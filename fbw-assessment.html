@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Function · Being · Will — Leadership Reflection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fn:#1F7A8C; --fn-ink:#0f5763; --fn-tint:#e7f2f4;
+    --be:#B07D2B; --be-ink:#7f591a; --be-tint:#f6eede;
+    --wl:#6A4A8F; --wl-ink:#4c3268; --wl-tint:#efe9f4;
+
+    --ink:#181C26; --text:#242A36; --muted:#5C6575;
+    --app:#E9EBEF; --paper:#FFFFFF; --line:#DDE1E7; --line-soft:#EAEDF1;
+
+    --serif:"Fraunces", Georgia, "Times New Roman", serif;
+    --sans:"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    --r:16px; --r-sm:11px;
+    --shadow:0 1px 2px rgba(20,26,40,.05), 0 8px 24px rgba(20,26,40,.07);
+    --maxw:680px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--sans);
+    color:var(--text);
+    background:var(--app);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  h1,h2,h3{font-family:var(--serif); font-weight:500; line-height:1.15; letter-spacing:-.01em; color:var(--ink); margin:0;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 16px;}
+
+  /* Top bar */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:var(--ink); color:#fff;
+    padding-top:env(safe-area-inset-top);
+  }
+  .topbar-inner{max-width:var(--maxw); margin:0 auto; padding:12px 16px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+  .brand{display:flex; flex-direction:column; gap:1px; min-width:0;}
+  .brand .k{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#AAB2C2;}
+  .brand .n{font-family:var(--serif); font-size:15px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .step-count{font-size:12px; color:#AAB2C2; white-space:nowrap;}
+  .progress{height:4px; background:#2a3040; display:flex;}
+  .progress > i{display:block; height:100%; width:0; transition:width .35s ease;}
+  .progress .pf{background:var(--fn);} .progress .pb{background:var(--be);} .progress .pw{background:var(--wl);}
+
+  main{padding:22px 0 120px;}
+
+  /* Screens */
+  .screen{display:none; animation:fade .3s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  @media (prefers-reduced-motion:reduce){ .screen,.progress>i{animation:none; transition:none;} }
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow);}
+  .pad{padding:22px;}
+
+  /* Intro */
+  .eyebrow{font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;}
+  .hero h1{font-size:clamp(28px,7vw,40px); margin-bottom:8px;}
+  .hero .lead{color:var(--muted); font-size:16px; margin:10px 0 0;}
+
+  .triple{display:grid; gap:10px; margin:22px 0;}
+  .dimrow{display:flex; align-items:flex-start; gap:14px; padding:14px 16px; border-radius:var(--r-sm); border:1px solid var(--line-soft);}
+  .dimrow .dot{flex:0 0 auto; width:12px; height:12px; border-radius:50%; margin-top:6px;}
+  .dimrow .lab{font-family:var(--serif); font-size:19px; color:var(--ink);}
+  .dimrow .q{font-size:14px; color:var(--muted);}
+  .dr-fn{background:var(--fn-tint);} .dr-fn .dot{background:var(--fn);}
+  .dr-be{background:var(--be-tint);} .dr-be .dot{background:var(--be);}
+  .dr-wl{background:var(--wl-tint);} .dr-wl .dot{background:var(--wl);}
+
+  .note{font-size:13.5px; color:var(--muted); background:#f4f5f7; border:1px solid var(--line-soft); border-radius:var(--r-sm); padding:14px 16px;}
+  .note b{color:var(--text);}
+  ul.clean{margin:8px 0 0; padding-left:18px;} ul.clean li{margin:5px 0;}
+
+  /* Buttons */
+  .btn{
+    appearance:none; border:none; cursor:pointer; font-family:var(--sans);
+    font-size:16px; font-weight:600; border-radius:12px; padding:15px 22px;
+    background:var(--ink); color:#fff; width:100%; transition:transform .06s ease, background .15s;
+  }
+  .btn:active{transform:scale(.985);}
+  .btn:disabled{background:#B7BDC8; cursor:not-allowed;}
+  .btn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line);}
+  .btn.sm{width:auto; font-size:14px; padding:11px 16px;}
+
+  /* Scenario */
+  .scn-kicker{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .scn-q{font-family:var(--serif); font-size:clamp(20px,5.2vw,25px); color:var(--ink); margin-bottom:4px;}
+  .scn-sub{font-size:14px; color:var(--muted); margin-bottom:18px;}
+  .opt{border:1.5px solid var(--line); border-radius:14px; padding:14px 14px 12px; margin-bottom:12px; transition:border-color .15s, background .15s;}
+  .opt .txt{font-size:15.5px; color:var(--text); margin-bottom:12px;}
+  .opt.is-most{border-color:var(--wl); background:var(--wl-tint);}
+  .opt.is-least{border-color:#c9ccd3; background:#f4f5f7;}
+  .chips{display:flex; gap:8px;}
+  .chip{
+    flex:1; text-align:center; border:1.5px solid var(--line); background:#fff; border-radius:10px;
+    padding:11px 8px; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; user-select:none;
+    display:flex; align-items:center; justify-content:center; gap:6px; min-height:44px;
+  }
+  .chip .ic{font-size:14px;}
+  .chip.on-most{border-color:var(--wl); background:var(--wl); color:#fff;}
+  .chip.on-least{border-color:#8a92a0; background:#6f7787; color:#fff;}
+
+  /* Likert (org) */
+  .lk-item{padding:16px 0; border-bottom:1px solid var(--line-soft);}
+  .lk-item:last-child{border-bottom:none;}
+  .lk-txt{font-size:15px; color:var(--text); margin-bottom:12px;}
+  .seg{display:flex; gap:8px;}
+  .seg button{
+    flex:1; border:1.5px solid var(--line); background:#fff; border-radius:10px; padding:12px 6px;
+    font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; min-height:46px;
+  }
+  .seg button.on{background:var(--ink); border-color:var(--ink); color:#fff;}
+
+  /* Sticky nav */
+  .navbar{
+    position:fixed; left:0; right:0; bottom:0; z-index:25;
+    background:rgba(255,255,255,.92); backdrop-filter:saturate(1.4) blur(8px);
+    border-top:1px solid var(--line);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+  .navbar-inner{max-width:var(--maxw); margin:0 auto; display:flex; gap:12px;}
+  .navbar .btn{flex:1;}
+  .navbar .btn.back{flex:0 0 108px;}
+
+  /* Report */
+  .sec-title{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:26px 4px 12px;}
+  .band{display:flex; height:40px; border-radius:10px; overflow:hidden; border:1px solid var(--line);}
+  .band > span{display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:600; min-width:26px; transition:flex-basis .5s ease;}
+  .band .bf{background:var(--fn);} .band .bb{background:var(--be);} .band .bw{background:var(--wl);}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:10px; font-size:12.5px; color:var(--muted);}
+  .legend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle;}
+
+  .rankline{display:flex; align-items:baseline; gap:10px; padding:12px 0; border-bottom:1px solid var(--line-soft);}
+  .rankline:last-child{border-bottom:none;}
+  .rankline .role{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); flex:0 0 auto;}
+  .rankline .name{font-family:var(--serif); font-size:18px; color:var(--ink);}
+  .rankline .pct{margin-left:auto; font-size:13px; color:var(--muted);}
+
+  .profile{border-left:4px solid var(--line); padding:2px 0 2px 16px; margin:16px 0;}
+  .profile.pf{border-color:var(--fn);} .profile.pb{border-color:var(--be);} .profile.pw{border-color:var(--wl);}
+  .profile .badge{font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:600;}
+  .profile.pf .badge{color:var(--fn-ink);} .profile.pb .badge{color:var(--be-ink);} .profile.pw .badge{color:var(--wl-ink);}
+  .profile h3{font-size:22px; margin:4px 0 2px;}
+  .profile .tag{font-size:14px; color:var(--muted); font-style:italic; margin-bottom:10px;}
+  .profile h4{font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 4px; font-family:var(--sans); font-weight:600;}
+
+  .orgbar{margin:12px 0;}
+  .orgbar .top{display:flex; justify-content:space-between; font-size:14px; margin-bottom:6px;}
+  .orgbar .track{height:12px; background:var(--line-soft); border-radius:6px; overflow:hidden;}
+  .orgbar .fill{height:100%; border-radius:6px; transition:width .5s ease;}
+  .orgbar .lvl{font-size:12px; color:var(--muted);}
+
+  .insight{background:#f4f5f7; border:1px solid var(--line-soft); border-radius:var(--r-sm); padding:16px; margin-top:12px;}
+  .insight h4{font-family:var(--serif); font-size:17px; color:var(--ink); margin-bottom:6px;}
+  .insight p{margin:6px 0 0; font-size:14.5px;}
+
+  .disclaimer{font-size:12.5px; color:var(--muted); line-height:1.5; margin-top:26px; padding:16px; border:1px dashed var(--line); border-radius:var(--r-sm);}
+  .foot{text-align:center; font-size:12px; color:var(--muted); margin:22px 0 0;}
+
+  @media print{
+    .topbar,.navbar,.no-print{display:none !important;}
+    body{background:#fff;}
+    main{padding:0;}
+    .card{box-shadow:none; border-color:#ccc;}
+    .screen{display:none !important;}
+    #screen-report{display:block !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="k">Integral Leadership Dynamics™</span>
+      <span class="n" id="brandTitle">Function · Being · Will</span>
+    </div>
+    <span class="step-count" id="stepCount"></span>
+  </div>
+  <div class="progress"><i class="pf" id="pgF"></i><i class="pb" id="pgB"></i><i class="pw" id="pgW"></i></div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- INTRO -->
+    <section class="screen active" id="screen-intro">
+      <div class="hero">
+        <div class="eyebrow">Leadership self-reflection</div>
+        <h1>Where do you lead from?</h1>
+        <p class="lead">Every leader draws on three inner sources. This short reflection shows which one leads for you, which one supports you, and which one is your growth edge — and how your current environment shapes all three.</p>
+      </div>
+
+      <div class="triple">
+        <div class="dimrow dr-fn"><span class="dot"></span><div><div class="lab">Function</div><div class="q">What I can do — my skills and delivery.</div></div></div>
+        <div class="dimrow dr-be"><span class="dot"></span><div><div class="lab">Being</div><div class="q">Who I am — my character and presence.</div></div></div>
+        <div class="dimrow dr-wl"><span class="dot"></span><div><div class="lab">Will</div><div class="q">Why I act — my purpose, drive, and courage.</div></div></div>
+      </div>
+
+      <div class="note">
+        <b>How to answer honestly.</b>
+        <ul class="clean">
+          <li>You will read <b>15 real work situations</b>. For each one, choose the answer that is <b>most like you</b> and the one that is <b>least like you</b>.</li>
+          <li>All answers are good ones. There is no "correct" choice — pick what is <b>truly you</b>, not what sounds best.</li>
+          <li>Answer <b>quickly and by instinct</b>. Your first reaction is the most honest.</li>
+          <li>Then answer <b>9 short questions about your workplace</b>.</li>
+          <li>Takes about <b>7 minutes</b>. Nothing is saved or sent anywhere.</li>
+        </ul>
+      </div>
+
+      <div style="height:20px"></div>
+      <button class="btn" id="startBtn">Start the reflection</button>
+    </section>
+
+    <!-- PART 1: SCENARIOS -->
+    <section class="screen" id="screen-p1">
+      <div class="card pad" id="scnCard"><!-- rendered by JS --></div>
+    </section>
+
+    <!-- PART 2: ORGANIZATION -->
+    <section class="screen" id="screen-p2">
+      <div class="eyebrow" style="margin-bottom:6px">Part 2 of 2</div>
+      <h1 style="font-size:clamp(24px,6vw,32px); margin-bottom:6px;">Your workplace</h1>
+      <p class="lead" style="margin-bottom:18px">Think about your team or organization <b>as it is today</b>. How often is each statement true?</p>
+      <div class="card pad" id="orgList"><!-- rendered by JS --></div>
+    </section>
+
+    <!-- REPORT -->
+    <section class="screen" id="screen-report">
+      <div class="eyebrow">Your reflection report</div>
+      <h1 style="font-size:clamp(26px,6.5vw,36px); margin-bottom:6px;">The Function · Being · Will Matrix</h1>
+      <p class="lead" style="margin-bottom:8px" id="reportIntro"></p>
+
+      <!-- SUMMARY -->
+      <div class="sec-title">Summary</div>
+      <div class="card pad">
+        <p style="margin:0 0 12px; font-size:14px; color:var(--muted)">How often you chose each style across the 15 situations:</p>
+        <div class="band" id="summaryBand"></div>
+        <div class="legend">
+          <span><i style="background:var(--fn)"></i>Function</span>
+          <span><i style="background:var(--be)"></i>Being</span>
+          <span><i style="background:var(--wl)"></i>Will</span>
+        </div>
+        <div style="margin-top:18px" id="summaryRanks"></div>
+        <div class="insight" id="summaryInsight"></div>
+      </div>
+
+      <!-- DETAILS -->
+      <div class="sec-title">Detailed profile</div>
+      <div class="card pad">
+        <div id="detailComprehensive"></div>
+        <hr style="border:none; border-top:1px solid var(--line-soft); margin:20px 0">
+        <div id="detailBackup"></div>
+        <hr style="border:none; border-top:1px solid var(--line-soft); margin:20px 0">
+        <div id="detailDevelop"></div>
+      </div>
+
+      <!-- ORGANIZATION -->
+      <div class="sec-title">Organization profile</div>
+      <div class="card pad">
+        <p style="margin:0 0 6px; font-size:14.5px; color:var(--text)">What your environment rewards and expects — because your answers above are shaped by where you work.</p>
+        <div id="orgBars" style="margin-top:14px"></div>
+        <div class="insight" id="orgInsight"></div>
+      </div>
+
+      <div class="disclaimer" id="disclaimer"></div>
+
+      <div class="no-print" style="margin-top:22px; display:flex; gap:12px;">
+        <button class="btn ghost" id="restartBtn">Start again</button>
+        <button class="btn" id="printBtn">Save / print</button>
+      </div>
+      <p class="foot">Integral Leadership Dynamics™ · Function · Being · Will</p>
+    </section>
+
+  </div>
+</main>
+
+<!-- STICKY NAV -->
+<nav class="navbar no-print" id="navbar" style="display:none">
+  <div class="navbar-inner">
+    <button class="btn ghost back" id="backBtn">Back</button>
+    <button class="btn" id="nextBtn">Next</button>
+  </div>
+</nav>
+
+<script>
+/* ============================================================
+   DATA
+   Each scenario has 3 options mapped to F (Function), B (Being),
+   W (Will). Display order is mixed so no dimension is always first.
+   ============================================================ */
+const SCENARIOS = [
+  { s:"A project is falling behind schedule.", opts:[
+      {t:"I fix the plan and processes to get back on track.", d:"F"},
+      {t:"I check how the team feels and rebuild their energy.", d:"B"},
+      {t:"I recommit everyone to the goal and push forward.", d:"W"} ]},
+  { s:"You receive hard feedback about yourself.", opts:[
+      {t:"I reflect on what it says about who I am.", d:"B"},
+      {t:"I decide what to change and act on it.", d:"W"},
+      {t:"I study which skills I need to improve.", d:"F"} ]},
+  { s:"A risky new opportunity appears.", opts:[
+      {t:"I feel the pull of the purpose and want to go for it.", d:"W"},
+      {t:"I check if we truly have the ability to deliver it.", d:"F"},
+      {t:"I ask if it fits our values and who we want to be.", d:"B"} ]},
+  { s:"There is tension in an important meeting.", opts:[
+      {t:"I stay calm and hold a steady, safe presence.", d:"B"},
+      {t:"I bring structure and facts to solve the problem.", d:"F"},
+      {t:"I name the hard truth, even if it is uncomfortable.", d:"W"} ]},
+  { s:"You have some free time at work.", opts:[
+      {t:"I improve a system or learn a new skill.", d:"F"},
+      {t:"I connect with people and check in with them.", d:"B"},
+      {t:"I think about the bigger direction and what matters.", d:"W"} ]},
+  { s:"A team member keeps underperforming.", opts:[
+      {t:"I make the tough call about their role if needed.", d:"W"},
+      {t:"I coach them on the exact skills they are missing.", d:"F"},
+      {t:"I try to understand what is happening for them.", d:"B"} ]},
+  { s:"Your organization faces a big change.", opts:[
+      {t:"I help people feel secure during the change.", d:"B"},
+      {t:"I plan the steps and manage the details.", d:"F"},
+      {t:"I hold the vision and keep everyone moving to it.", d:"W"} ]},
+  { s:"You feel stressed and tired.", opts:[
+      {t:"I remind myself why this matters and keep going.", d:"W"},
+      {t:"I pause to reconnect with myself and recharge.", d:"B"},
+      {t:"I organize my tasks to get back in control.", d:"F"} ]},
+  { s:"Two good options, and no clear answer.", opts:[
+      {t:"I compare the facts and pick the stronger one.", d:"F"},
+      {t:"I choose the one that feels true to our values.", d:"B"},
+      {t:"I decide, own it, and move forward.", d:"W"} ]},
+  { s:"A colleague breaks an important rule.", opts:[
+      {t:"I confront the issue directly, whatever the cost.", d:"W"},
+      {t:"I point to the process that was broken.", d:"F"},
+      {t:"I talk with them honestly, person to person.", d:"B"} ]},
+  { s:"People praise your team's success.", opts:[
+      {t:"I credit the trust and relationships we built.", d:"B"},
+      {t:"I credit our shared purpose and drive.", d:"W"},
+      {t:"I credit the strong systems and skills we built.", d:"F"} ]},
+  { s:"You are asked to lead something new.", opts:[
+      {t:"I first ask if I have the skills to do it well.", d:"F"},
+      {t:"I first ask if it fits who I am.", d:"B"},
+      {t:"I first ask if it is worth committing to.", d:"W"} ]},
+  { s:"A plan fails badly.", opts:[
+      {t:"I take responsibility and choose the next bold step.", d:"W"},
+      {t:"I review what went wrong and fix the method.", d:"F"},
+      {t:"I stay grounded and keep the team's spirit up.", d:"B"} ]},
+  { s:"Everything is calm and going well.", opts:[
+      {t:"I enjoy the connections and the good atmosphere.", d:"B"},
+      {t:"I set a bigger goal to aim for next.", d:"W"},
+      {t:"I look for ways to make things run even better.", d:"F"} ]},
+  { s:"You must make an unpopular decision.", opts:[
+      {t:"I build a clear case with evidence.", d:"F"},
+      {t:"I make the decision and stand behind it.", d:"W"},
+      {t:"I make sure people feel heard first.", d:"B"} ]},
+];
+
+const ORG_ITEMS = [
+  { t:"Results and performance get the most attention here.", d:"F" },
+  { t:"People are valued mainly for their skills and output.", d:"F" },
+  { t:"Doing the work correctly matters more than anything else.", d:"F" },
+  { t:"People feel safe to be themselves here.", d:"B" },
+  { t:"Trust and relationships are treated as important.", d:"B" },
+  { t:"How we treat each other matters as much as what we achieve.", d:"B" },
+  { t:"We have a clear and inspiring direction.", d:"W" },
+  { t:"People are encouraged to make brave decisions.", d:"W" },
+  { t:"We stay committed to our goals even when things get hard.", d:"W" },
+];
+
+const DIM = {
+  F:{ key:"F", label:"Function", tag:"You lead through skill, competence, and getting things done.",
+      color:"var(--fn)", cls:"pf", band:"bf",
+      strength:[
+        "You are reliable — people trust you to deliver.",
+        "You think clearly and solve problems well.",
+        "You build systems, order, and high standards.",
+        "You turn ideas into real, finished results."],
+      watch:[
+        "You may focus on the task and forget the people.",
+        "You can hold on too tightly and control the details.",
+        "You may tie your value to your output, and feel empty without it.",
+        "You can miss the emotional side of a situation."],
+      develop:[
+        "Before acting, ask \"who\" is affected, not only \"what\" must be done.",
+        "Trust others to do the work their own way.",
+        "Make time to connect with people and to reflect on purpose.",
+        "Let people see you when you do not have all the answers."] },
+  B:{ key:"B", label:"Being", tag:"You lead through presence, character, and honest relationships.",
+      color:"var(--be)", cls:"pb", band:"bb",
+      strength:[
+        "You build trust and make people feel safe.",
+        "You stay calm and grounded under pressure.",
+        "You know yourself and lead by example.",
+        "People feel seen and respected around you."],
+      watch:[
+        "You may avoid the hard action to keep the peace.",
+        "You can put harmony above needed results.",
+        "You may hesitate on tough decisions.",
+        "You can carry other people's stress as your own."],
+      develop:[
+        "Practice saying the hard thing, kindly and clearly.",
+        "Set clear goals and hold people to them.",
+        "Balance care with accountability — both are respect.",
+        "Act sooner; not every decision needs full comfort first."] },
+  W:{ key:"W", label:"Will", tag:"You lead through purpose, drive, and courage.",
+      color:"var(--wl)", cls:"pw", band:"bw",
+      strength:[
+        "You give people a clear direction and reason.",
+        "You keep going through difficulty and setbacks.",
+        "You have the courage to act and to decide.",
+        "You move things forward and inspire momentum."],
+      watch:[
+        "You may push too hard and wear people out.",
+        "You can overlook people's real limits.",
+        "You may act before building skill or trust.",
+        "You risk burning out yourself and others."],
+      develop:[
+        "Slow down to build the skills (Function) the goal needs.",
+        "Bring people with you (Being), not just ahead of them.",
+        "Check that your drive leaves room for others' pace.",
+        "Rest on purpose — commitment lasts only if you do."] },
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  p1: SCENARIOS.map(()=>({most:null, least:null})),
+  p1i: 0,
+  org: ORG_ITEMS.map(()=>null),
+};
+
+const $ = id => document.getElementById(id);
+const screens = {
+  intro:$("screen-intro"), p1:$("screen-p1"), p2:$("screen-p2"), report:$("screen-report")
+};
+
+function show(name){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[name].classList.add("active");
+  window.scrollTo({top:0, behavior:"instant" in window ? "instant" : "auto"});
+}
+
+/* progress bar: fills across all 24 answers */
+function setProgress(){
+  const total = SCENARIOS.length + ORG_ITEMS.length;
+  const doneP1 = state.p1.filter(a=>a.most&&a.least).length;
+  const doneP2 = state.org.filter(v=>v!==null).length;
+  const done = doneP1 + doneP2;
+  const each = 100/total;
+  $("pgF").style.width = each*Math.min(done,5) + "%";
+  $("pgB").style.width = each*Math.max(0,Math.min(done-5,5)) + "%";
+  $("pgW").style.width = each*Math.max(0,done-10) + "%";
+}
+
+/* ---------- PART 1 render ---------- */
+function renderScenario(){
+  const i = state.p1i;
+  const sc = SCENARIOS[i];
+  const ans = state.p1[i];
+  $("stepCount").textContent = "Situation " + (i+1) + " of " + SCENARIOS.length;
+
+  let html = '<div class="scn-kicker">Part 1 · Situation '+(i+1)+'/'+SCENARIOS.length+'</div>';
+  html += '<div class="scn-q">'+sc.s+'</div>';
+  html += '<div class="scn-sub">Choose one <b>most like you</b> and one <b>least like you</b>.</div>';
+  sc.opts.forEach((o, idx)=>{
+    const mostOn = ans.most===idx, leastOn = ans.least===idx;
+    const state_cls = mostOn ? " is-most" : (leastOn ? " is-least" : "");
+    html += '<div class="opt'+state_cls+'">'+
+      '<div class="txt">'+o.t+'</div>'+
+      '<div class="chips">'+
+        '<div class="chip'+(mostOn?' on-most':'')+'" data-kind="most" data-idx="'+idx+'"><span class="ic">✓</span> Most like me</div>'+
+        '<div class="chip'+(leastOn?' on-least':'')+'" data-kind="least" data-idx="'+idx+'"><span class="ic">✕</span> Least like me</div>'+
+      '</div></div>';
+  });
+  $("scnCard").innerHTML = html;
+
+  // chip handlers
+  $("scnCard").querySelectorAll(".chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      const kind = chip.dataset.kind, idx = parseInt(chip.dataset.idx,10);
+      const a = state.p1[i];
+      if(kind==="most"){
+        a.most = (a.most===idx)? null : idx;
+        if(a.least===idx) a.least = null;      // cannot be both
+      } else {
+        a.least = (a.least===idx)? null : idx;
+        if(a.most===idx) a.most = null;
+      }
+      renderScenario();
+      updateNav();
+      setProgress();
+    });
+  });
+  updateNav();
+  setProgress();
+}
+
+/* ---------- PART 2 render ---------- */
+function renderOrg(){
+  $("stepCount").textContent = "Workplace questions";
+  const labels = ["Rarely","Sometimes","Often"];
+  let html = "";
+  ORG_ITEMS.forEach((it, i)=>{
+    html += '<div class="lk-item"><div class="lk-txt">'+(i+1)+'. '+it.t+'</div><div class="seg" data-i="'+i+'">';
+    labels.forEach((l, v)=>{
+      const on = state.org[i]===(v+1) ? " on" : "";
+      html += '<button class="'+on.trim()+'" data-v="'+(v+1)+'">'+l+'</button>';
+    });
+    html += '</div></div>';
+  });
+  $("orgList").innerHTML = html;
+
+  $("orgList").querySelectorAll(".seg").forEach(seg=>{
+    const i = parseInt(seg.dataset.i,10);
+    seg.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        state.org[i] = parseInt(b.dataset.v,10);
+        seg.querySelectorAll("button").forEach(x=>x.classList.remove("on"));
+        b.classList.add("on");
+        updateNav(); setProgress();
+      });
+    });
+  });
+  updateNav(); setProgress();
+}
+
+/* ---------- NAV ---------- */
+let phase = "intro";
+function updateNav(){
+  const nav = $("navbar");
+  if(phase==="intro" || phase==="report"){ nav.style.display="none"; return; }
+  nav.style.display="block";
+  const back = $("backBtn"), next = $("nextBtn");
+
+  if(phase==="p1"){
+    const a = state.p1[state.p1i];
+    const ready = a.most!==null && a.least!==null;
+    next.disabled = !ready;
+    next.textContent = (state.p1i===SCENARIOS.length-1) ? "Continue to workplace" : "Next";
+    back.style.visibility = (state.p1i===0) ? "hidden" : "visible";
+  } else if(phase==="p2"){
+    const ready = state.org.every(v=>v!==null);
+    next.disabled = !ready;
+    next.textContent = "See my report";
+    back.style.visibility = "visible";
+  }
+}
+
+$("startBtn").addEventListener("click", ()=>{
+  phase="p1"; show("p1"); renderScenario();
+});
+$("backBtn").addEventListener("click", ()=>{
+  if(phase==="p1"){
+    if(state.p1i>0){ state.p1i--; renderScenario(); }
+  } else if(phase==="p2"){
+    phase="p1"; show("p1"); state.p1i=SCENARIOS.length-1; renderScenario();
+  }
+});
+$("nextBtn").addEventListener("click", ()=>{
+  if(phase==="p1"){
+    if(state.p1i<SCENARIOS.length-1){ state.p1i++; renderScenario(); }
+    else { phase="p2"; show("p2"); renderOrg(); }
+  } else if(phase==="p2"){
+    buildReport(); phase="report"; show("report"); updateNav();
+    $("stepCount").textContent="";
+    $("pgF").style.width="calc(100%/3)"; $("pgB").style.width="calc(100%/3)"; $("pgW").style.width="calc(100%/3)";
+  }
+});
+$("restartBtn").addEventListener("click", ()=>{
+  state.p1 = SCENARIOS.map(()=>({most:null,least:null}));
+  state.p1i=0; state.org = ORG_ITEMS.map(()=>null);
+  phase="intro"; show("intro"); updateNav(); setProgress(); $("stepCount").textContent="";
+});
+$("printBtn").addEventListener("click", ()=>window.print());
+
+/* ============================================================
+   SCORING & REPORT
+   ============================================================ */
+function scoreIndividual(){
+  const most={F:0,B:0,W:0}, least={F:0,B:0,W:0};
+  state.p1.forEach((a,i)=>{
+    if(a.most!==null){ most[ SCENARIOS[i].opts[a.most].d ]++; }
+    if(a.least!==null){ least[ SCENARIOS[i].opts[a.least].d ]++; }
+  });
+  return {most, least};
+}
+function scoreOrg(){
+  const s={F:0,B:0,W:0}, c={F:0,B:0,W:0};
+  ORG_ITEMS.forEach((it,i)=>{ s[it.d]+=state.org[i]; c[it.d]++; });
+  return s; // each dimension: 3 items × (1..3) = 3..9
+}
+function rank(scoreObj, tiebreak){
+  // returns array of keys high→low; tiebreak: fewer 'least' wins for individual
+  const keys=["F","B","W"];
+  keys.sort((a,b)=>{
+    if(scoreObj[b]!==scoreObj[a]) return scoreObj[b]-scoreObj[a];
+    if(tiebreak) return (tiebreak[a]||0)-(tiebreak[b]||0);
+    return 0;
+  });
+  return keys;
+}
+
+function buildReport(){
+  const ind = scoreIndividual();
+  const org = scoreOrg();
+  const order = rank(ind.most, ind.least); // dominant, backup, develop
+  const dom=order[0], back=order[1], dev=order[2];
+
+  // ---- report intro ----
+  $("reportIntro").textContent =
+    "You lead most from " + DIM[dom].label + ", supported by " + DIM[back].label +
+    ". Your growth edge is " + DIM[dev].label + ".";
+
+  // ---- summary band (share of 'most' picks, sums to 15) ----
+  const total = ind.most.F + ind.most.B + ind.most.W || 1;
+  const band = $("summaryBand"); band.innerHTML="";
+  [["F","bf"],["B","bb"],["W","bw"]].forEach(([k,c])=>{
+    const pct = ind.most[k]/total*100;
+    const span=document.createElement("span");
+    span.className=c; span.style.flexBasis=pct+"%";
+    span.textContent = ind.most[k]>0 ? ind.most[k] : "";
+    band.appendChild(span);
+  });
+
+  // ---- ranked lines ----
+  const roleNames = {0:"Comprehensive profile",1:"Backup profile",2:"Area to develop"};
+  let rl="";
+  order.forEach((k,idx)=>{
+    const pct = Math.round(ind.most[k]/total*100);
+    rl += '<div class="rankline"><span class="role">'+roleNames[idx]+'</span>'+
+          '<span class="name" style="color:'+DIM[k].color+'">'+DIM[k].label+'</span>'+
+          '<span class="pct">'+ind.most[k]+' of '+total+' · '+pct+'%</span></div>';
+  });
+  $("summaryRanks").innerHTML = rl;
+
+  // ---- summary insight (individual vs org) ----
+  $("summaryInsight").innerHTML = makeInsight(dom, dev, org, true);
+
+  // ---- detailed profiles ----
+  $("detailComprehensive").innerHTML = profileBlock(dom,"Comprehensive profile","full");
+  $("detailBackup").innerHTML = profileBlock(back,"Backup profile","backup");
+  $("detailDevelop").innerHTML = profileBlock(dev,"Area to develop","develop");
+
+  // ---- org bars ----
+  const orgOrder = rank(org);
+  let ob="";
+  ["F","B","W"].forEach(k=>{
+    const v=org[k]; const pct=(v-3)/6*100; // 3..9 -> 0..100
+    const lvl = v>=7?"High":(v>=5?"Medium":"Low");
+    ob += '<div class="orgbar"><div class="top"><span style="color:'+DIM[k].color+'; font-weight:600">'+DIM[k].label+'</span>'+
+          '<span class="lvl">'+lvl+' emphasis</span></div>'+
+          '<div class="track"><div class="fill" style="width:'+Math.max(6,pct)+'%; background:'+DIM[k].color+'"></div></div></div>';
+  });
+  $("orgBars").innerHTML = ob;
+
+  // ---- org insight ----
+  $("orgInsight").innerHTML = orgParagraph(orgOrder, org, dom, dev);
+
+  // ---- disclaimer ----
+  $("disclaimer").innerHTML =
+    "<b>Please read this.</b> This is a structured self-reflection tool built on the Integral Leadership Dynamics™ framework. "+
+    "It is <b>not a validated psychometric test</b>. Because you choose between options, your scores are <b>relative to your own answers only</b> — "+
+    "they show which style you lean to more than the others, and they cannot be compared to other people or read as percentiles. "+
+    "Your results describe <b>how you answered today</b> and can be shaped by your current role, mood, and workplace. "+
+    "Use it to start reflection and conversation, not as a final judgment.";
+}
+
+function profileBlock(k, roleLabel, mode){
+  const d=DIM[k];
+  let h='<div class="profile '+d.cls+'">';
+  h+='<div class="badge">'+roleLabel+'</div>';
+  h+='<h3>'+d.label+'</h3>';
+  h+='<div class="tag">'+d.tag+'</div>';
+
+  if(mode==="full"){
+    h+='<p style="font-size:14.5px; margin:0 0 4px">This is the source you turn to first. It is your main strength as a leader — and, when overused, your main risk.</p>';
+    h+='<h4>Where it makes you strong</h4><ul class="clean">'+d.strength.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+    h+='<h4>Watch-outs when overused</h4><ul class="clean">'+d.watch.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  } else if(mode==="backup"){
+    h+='<p style="font-size:14.5px; margin:0 0 4px">This is your second source. You use it well to support your main style, especially when the situation asks for it.</p>';
+    h+='<h4>How it supports you</h4><ul class="clean">'+d.strength.slice(0,3).map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+    h+='<h4>One thing to watch</h4><ul class="clean"><li>'+d.watch[0]+'</li></ul>';
+  } else {
+    h+='<p style="font-size:14.5px; margin:0 0 4px">You chose this style least often. It is not a weakness in you — it is simply the least developed source right now. Growing here makes your leadership more complete and balanced.</p>';
+    h+='<h4>Simple ways to grow here</h4><ul class="clean">'+d.develop.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  }
+  h+='</div>';
+  return h;
+}
+
+function makeInsight(dom, dev, org, forSummary){
+  const domOrg = org[dom]; // 3..9
+  let head="", body="";
+  if(domOrg>=7){
+    head="Your style fits your environment.";
+    body="You lead most from <b>"+DIM[dom].label+"</b>, and your workplace also rewards it. This usually means your natural strengths are seen and valued — a good position to lead from.";
+  } else if(domOrg<=4){
+    head="Your style and your environment pull in different directions.";
+    body="You lead from <b>"+DIM[dom].label+"</b>, but your workplace gives it little room. This can leave you feeling unseen or tired, and it may explain some friction you feel. It is worth naming — the gap is about the environment, not about you.";
+  } else {
+    head="A partial fit with your environment.";
+    body="You lead from <b>"+DIM[dom].label+"</b>, and your workplace gives it some, but not full, support. There is room to shape the environment toward the way you lead best.";
+  }
+  // extra note if development area is what org pushes hardest
+  const orgTop = rank(org)[0];
+  let extra="";
+  if(orgTop===dev){
+    extra = "<p>Also notice: your environment pushes hardest on <b>"+DIM[dev].label+"</b>, which is your growth edge. That pressure can be uncomfortable — but it is also a real chance to develop the source you use least.</p>";
+  }
+  return '<h4>'+head+'</h4><p>'+body+'</p>'+extra;
+}
+
+function orgParagraph(orgOrder, org, dom, dev){
+  const top=orgOrder[0], low=orgOrder[2];
+  let h='<h4>What your environment values</h4>';
+  h+='<p>Your workplace puts the most weight on <b style="color:'+DIM[top].color+'">'+DIM[top].label+'</b> '+
+     '('+orgWord(DIM[top].key)+') and the least on <b style="color:'+DIM[low].color+'">'+DIM[low].label+'</b> '+
+     '('+orgWord(DIM[low].key)+').</p>';
+  h+='<p style="margin-top:8px">Remember: your own answers are partly a response to this environment. If a style is rarely rewarded here, you may use it less — even if it is natural to you. When you read your profile above, ask: <i>is this truly me, or is this what my workplace has trained me to be?</i></p>';
+  return h;
+}
+function orgWord(k){
+  return k==="F" ? "results, skill, and delivery"
+       : k==="B" ? "trust, people, and character"
+       : "purpose, courage, and direction";
+}
+
+/* init */
+setProgress();
+updateNav();
+</script>
+</body>
+</html>
