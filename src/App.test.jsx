@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App.jsx';
 import { SCENARIOS } from './data/scenarios.js';
@@ -75,7 +75,9 @@ describe('App with a fake auth adapter', () => {
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.click(screen.getByText('Send link'));
 
-    await authCallback({ user: { id: 'user-123' } });
+    await act(async () => {
+      await authCallback({ user: { id: 'user-123' } });
+    });
 
     expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ userId: 'user-123' }));
     expect(await screen.findByText('Saved to your account.', { exact: false })).toBeInTheDocument();

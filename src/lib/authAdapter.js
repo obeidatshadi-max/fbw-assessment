@@ -23,7 +23,7 @@ export const supabaseAuthAdapter = {
   },
   async saveAssessment({ p1Answers, orgAnswers, reportData, userId }) {
     if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
-    const { error: profileError } = await supabase.from('profiles').upsert({ id: userId });
+    const { error: profileError } = await supabase.from('profiles').upsert({ id: userId }, { ignoreDuplicates: true });
     if (profileError) return { success: false, error: profileError.message };
     const { error } = await supabase.from('assessments').insert({
       profile_id: userId,
