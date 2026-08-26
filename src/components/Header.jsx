@@ -1,4 +1,8 @@
+import { LANGS } from '../i18n/translations.js';
+import { useLanguage } from '../i18n/LanguageContext.jsx';
+
 export default function Header({ stepLabel, done, total, final }) {
+  const { lang, setLang, t } = useLanguage();
   const each = total > 0 ? 100 / total : 0;
   const widths = final
     ? { F: 100 / 3, B: 100 / 3, W: 100 / 3 }
@@ -11,8 +15,20 @@ export default function Header({ stepLabel, done, total, final }) {
     <header className="topbar">
       <div className="topbar-inner">
         <div className="brand">
-          <span className="k">Integral Leadership Dynamics™</span>
-          <span className="n">Function · Being · Will</span>
+          <span className="k">{t('brand.kicker')}</span>
+          <span className="n">{t('brand.name')}</span>
+        </div>
+        <div className="lang-switch no-print" role="group" aria-label="Language">
+          {LANGS.map(code => (
+            <button
+              key={code}
+              type="button"
+              className={code === lang ? 'on' : ''}
+              onClick={() => setLang(code)}
+            >
+              {t(`lang.${code}`)}
+            </button>
+          ))}
         </div>
         <span className="step-count">{stepLabel}</span>
       </div>

@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ReportScreen from './ReportScreen.jsx';
 import { buildReportData } from '../lib/scoring.js';
+import { LanguageProvider } from '../i18n/LanguageContext.jsx';
+import { SCENARIOS } from '../data/scenarios.js';
+import { ORG_ITEMS } from '../data/orgItems.js';
+import { DIM } from '../data/dimensions.js';
 
 const scenarios = [
   { s: 'a', opts: [{ t: 'f', d: 'F' }, { t: 'b', d: 'B' }, { t: 'w', d: 'W' }] },
@@ -45,5 +49,21 @@ describe('ReportScreen', () => {
     expect(screen.getByText('Where it makes you strong')).toBeInTheDocument(); // 'full' profile
     expect(screen.getByText('How it supports you')).toBeInTheDocument(); // 'backup' profile
     expect(screen.getByText('Simple ways to grow here')).toBeInTheDocument(); // 'develop' profile
+  });
+
+  it('renders a fully localized Arabic report using the real content banks', () => {
+    const arReport = buildReportData(
+      SCENARIOS.map(() => ({ most: 0, least: 1 })),
+      ORG_ITEMS.map(() => 3),
+      SCENARIOS, ORG_ITEMS, DIM, 'ar'
+    );
+    render(
+      <LanguageProvider initialLang="ar">
+        <ReportScreen reportData={arReport} dim={DIM} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />
+      </LanguageProvider>
+    );
+    expect(screen.getByText('مصفوفة الوظيفة · الكينونة · الإرادة')).toBeInTheDocument();
+    expect(screen.getByText('ابدأ من جديد')).toBeInTheDocument();
+    expect(screen.getByText('يرجى قراءة هذا.')).toBeInTheDocument();
   });
 });

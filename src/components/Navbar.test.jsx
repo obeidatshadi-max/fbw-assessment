@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Navbar from './Navbar.jsx';
+import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 
 describe('Navbar', () => {
   it('renders nothing when not visible', () => {
@@ -23,5 +24,10 @@ describe('Navbar', () => {
   it('hides the back button when canGoBack is false', () => {
     render(<Navbar visible canGoBack={false} canGoNext nextLabel="Next" onBack={() => {}} onNext={() => {}} />);
     expect(screen.getByText('Back')).toHaveStyle({ visibility: 'hidden' });
+  });
+
+  it('renders the localized back label', () => {
+    render(<LanguageProvider initialLang="ar"><Navbar visible canGoBack canGoNext nextLabel="التالي" onBack={() => {}} onNext={() => {}} /></LanguageProvider>);
+    expect(screen.getByText('رجوع')).toBeInTheDocument();
   });
 });

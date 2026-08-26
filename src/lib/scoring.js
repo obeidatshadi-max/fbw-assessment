@@ -1,3 +1,5 @@
+import { L, t, tf } from '../i18n/translations.js';
+
 export function scoreIndividual(p1Answers, scenarios) {
   const most = { F: 0, B: 0, W: 0 };
   const least = { F: 0, B: 0, W: 0 };
@@ -35,44 +37,43 @@ function buildProfile(dimEntry, mode) {
   return { ...base, develop: dimEntry.develop };
 }
 
-function orgWord(k) {
-  return k === 'F' ? 'results, skill, and delivery'
-    : k === 'B' ? 'trust, people, and character'
-    : 'purpose, courage, and direction';
+function orgWord(k, lang) {
+  return t(lang, `report.orgWord.${k}`);
 }
 
-function buildInsight(dominant, developArea, orgScore, dim) {
+function buildInsight(dominant, developArea, orgScore, dim, lang) {
   const domOrg = orgScore[dominant];
+  const domLabel = L(dim[dominant].label, lang);
   let head, body;
   if (domOrg >= 7) {
-    head = 'Your style fits your environment.';
-    body = `You lead most from ${dim[dominant].label}, and your workplace also rewards it. This usually means your natural strengths are seen and valued — a good position to lead from.`;
+    head = t(lang, 'report.insightFitHead');
+    body = tf(lang, 'report.insightFitBody', { dom: domLabel });
   } else if (domOrg <= 4) {
-    head = 'Your style and your environment pull in different directions.';
-    body = `You lead from ${dim[dominant].label}, but your workplace gives it little room. This can leave you feeling unseen or tired, and it may explain some friction you feel. It is worth naming — the gap is about the environment, not about you.`;
+    head = t(lang, 'report.insightGapHead');
+    body = tf(lang, 'report.insightGapBody', { dom: domLabel });
   } else {
-    head = 'A partial fit with your environment.';
-    body = `You lead from ${dim[dominant].label}, and your workplace gives it some, but not full, support. There is room to shape the environment toward the way you lead best.`;
+    head = t(lang, 'report.insightPartialHead');
+    body = tf(lang, 'report.insightPartialBody', { dom: domLabel });
   }
   const orgTop = rank(orgScore)[0];
   const extra = orgTop === developArea
-    ? `Also notice: your environment pushes hardest on ${dim[developArea].label}, which is your growth edge. That pressure can be uncomfortable — but it is also a real chance to develop the source you use least.`
+    ? tf(lang, 'report.insightExtra', { dev: L(dim[developArea].label, lang) })
     : null;
   return { head, body, extra };
 }
 
-function buildOrgInsight(orgOrder) {
+function buildOrgInsight(orgOrder, lang) {
   const top = orgOrder[0];
   const low = orgOrder[2];
   return {
     top, low,
-    topWord: orgWord(top),
-    lowWord: orgWord(low),
-    note: "Remember: your own answers are partly a response to this environment. If a style is rarely rewarded here, you may use it less — even if it is natural to you. When you read your profile above, ask: is this truly me, or is this what my workplace has trained me to be?",
+    topWord: orgWord(top, lang),
+    lowWord: orgWord(low, lang),
+    note: t(lang, 'report.orgNote'),
   };
 }
 
-export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim) {
+export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim, lang = 'en') {
   const ind = scoreIndividual(p1Answers, scenarios);
   const org = scoreOrg(orgAnswers, orgItems);
   const order = rank(ind.most, ind.least);
@@ -85,7 +86,7 @@ export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim)
     pct: (ind.most[k] / total) * 100,
   }));
 
-  const roleNames = ['Comprehensive profile', 'Backup profile', 'Area to develop'];
+  const roleNames = [t(lang, 'report.roleFull'), t(lang, 'report.roleBackup'), t(lang, 'report.roleDevelop')];
   const rankLines = order.map((k, idx) => ({
     role: roleNames[idx],
     key: k,
@@ -97,7 +98,7 @@ export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim)
   const orgBars = ['F', 'B', 'W'].map(k => {
     const v = org[k];
     const pct = ((v - 3) / 6) * 100;
-    const level = v >= 7 ? 'High' : v >= 5 ? 'Medium' : 'Low';
+    const level = v >= 7 ? t(lang, 'report.levelHigh') : v >= 5 ? t(lang, 'report.levelMedium') : t(lang, 'report.levelLow');
     return { key: k, value: v, pct: Math.max(6, pct), level };
   });
 
@@ -105,12 +106,12 @@ export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim)
     dominant, backup, developArea,
     ind, org, total,
     band, rankLines, orgOrder, orgBars,
-    summaryInsight: buildInsight(dominant, developArea, org, dim),
+    summaryInsight: buildInsight(dominant, developArea, org, dim, lang),
     profiles: {
       full: buildProfile(dim[dominant], 'full'),
       backup: buildProfile(dim[backup], 'backup'),
       develop: buildProfile(dim[developArea], 'develop'),
     },
-    orgInsight: buildOrgInsight(orgOrder),
+    orgInsight: buildOrgInsight(orgOrder, lang),
   };
 }

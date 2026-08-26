@@ -37,7 +37,7 @@ describe('App', () => {
     expect(screen.getByText('The Function · Being · Will Matrix')).toBeInTheDocument();
     // the dominant dimension's label legitimately appears more than once on the
     // report (intro line, rank line, profile heading) — assert presence, not uniqueness
-    expect(screen.getAllByText(DIM[expected.dominant].label, { exact: false }).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(DIM[expected.dominant].label.en, { exact: false }).length).toBeGreaterThan(0);
   });
 
   it('restarts back to the intro screen', () => {

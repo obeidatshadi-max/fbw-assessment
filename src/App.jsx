@@ -11,8 +11,10 @@ import { DIM } from './data/dimensions.js';
 import { applyChoice } from './lib/answers.js';
 import { buildReportData } from './lib/scoring.js';
 import { noopAuthAdapter } from './lib/authAdapter.js';
+import { useLanguage } from './i18n/LanguageContext.jsx';
 
 export default function App({ authAdapter = noopAuthAdapter }) {
+  const { lang, t, tf } = useLanguage();
   const [phase, setPhase] = useState('intro');
   const [p1Index, setP1Index] = useState(0);
   const [p1Answers, setP1Answers] = useState(() => SCENARIOS.map(() => ({ most: null, least: null })));
@@ -53,7 +55,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
         setPhase('p2');
       }
     } else if (phase === 'p2') {
-      const data = buildReportData(p1Answers, orgAnswers, SCENARIOS, ORG_ITEMS, DIM);
+      const data = buildReportData(p1Answers, orgAnswers, SCENARIOS, ORG_ITEMS, DIM, lang);
       setReportData(data);
       setPhase('report');
     }
@@ -75,7 +77,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   async function handleSignIn(email) {
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithEmail(email);
-    setAuthState(result.success ? { status: 'sent' } : { status: 'error', error: result.error || 'Could not send the link. Try again.' });
+    setAuthState(result.success ? { status: 'sent' } : { status: 'error', error: result.error || t('auth.sendError') });
   }
 
   useEffect(() => {
@@ -99,10 +101,10 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const p2Ready = orgAnswers.every(v => v !== null);
 
   const stepLabel = useMemo(() => {
-    if (phase === 'p1') return `Situation ${p1Index + 1} of ${SCENARIOS.length}`;
-    if (phase === 'p2') return 'Workplace questions';
+    if (phase === 'p1') return tf('header.stepP1', { n: p1Index + 1, total: SCENARIOS.length });
+    if (phase === 'p2') return t('header.stepP2');
     return '';
-  }, [phase, p1Index]);
+  }, [phase, p1Index, lang]);
 
   return (
     <>
@@ -136,7 +138,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
         visible={phase === 'p1' || phase === 'p2'}
         canGoBack={phase === 'p2' || (phase === 'p1' && p1Index > 0)}
         canGoNext={phase === 'p1' ? p1Ready : p2Ready}
-        nextLabel={phase === 'p1' ? (p1Index === SCENARIOS.length - 1 ? 'Continue to workplace' : 'Next') : 'See my report'}
+        nextLabel={phase === 'p1' ? (p1Index === SCENARIOS.length - 1 ? t('nav.continueToWorkplace') : t('nav.next')) : t('nav.seeReport')}
         onBack={handleBack}
         onNext={handleNext}
       />

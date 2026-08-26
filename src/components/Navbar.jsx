@@ -1,4 +1,7 @@
+import { useLanguage } from '../i18n/LanguageContext.jsx';
+
 export default function Navbar({ visible, canGoBack, canGoNext, nextLabel, onBack, onNext }) {
+  const { t } = useLanguage();
   if (!visible) return null;
   return (
     <nav className="navbar no-print">
@@ -8,7 +11,7 @@ export default function Navbar({ visible, canGoBack, canGoNext, nextLabel, onBac
           onClick={onBack}
           style={{ visibility: canGoBack ? 'visible' : 'hidden' }}
         >
-          Back
+          {t('nav.back')}
         </button>
         <button className="btn" onClick={onNext} disabled={!canGoNext}>
           {nextLabel}
