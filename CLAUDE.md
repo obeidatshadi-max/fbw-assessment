@@ -113,6 +113,42 @@ result that isn't theirs in that moment, you need storage.
 **Recommendation is not made here** — per Prompt 0, wait for your choice
 before building anything.
 
+## 360 self-vs-others feedback (Prompt 4)
+
+Storage: shared Supabase project `madarlead-assessment` (id
+`kkhkxjvipamajvawxzpc`), used by several of Shadi's other apps — tables are
+namespaced `fbw_` (`fbw_profiles`, `fbw_assessments`, `fbw_rater_links`,
+`fbw_rater_responses`). Chosen over a dedicated project to avoid a new
+$10/mo charge. Migrations: `supabase/migrations/0002_fbw_360.sql` (schema)
+and `0003_fbw_360_hardening.sql` (fixes below).
+
+- **Rater flow**: leader generates a link from the report screen
+  (`/rate/<uuid>`, the uuid is the token). `src/main.jsx` reads
+  `window.location.pathname` directly (no router library) and renders
+  `RaterApp` instead of `App` when it matches. Raters answer 12 Likert
+  items (`src/data/raterItems.js`, 3 per F/B/W/Compliance, same 1-3 scale
+  as `ORG_ITEMS`) completely anonymously — no login, no identity captured.
+- **Anonymity is structural, not a UI convention**: `fbw_rater_responses`
+  has an INSERT-only RLS policy and *no SELECT policy at all* — nobody,
+  including the leader, can read raw rows. The only sanctioned read path is
+  the `get_360_summary(link_id)` SECURITY DEFINER function, which checks
+  the caller owns the link and returns `scores: null` until at least 3
+  responses exist. Link validity for the rater side is checked the same
+  way, via `validate_rater_link(link_id)` — **not** a table SELECT grant.
+  (0003 replaced an earlier `using (true)` SELECT policy on
+  `fbw_rater_links` that let any caller in this shared DB enumerate every
+  leader's links — caught in review before ship.)
+- **Score comparability**: self scores are ipsative (forced-choice, sum to
+  15 across F/B/W); rater scores are Likert sums (3-9 per dimension). Both
+  are converted to "% of profile" before comparing — see
+  `src/lib/raterScoring.js` and
+  `docs/superpowers/specs/2026-08-26-prompt4-360-design.md` for the exact
+  math. This is an approximation, documented in the report copy.
+- **Known limitation**: no rater identity exists, so nothing stops one
+  person submitting more than once. Acceptable for this low-stakes,
+  reflective use; would need per-rater one-time tokens to close — revisit
+  if this tool is ever used for Prompt 8 (talent review).
+
 ## Data-protection checklist (placeholder, expand at Prompt 8)
 Before deploying anything that stores 360/team/longitudinal data:
 verify **current** data-protection requirements per country of use

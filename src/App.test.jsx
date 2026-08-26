@@ -109,4 +109,30 @@ describe('App with a fake auth adapter', () => {
     expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ userId: 'user-123' }));
     expect(await screen.findByText('Saved to your account.', { exact: false })).toBeInTheDocument();
   });
+
+  it('generates a rater link and shows the gap card once enough responses exist', async () => {
+    let authCallback;
+    const fakeAdapter = {
+      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      saveAssessment: vi.fn().mockResolvedValue({ success: true, assessmentId: 'assess-1' }),
+      getSession: vi.fn().mockResolvedValue(null),
+      onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
+      createRaterLink: vi.fn().mockResolvedValue({ success: true, linkId: 'link-1' }),
+      get360Summary: vi.fn().mockResolvedValue({ success: true, count: 3, scores: { F: 6, B: 6, W: 3, C: 3 } }),
+    };
+
+    render(<App authAdapter={fakeAdapter} />);
+    completeFullFlow();
+
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
+    fireEvent.click(screen.getByText('Send link'));
+    await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
+
+    fireEvent.click(await screen.findByText('Generate feedback link'));
+    expect(await screen.findByDisplayValue(/\/rate\/link-1$/)).toBeInTheDocument();
+    expect(fakeAdapter.createRaterLink).toHaveBeenCalledWith({ assessmentId: 'assess-1', userId: 'user-123' });
+
+    fireEvent.click(screen.getByText('Check for new responses'));
+    expect(await screen.findByText('Self vs. others')).toBeInTheDocument();
+  });
 });

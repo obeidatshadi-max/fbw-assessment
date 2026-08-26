@@ -1,8 +1,105 @@
+import { useState } from 'react';
 import AuthPanel from './AuthPanel.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { interpolate } from '../i18n/translations.js';
 import { DEV_PLAN } from '../data/devPlan.js';
 import { MANAGER_DEBRIEF_QUESTIONS } from '../data/managerDebrief.js';
+import { normalizeSelf, normalizeRaters, buildGapData } from '../lib/raterScoring.js';
+
+const MIN_RATERS = 3;
+const GAP_THRESHOLD = 5;
+
+function InviteFeedback({ raterLink, ind, compliance, dim, onCreateRaterLink, onRefreshRaterSummary }) {
+  const { t, tf, L } = useLanguage();
+  const [copied, setCopied] = useState(false);
+
+  function copyLink(url) {
+    navigator.clipboard?.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  const gapData = raterLink?.scores
+    ? buildGapData(normalizeSelf(ind.most, compliance?.score), normalizeRaters([raterLink.scores]))
+    : null;
+
+  return (
+    <>
+      <div className="sec-title no-print">{t('report.inviteHeading')}</div>
+      <div className="card pad no-print">
+        <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>{t('report.inviteBody')}</p>
+        {!raterLink && (
+          <button className="btn" onClick={onCreateRaterLink}>{t('report.inviteGenerate')}</button>
+        )}
+        {raterLink?.status === 'creating' && (
+          <button className="btn" disabled>{t('report.inviteGenerating')}</button>
+        )}
+        {raterLink?.status === 'error' && (
+          <>
+            <p style={{ color: '#b3261e', margin: '0 0 8px' }}>{raterLink.error || t('report.inviteError')}</p>
+            <button className="btn" onClick={onCreateRaterLink}>{t('report.inviteGenerate')}</button>
+          </>
+        )}
+        {raterLink?.status === 'ready' && (
+          <>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+              <input
+                readOnly
+                value={`${window.location.origin}/rate/${raterLink.id}`}
+                style={{ flex: 1, padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10 }}
+                onFocus={e => e.target.select()}
+              />
+              <button className="btn sm" onClick={() => copyLink(`${window.location.origin}/rate/${raterLink.id}`)}>
+                {copied ? t('report.inviteCopied') : t('report.inviteCopy')}
+              </button>
+            </div>
+            <p style={{ fontSize: 13.5, color: 'var(--muted)', margin: '0 0 10px' }}>{t('report.inviteShareNote')}</p>
+            {!gapData && (
+              <p style={{ fontSize: 13.5 }}>{tf('report.inviteCountWaiting', { count: raterLink.count || 0, min: MIN_RATERS })}</p>
+            )}
+            <button className="btn ghost sm" onClick={onRefreshRaterSummary}>{t('report.gapRefresh')}</button>
+          </>
+        )}
+      </div>
+
+      {gapData && (
+        <>
+          <div className="sec-title">{t('report.gapTitle')}</div>
+          <div className="card pad">
+            <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>
+              {tf('report.gapIntro', { count: raterLink.count })}
+            </p>
+            {gapData.map(g => {
+              const label = g.key === 'C' ? t('report.complianceLineLabel') : L(dim[g.key].label);
+              const color = g.key === 'C' ? dim.W.color : dim[g.key].color;
+              const note = g.gap <= -GAP_THRESHOLD ? t('report.gapBlindSpot')
+                : g.gap >= GAP_THRESHOLD ? t('report.gapHiddenStrength')
+                : t('report.gapAligned');
+              return (
+                <div className="orgbar" key={g.key} style={{ marginBottom: 14 }}>
+                  <div className="top">
+                    <span style={{ color, fontWeight: 600 }}>{label}</span>
+                  </div>
+                  <div className="track">
+                    <div className="fill" style={{ width: `${g.selfPct}%`, background: color, opacity: 0.5 }} />
+                  </div>
+                  <div className="track" style={{ marginTop: 4 }}>
+                    <div className="fill" style={{ width: `${g.raterPct}%`, background: color }} />
+                  </div>
+                  <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: '4px 0 0' }}>
+                    {t('report.gapSelfLabel')}: {Math.round(g.selfPct)}% · {t('report.gapOthersLabel')}: {Math.round(g.raterPct)}%
+                  </p>
+                  <p style={{ fontSize: 13.5, marginTop: 4 }}>{note}</p>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+    </>
+  );
+}
 
 function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   const { t, L } = useLanguage();
@@ -56,7 +153,7 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   );
 }
 
-export default function ReportScreen({ reportData, dim, authState, onRestart, onPrint, onSignIn }) {
+export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateRaterLink, onRefreshRaterSummary }) {
   const { t, tf, L } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
 
@@ -176,6 +273,17 @@ export default function ReportScreen({ reportData, dim, authState, onRestart, on
       </div>
 
       <AuthPanel authState={authState} onSignIn={onSignIn} />
+
+      {authState.status === 'saved' && onCreateRaterLink && (
+        <InviteFeedback
+          raterLink={raterLink}
+          ind={reportData.ind}
+          compliance={compliance}
+          dim={dim}
+          onCreateRaterLink={onCreateRaterLink}
+          onRefreshRaterSummary={onRefreshRaterSummary}
+        />
+      )}
 
       <div className="no-print" style={{ marginTop: 22, display: 'flex', gap: 12 }}>
         <button className="btn ghost" onClick={onRestart}>{t('report.startAgain')}</button>
