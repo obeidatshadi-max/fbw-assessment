@@ -4,6 +4,14 @@ create table profiles (
   created_at timestamptz not null default now()
 );
 
+alter table profiles enable row level security;
+
+create policy "read own profile" on profiles
+  for select using (auth.uid() = id);
+
+create policy "insert own profile" on profiles
+  for insert with check (auth.uid() = id);
+
 -- assessments: one row per completed reflection a leader chose to save
 create table assessments (
   id uuid primary key default gen_random_uuid(),
