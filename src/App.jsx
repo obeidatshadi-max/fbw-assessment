@@ -27,6 +27,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const [complianceAnswers, setComplianceAnswers] = useState(() => COMPLIANCE_ITEMS.map(() => null));
   const [reportData, setReportData] = useState(null);
   const [authState, setAuthState] = useState({ status: 'anon' });
+  const [raterLink, setRaterLink] = useState(null); // { id, count, scores }
 
   const doneP1 = p1Answers.filter(a => a.most !== null && a.least !== null).length;
   const doneP2 = orgAnswers.filter(v => v !== null).length;
@@ -88,6 +89,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setComplianceAnswers(COMPLIANCE_ITEMS.map(() => null));
     setReportData(null);
     setAuthState({ status: 'anon' });
+    setRaterLink(null);
     setPhase('intro');
   }
 
@@ -106,17 +108,40 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       if (session && reportData && authState.status !== 'saved' && authState.status !== 'signedIn') {
         setAuthState({ status: 'signedIn' });
         const result = await authAdapter.saveAssessment({
+          role,
           p1Answers,
           orgAnswers,
           complianceAnswers,
           reportData,
           userId: session.user.id,
         });
-        setAuthState(result.success ? { status: 'saved' } : { status: 'error', error: result.error });
+        setAuthState(
+          result.success
+            ? { status: 'saved', assessmentId: result.assessmentId, userId: session.user.id }
+            : { status: 'error', error: result.error }
+        );
       }
     });
     return unsubscribe;
-  }, [authAdapter, reportData, authState.status, p1Answers, orgAnswers, complianceAnswers]);
+  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers]);
+
+  async function handleCreateRaterLink() {
+    setRaterLink({ status: 'creating' });
+    const result = await authAdapter.createRaterLink({ assessmentId: authState.assessmentId, userId: authState.userId });
+    if (!result.success) {
+      setRaterLink({ status: 'error', error: result.error });
+      return;
+    }
+    setRaterLink({ status: 'ready', id: result.linkId, count: 0, scores: null });
+  }
+
+  async function handleRefreshRaterSummary() {
+    if (!raterLink || !raterLink.id) return;
+    const result = await authAdapter.get360Summary({ linkId: raterLink.id });
+    if (result.success) {
+      setRaterLink(prev => ({ ...prev, count: result.count, scores: result.scores }));
+    }
+  }
 
   const currentAnswer = p1Answers[p1Index];
   const p1Ready = currentAnswer && currentAnswer.most !== null && currentAnswer.least !== null;
@@ -152,9 +177,12 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               reportData={reportData}
               dim={DIM}
               authState={authState}
+              raterLink={raterLink}
               onRestart={handleRestart}
               onPrint={handlePrint}
               onSignIn={handleSignIn}
+              onCreateRaterLink={handleCreateRaterLink}
+              onRefreshRaterSummary={handleRefreshRaterSummary}
             />
           )}
         </div>
