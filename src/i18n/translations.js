@@ -57,6 +57,11 @@ export const UI = {
       note5: 'Takes about {minutes} minutes. Nothing is saved or sent anywhere unless you choose to save your report.',
       start: 'Start the reflection',
     },
+    role: {
+      heading: 'Your role',
+      help: 'Situations are tailored to your role where available.',
+      draftNote: 'These situations are an early draft for this role and are still being refined.',
+    },
     scenario: {
       kicker: 'Part 1 · Situation {n}/{total}',
       sub: 'Choose one most like you and one least like you.',
@@ -154,6 +159,11 @@ export const UI = {
       note5: 'يستغرق نحو {minutes} دقائق. لا يُحفظ أو يُرسل شيء ما لم تختر حفظ تقريرك.',
       start: 'ابدأ التأمل',
     },
+    role: {
+      heading: 'دورك الوظيفي',
+      help: 'تُصمَّم المواقف حسب دورك الوظيفي عند توفرها.',
+      draftNote: 'هذه المواقف مسودة أولية لهذا الدور وما زالت قيد التطوير.',
+    },
     scenario: {
       kicker: 'الجزء ١ · الموقف {n}/{total}',
       sub: 'اختر إجابة واحدة الأقرب إليك وأخرى الأبعد عنك.',
@@ -250,6 +260,11 @@ export const UI = {
       note4: 'Puis répondez à {n} courtes questions sur votre environnement de travail.',
       note5: "Cela prend environ {minutes} minutes. Rien n'est enregistré ni envoyé, sauf si vous choisissez de sauvegarder votre rapport.",
       start: 'Commencer la réflexion',
+    },
+    role: {
+      heading: 'Votre rôle',
+      help: 'Les situations sont adaptées à votre rôle lorsque cela est disponible.',
+      draftNote: 'Ces situations sont une première ébauche pour ce rôle et sont encore en cours de finalisation.',
     },
     scenario: {
       kicker: 'Partie 1 · Situation {n}/{total}',

@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { DIM } from '../data/dimensions.js';
+import { ROLES, DEFAULT_ROLE } from '../data/roles.js';
+import { isDraftRole } from '../data/scenarioSets.js';
 
 export default function IntroScreen({ onStart }) {
   const { t, tf, L } = useLanguage();
+  const [role, setRole] = useState(DEFAULT_ROLE);
   return (
     <section className="screen active" id="screen-intro">
       <div className="hero">
@@ -37,8 +41,24 @@ export default function IntroScreen({ onStart }) {
         </ul>
       </div>
 
+      <div className="note" style={{ marginTop: 16 }}>
+        <label htmlFor="role-select"><b>{t('role.heading')}</b></label>
+        <div className="q" style={{ marginBottom: 8 }}>{t('role.help')}</div>
+        <select
+          id="role-select"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          style={{ width: '100%', padding: '10px 12px', borderRadius: 8 }}
+        >
+          {ROLES.map(r => (
+            <option key={r.id} value={r.id}>{L(r.label)}</option>
+          ))}
+        </select>
+        {isDraftRole(role) && <div className="q" style={{ marginTop: 8 }}>{t('role.draftNote')}</div>}
+      </div>
+
       <div style={{ height: 20 }} />
-      <button className="btn" onClick={onStart}>{t('intro.start')}</button>
+      <button className="btn" onClick={() => onStart(role)}>{t('intro.start')}</button>
     </section>
   );
 }

@@ -2,6 +2,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App.jsx';
 import { SCENARIOS } from './data/scenarios.js';
+import { SCENARIO_SETS } from './data/scenarioSets.js';
 import { ORG_ITEMS } from './data/orgItems.js';
 import { DIM } from './data/dimensions.js';
 import { buildReportData } from './lib/scoring.js';
@@ -55,6 +56,17 @@ describe('App', () => {
     expect(screen.getByText('Next')).toBeDisabled();
     fireEvent.click(screen.getAllByText('Least like me')[1]);
     expect(screen.getByText('Next')).toBeEnabled();
+  });
+
+  it('loads the role-specific scenario set once a non-default role is chosen', () => {
+    render(<App />);
+    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'product_manager' } });
+    fireEvent.click(screen.getByText('Start the reflection'));
+
+    const pmScenarios = SCENARIO_SETS.product_manager;
+    expect(pmScenarios).not.toEqual(SCENARIOS);
+    expect(screen.getByText(pmScenarios[0].s.en)).toBeInTheDocument();
+    expect(screen.getByText('Situation 1 of 15')).toBeInTheDocument();
   });
 });
 
