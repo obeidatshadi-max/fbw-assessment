@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { SCENARIOS } from './scenarios.js';
 import { ORG_ITEMS } from './orgItems.js';
+import { COMPLIANCE_ITEMS } from './complianceItems.js';
 import { DIM } from './dimensions.js';
 
 describe('SCENARIOS', () => {
@@ -20,6 +21,12 @@ describe('ORG_ITEMS', () => {
     const counts = { F: 0, B: 0, W: 0 };
     ORG_ITEMS.forEach(it => counts[it.d]++);
     expect(counts).toEqual({ F: 3, B: 3, W: 3 });
+  });
+});
+
+describe('COMPLIANCE_ITEMS', () => {
+  it('has 3 items, one per named compliance-courage behavior', () => {
+    expect(COMPLIANCE_ITEMS).toHaveLength(3);
   });
 });
 

@@ -4,6 +4,7 @@ import App from './App.jsx';
 import { SCENARIOS } from './data/scenarios.js';
 import { SCENARIO_SETS } from './data/scenarioSets.js';
 import { ORG_ITEMS } from './data/orgItems.js';
+import { COMPLIANCE_ITEMS } from './data/complianceItems.js';
 import { DIM } from './data/dimensions.js';
 import { buildReportData } from './lib/scoring.js';
 
@@ -23,6 +24,12 @@ function completeFullFlow() {
     const oftenButtons = screen.getAllByText('Often');
     fireEvent.click(oftenButtons[i]);
   }
+  fireEvent.click(screen.getByText('Continue'));
+
+  for (let i = 0; i < COMPLIANCE_ITEMS.length; i++) {
+    const oftenButtons = screen.getAllByText('Often');
+    fireEvent.click(oftenButtons[i]);
+  }
   fireEvent.click(screen.getByText('See my report'));
 }
 
@@ -33,12 +40,20 @@ describe('App', () => {
 
     const expectedAnswers = SCENARIOS.map(() => ({ most: 0, least: 1 }));
     const expectedOrgAnswers = ORG_ITEMS.map(() => 3);
-    const expected = buildReportData(expectedAnswers, expectedOrgAnswers, SCENARIOS, ORG_ITEMS, DIM);
+    const expectedComplianceAnswers = COMPLIANCE_ITEMS.map(() => 3);
+    const expected = buildReportData(expectedAnswers, expectedOrgAnswers, SCENARIOS, ORG_ITEMS, DIM, 'en', expectedComplianceAnswers);
 
     expect(screen.getByText('The Function · Being · Will Matrix')).toBeInTheDocument();
     // the dominant dimension's label legitimately appears more than once on the
     // report (intro line, rank line, profile heading) — assert presence, not uniqueness
     expect(screen.getAllByText(DIM[expected.dominant].label.en, { exact: false }).length).toBeGreaterThan(0);
+  });
+
+  it('shows the compliance courage line inside the Will profile block', () => {
+    render(<App />);
+    completeFullFlow();
+    expect(screen.getByText('Compliance courage')).toBeInTheDocument();
+    expect(screen.getByText('A strength to protect.')).toBeInTheDocument();
   });
 
   it('restarts back to the intro screen', () => {

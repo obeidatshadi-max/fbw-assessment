@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { L, t, tf, dirFor, LANGS, UI } from './translations.js';
 import { SCENARIOS } from '../data/scenarios.js';
 import { ORG_ITEMS } from '../data/orgItems.js';
+import { COMPLIANCE_ITEMS } from '../data/complianceItems.js';
 import { DIM } from '../data/dimensions.js';
 
 describe('L', () => {
@@ -76,6 +77,12 @@ describe('translation completeness', () => {
   it('every org item has en/ar/fr text', () => {
     ORG_ITEMS.forEach((it, i) => {
       LANGS.forEach(lang => expect(L(it.t, lang), `org item ${i} t.${lang}`).toBeTruthy());
+    });
+  });
+
+  it('every compliance-courage item has en/ar/fr text', () => {
+    COMPLIANCE_ITEMS.forEach((it, i) => {
+      LANGS.forEach(lang => expect(L(it.t, lang), `compliance item ${i} t.${lang}`).toBeTruthy());
     });
   });
 

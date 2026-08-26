@@ -1,13 +1,29 @@
 import AuthPanel from './AuthPanel.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-function ProfileBlock({ dimEntry, data, roleLabel, mode }) {
+function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   const { t, L } = useLanguage();
   return (
     <div className={`profile ${dimEntry.cls}`}>
       <div className="badge">{roleLabel}</div>
       <h3>{L(dimEntry.label)}</h3>
       <div className="tag">{L(dimEntry.tag)}</div>
+      {dimEntry.key === 'W' && compliance && (
+        <div className="orgbar" style={{ marginTop: 14, marginBottom: 4 }}>
+          <div className="top">
+            <span style={{ fontWeight: 600 }}>{t('report.complianceLineLabel')}</span>
+            <span className="lvl">{compliance.level}</span>
+          </div>
+          <div className="track">
+            <div className="fill" style={{ width: `${compliance.pct}%`, background: dimEntry.color }} />
+          </div>
+          <div className="insight" style={{ marginTop: 10 }}>
+            <h4>{compliance.head}</h4>
+            <p>{compliance.body}</p>
+            <p style={{ marginTop: 8 }}>{compliance.note}</p>
+          </div>
+        </div>
+      )}
       {mode === 'full' && (
         <>
           <p style={{ fontSize: 14.5, margin: '0 0 4px' }}>{t('report.fullIntro')}</p>
@@ -39,7 +55,7 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode }) {
 
 export default function ReportScreen({ reportData, dim, authState, onRestart, onPrint, onSignIn }) {
   const { t, tf, L } = useLanguage();
-  const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total } = reportData;
+  const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
 
   return (
     <section className="screen active" id="screen-report">
@@ -84,11 +100,11 @@ export default function ReportScreen({ reportData, dim, authState, onRestart, on
 
       <div className="sec-title">{t('report.detailedTitle')}</div>
       <div className="card pad">
-        <ProfileBlock dimEntry={dim[dominant]} data={profiles.full} roleLabel={t('report.roleFull')} mode="full" />
+        <ProfileBlock dimEntry={dim[dominant]} data={profiles.full} roleLabel={t('report.roleFull')} mode="full" compliance={compliance} />
         <hr style={{ border: 'none', borderTop: '1px solid var(--line-soft)', margin: '20px 0' }} />
-        <ProfileBlock dimEntry={dim[backup]} data={profiles.backup} roleLabel={t('report.roleBackup')} mode="backup" />
+        <ProfileBlock dimEntry={dim[backup]} data={profiles.backup} roleLabel={t('report.roleBackup')} mode="backup" compliance={compliance} />
         <hr style={{ border: 'none', borderTop: '1px solid var(--line-soft)', margin: '20px 0' }} />
-        <ProfileBlock dimEntry={dim[developArea]} data={profiles.develop} roleLabel={t('report.roleDevelop')} mode="develop" />
+        <ProfileBlock dimEntry={dim[developArea]} data={profiles.develop} roleLabel={t('report.roleDevelop')} mode="develop" compliance={compliance} />
       </div>
 
       <div className="sec-title">{t('report.orgTitle')}</div>

@@ -4,8 +4,10 @@ import Navbar from './components/Navbar.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
 import ScenarioScreen from './components/ScenarioScreen.jsx';
 import OrgScreen from './components/OrgScreen.jsx';
+import ComplianceScreen from './components/ComplianceScreen.jsx';
 import ReportScreen from './components/ReportScreen.jsx';
 import { ORG_ITEMS } from './data/orgItems.js';
+import { COMPLIANCE_ITEMS } from './data/complianceItems.js';
 import { DIM } from './data/dimensions.js';
 import { DEFAULT_ROLE } from './data/roles.js';
 import { getScenariosForRole } from './data/scenarioSets.js';
@@ -22,12 +24,14 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const [p1Index, setP1Index] = useState(0);
   const [p1Answers, setP1Answers] = useState(() => scenarios.map(() => ({ most: null, least: null })));
   const [orgAnswers, setOrgAnswers] = useState(() => ORG_ITEMS.map(() => null));
+  const [complianceAnswers, setComplianceAnswers] = useState(() => COMPLIANCE_ITEMS.map(() => null));
   const [reportData, setReportData] = useState(null);
   const [authState, setAuthState] = useState({ status: 'anon' });
 
   const doneP1 = p1Answers.filter(a => a.most !== null && a.least !== null).length;
   const doneP2 = orgAnswers.filter(v => v !== null).length;
-  const totalSteps = scenarios.length + ORG_ITEMS.length;
+  const doneP3 = complianceAnswers.filter(v => v !== null).length;
+  const totalSteps = scenarios.length + ORG_ITEMS.length + COMPLIANCE_ITEMS.length;
 
   function handleStart(selectedRole) {
     const nextScenarios = getScenariosForRole(selectedRole);
@@ -46,12 +50,18 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setOrgAnswers(prev => prev.map((v, i) => (i === itemIndex ? value : v)));
   }
 
+  function handleComplianceSelect(itemIndex, value) {
+    setComplianceAnswers(prev => prev.map((v, i) => (i === itemIndex ? value : v)));
+  }
+
   function handleBack() {
     if (phase === 'p1') {
       if (p1Index > 0) setP1Index(p1Index - 1);
     } else if (phase === 'p2') {
       setPhase('p1');
       setP1Index(scenarios.length - 1);
+    } else if (phase === 'p3') {
+      setPhase('p2');
     }
   }
 
@@ -63,7 +73,9 @@ export default function App({ authAdapter = noopAuthAdapter }) {
         setPhase('p2');
       }
     } else if (phase === 'p2') {
-      const data = buildReportData(p1Answers, orgAnswers, scenarios, ORG_ITEMS, DIM, lang);
+      setPhase('p3');
+    } else if (phase === 'p3') {
+      const data = buildReportData(p1Answers, orgAnswers, scenarios, ORG_ITEMS, DIM, lang, complianceAnswers);
       setReportData(data);
       setPhase('report');
     }
@@ -73,6 +85,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setP1Answers(scenarios.map(() => ({ most: null, least: null })));
     setP1Index(0);
     setOrgAnswers(ORG_ITEMS.map(() => null));
+    setComplianceAnswers(COMPLIANCE_ITEMS.map(() => null));
     setReportData(null);
     setAuthState({ status: 'anon' });
     setPhase('intro');
@@ -95,6 +108,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
         const result = await authAdapter.saveAssessment({
           p1Answers,
           orgAnswers,
+          complianceAnswers,
           reportData,
           userId: session.user.id,
         });
@@ -102,21 +116,23 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       }
     });
     return unsubscribe;
-  }, [authAdapter, reportData, authState.status, p1Answers, orgAnswers]);
+  }, [authAdapter, reportData, authState.status, p1Answers, orgAnswers, complianceAnswers]);
 
   const currentAnswer = p1Answers[p1Index];
   const p1Ready = currentAnswer && currentAnswer.most !== null && currentAnswer.least !== null;
   const p2Ready = orgAnswers.every(v => v !== null);
+  const p3Ready = complianceAnswers.every(v => v !== null);
 
   const stepLabel = useMemo(() => {
     if (phase === 'p1') return tf('header.stepP1', { n: p1Index + 1, total: scenarios.length });
     if (phase === 'p2') return t('header.stepP2');
+    if (phase === 'p3') return t('header.stepP3');
     return '';
   }, [phase, p1Index, lang]);
 
   return (
     <>
-      <Header stepLabel={stepLabel} done={doneP1 + doneP2} total={totalSteps} final={phase === 'report'} />
+      <Header stepLabel={stepLabel} done={doneP1 + doneP2 + doneP3} total={totalSteps} final={phase === 'report'} />
       <main>
         <div className="wrap">
           {phase === 'intro' && <IntroScreen onStart={handleStart} />}
@@ -130,6 +146,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
             />
           )}
           {phase === 'p2' && <OrgScreen items={ORG_ITEMS} answers={orgAnswers} onSelect={handleOrgSelect} />}
+          {phase === 'p3' && <ComplianceScreen items={COMPLIANCE_ITEMS} answers={complianceAnswers} onSelect={handleComplianceSelect} />}
           {phase === 'report' && reportData && (
             <ReportScreen
               reportData={reportData}
@@ -143,10 +160,16 @@ export default function App({ authAdapter = noopAuthAdapter }) {
         </div>
       </main>
       <Navbar
-        visible={phase === 'p1' || phase === 'p2'}
-        canGoBack={phase === 'p2' || (phase === 'p1' && p1Index > 0)}
-        canGoNext={phase === 'p1' ? p1Ready : p2Ready}
-        nextLabel={phase === 'p1' ? (p1Index === scenarios.length - 1 ? t('nav.continueToWorkplace') : t('nav.next')) : t('nav.seeReport')}
+        visible={phase === 'p1' || phase === 'p2' || phase === 'p3'}
+        canGoBack={phase === 'p2' || phase === 'p3' || (phase === 'p1' && p1Index > 0)}
+        canGoNext={phase === 'p1' ? p1Ready : phase === 'p2' ? p2Ready : p3Ready}
+        nextLabel={
+          phase === 'p1'
+            ? (p1Index === scenarios.length - 1 ? t('nav.continueToWorkplace') : t('nav.next'))
+            : phase === 'p2'
+            ? t('nav.continueToCompliance')
+            : t('nav.seeReport')
+        }
         onBack={handleBack}
         onNext={handleNext}
       />

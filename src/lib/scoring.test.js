@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { scoreIndividual, scoreOrg, rank, buildReportData } from './scoring.js';
+import { scoreIndividual, scoreOrg, scoreCompliance, rank, buildReportData } from './scoring.js';
 
 const scenarios = [
   { s: 'a', opts: [{ t: 'f', d: 'F' }, { t: 'b', d: 'B' }, { t: 'w', d: 'W' }] },
@@ -31,6 +31,16 @@ describe('scoreOrg', () => {
     const items = [{ t: 'x', d: 'F' }, { t: 'y', d: 'F' }, { t: 'z', d: 'B' }];
     const answers = [3, 2, 1];
     expect(scoreOrg(answers, items)).toEqual({ F: 5, B: 1, W: 0 });
+  });
+});
+
+describe('scoreCompliance', () => {
+  it('sums the 1-3 answers', () => {
+    expect(scoreCompliance([3, 2, 1])).toBe(6);
+  });
+
+  it('treats an unanswered item as 0', () => {
+    expect(scoreCompliance([3, null, 1])).toBe(4);
   });
 });
 
@@ -95,5 +105,30 @@ describe('buildReportData', () => {
     const report = buildReportData(answers, orgAnswers, scenarios, orgItems, dim);
     expect(report.developArea).toBe('W');
     expect(report.summaryInsight.extra).toBeTruthy();
+  });
+
+  it('omits compliance when no complianceAnswers are passed (back-compat)', () => {
+    const answers = [{ most: 0, least: 1 }, { most: 0, least: 1 }, { most: 1, least: 2 }];
+    const orgItems = [{ t: 'x', d: 'F' }, { t: 'y', d: 'B' }, { t: 'z', d: 'W' }];
+    const report = buildReportData(answers, [3, 2, 1], scenarios, orgItems, dim);
+    expect(report.compliance).toBeNull();
+  });
+
+  it('scores compliance separately and buckets it high/medium/low', () => {
+    const answers = [{ most: 0, least: 1 }, { most: 0, least: 1 }, { most: 1, least: 2 }];
+    const orgItems = [{ t: 'x', d: 'F' }, { t: 'y', d: 'B' }, { t: 'z', d: 'W' }];
+
+    const high = buildReportData(answers, [3, 2, 1], scenarios, orgItems, dim, 'en', [3, 3, 3]);
+    expect(high.compliance.score).toBe(9);
+    expect(high.compliance.level).toBe('High');
+    expect(high.compliance.head).toBeTruthy();
+
+    const medium = buildReportData(answers, [3, 2, 1], scenarios, orgItems, dim, 'en', [2, 2, 1]);
+    expect(medium.compliance.score).toBe(5);
+    expect(medium.compliance.level).toBe('Medium');
+
+    const low = buildReportData(answers, [3, 2, 1], scenarios, orgItems, dim, 'en', [1, 1, 1]);
+    expect(low.compliance.score).toBe(3);
+    expect(low.compliance.level).toBe('Low');
   });
 });

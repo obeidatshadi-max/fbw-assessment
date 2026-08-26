@@ -16,6 +16,12 @@ export function scoreOrg(orgAnswers, orgItems) {
   return s;
 }
 
+// Sum of a 1-3 Likert scale across all compliance-courage items — a single
+// scale, not per-dimension like scoreOrg (every item lives inside Will).
+export function scoreCompliance(complianceAnswers) {
+  return complianceAnswers.reduce((sum, v) => sum + (v || 0), 0);
+}
+
 export function rank(scoreObj, tiebreak) {
   const keys = ['F', 'B', 'W'];
   keys.sort((a, b) => {
@@ -62,6 +68,21 @@ function buildInsight(dominant, developArea, orgScore, dim, lang) {
   return { head, body, extra };
 }
 
+function buildComplianceResult(score, lang) {
+  const level = score >= 7 ? t(lang, 'report.levelHigh') : score >= 5 ? t(lang, 'report.levelMedium') : t(lang, 'report.levelLow');
+  const pct = Math.max(6, ((score - 3) / 6) * 100);
+  const headKey = score >= 7 ? 'report.complianceHighHead' : score >= 5 ? 'report.complianceMediumHead' : 'report.complianceLowHead';
+  const bodyKey = score >= 7 ? 'report.complianceHighBody' : score >= 5 ? 'report.complianceMediumBody' : 'report.complianceLowBody';
+  return {
+    score,
+    level,
+    pct,
+    head: t(lang, headKey),
+    body: t(lang, bodyKey),
+    note: t(lang, 'report.complianceNote'),
+  };
+}
+
 function buildOrgInsight(orgOrder, lang) {
   const top = orgOrder[0];
   const low = orgOrder[2];
@@ -73,7 +94,7 @@ function buildOrgInsight(orgOrder, lang) {
   };
 }
 
-export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim, lang = 'en') {
+export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim, lang = 'en', complianceAnswers = null) {
   const ind = scoreIndividual(p1Answers, scenarios);
   const org = scoreOrg(orgAnswers, orgItems);
   const order = rank(ind.most, ind.least);
@@ -113,5 +134,6 @@ export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim,
       develop: buildProfile(dim[developArea], 'develop'),
     },
     orgInsight: buildOrgInsight(orgOrder, lang),
+    compliance: complianceAnswers ? buildComplianceResult(scoreCompliance(complianceAnswers), lang) : null,
   };
 }
