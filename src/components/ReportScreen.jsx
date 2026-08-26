@@ -1,5 +1,8 @@
 import AuthPanel from './AuthPanel.jsx';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { interpolate } from '../i18n/translations.js';
+import { DEV_PLAN } from '../data/devPlan.js';
+import { MANAGER_DEBRIEF_QUESTIONS } from '../data/managerDebrief.js';
 
 function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   const { t, L } = useLanguage();
@@ -56,6 +59,14 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
 export default function ReportScreen({ reportData, dim, authState, onRestart, onPrint, onSignIn }) {
   const { t, tf, L } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
+
+  const debriefVars = { dominant: L(dim[dominant].label), developArea: L(dim[developArea].label) };
+  const plan = DEV_PLAN[developArea];
+  const planPhases = [
+    { key: 'day30', label: t('report.planDay30'), actions: plan.day30 },
+    { key: 'day60', label: t('report.planDay60'), actions: plan.day60 },
+    { key: 'day90', label: t('report.planDay90'), actions: plan.day90 },
+  ];
 
   return (
     <section className="screen active" id="screen-report">
@@ -135,6 +146,29 @@ export default function ReportScreen({ reportData, dim, authState, onRestart, on
           </p>
           <p style={{ marginTop: 8 }}>{orgInsight.note}</p>
         </div>
+      </div>
+
+      <div className="sec-title">{t('report.planTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>
+          {tf('report.planIntro', { developArea: L(dim[developArea].label) })}
+        </p>
+        {planPhases.map((phase, i) => (
+          <div key={phase.key} style={i > 0 ? { marginTop: 16 } : undefined}>
+            <h4 style={{ color: dim[developArea].color }}>{phase.label}</h4>
+            <ul className="clean">{phase.actions.map((x, j) => <li key={j}>{L(x)}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="sec-title">{t('report.debriefTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 12px', fontSize: 14.5, color: 'var(--text)' }}>{t('report.debriefIntro')}</p>
+        <ol className="clean">
+          {MANAGER_DEBRIEF_QUESTIONS.map((q, i) => (
+            <li key={i}>{interpolate(L(q), debriefVars)}</li>
+          ))}
+        </ol>
       </div>
 
       <div className="disclaimer">

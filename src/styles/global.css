@@ -83,6 +83,7 @@
   .note{font-size:13.5px; color:var(--muted); background:#f4f5f7; border:1px solid var(--line-soft); border-radius:var(--r-sm); padding:14px 16px;}
   .note b{color:var(--text);}
   ul.clean{margin:8px 0 0; padding-left:18px;} ul.clean li{margin:5px 0;}
+  ol.clean{margin:8px 0 0; padding-left:18px;} ol.clean li{margin:5px 0;}
 
   /* Buttons */
   .btn{
@@ -174,6 +175,7 @@
      progress) reorder automatically once html[dir="rtl"] is set; only
      physical (left/right) properties below need an explicit mirror. */
   [dir="rtl"] ul.clean{padding-left:0; padding-right:18px;}
+  [dir="rtl"] ol.clean{padding-left:0; padding-right:18px;}
   [dir="rtl"] .legend i{margin-right:0; margin-left:6px;}
   [dir="rtl"] .rankline .pct{margin-left:0; margin-right:auto;}
   [dir="rtl"] .profile{border-left:none; padding-left:0; border-right:4px solid var(--line); padding-right:16px;}

@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { SCENARIOS } from './scenarios.js';
 import { ORG_ITEMS } from './orgItems.js';
 import { COMPLIANCE_ITEMS } from './complianceItems.js';
+import { DEV_PLAN } from './devPlan.js';
+import { MANAGER_DEBRIEF_QUESTIONS } from './managerDebrief.js';
 import { DIM } from './dimensions.js';
 
 describe('SCENARIOS', () => {
@@ -27,6 +29,26 @@ describe('ORG_ITEMS', () => {
 describe('COMPLIANCE_ITEMS', () => {
   it('has 3 items, one per named compliance-courage behavior', () => {
     expect(COMPLIANCE_ITEMS).toHaveLength(3);
+  });
+});
+
+describe('DEV_PLAN', () => {
+  it('has F, B, W each with 2 concrete actions per 30/60/90 phase', () => {
+    ['F', 'B', 'W'].forEach(k => {
+      const plan = DEV_PLAN[k];
+      ['day30', 'day60', 'day90'].forEach(phase => {
+        expect(plan[phase]).toHaveLength(2);
+      });
+    });
+  });
+});
+
+describe('MANAGER_DEBRIEF_QUESTIONS', () => {
+  it('has 5-6 questions, most grounded in the person\'s dominant/growth-edge dimension', () => {
+    expect(MANAGER_DEBRIEF_QUESTIONS.length).toBeGreaterThanOrEqual(5);
+    expect(MANAGER_DEBRIEF_QUESTIONS.length).toBeLessThanOrEqual(6);
+    const withPlaceholder = MANAGER_DEBRIEF_QUESTIONS.filter(q => /\{dominant\}|\{developArea\}/.test(q.en));
+    expect(withPlaceholder.length).toBeGreaterThanOrEqual(4);
   });
 });
 

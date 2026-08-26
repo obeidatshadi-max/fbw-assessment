@@ -42,6 +42,22 @@ describe('ReportScreen', () => {
     expect(onPrint).toHaveBeenCalledOnce();
   });
 
+  it('renders the 30/60/90 plan and manager debrief guide, with dominant/growth-edge interpolated', () => {
+    render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
+    expect(screen.getByText('Your 30/60/90-day plan')).toBeInTheDocument();
+    expect(screen.getByText('Day 1–30')).toBeInTheDocument();
+    expect(screen.getByText('Day 31–60')).toBeInTheDocument();
+    expect(screen.getByText('Day 61–90')).toBeInTheDocument();
+    expect(screen.getByText('Manager debrief guide')).toBeInTheDocument();
+    const dominantLabel = dim[reportData.dominant].label;
+    const developLabel = dim[reportData.developArea].label;
+    expect(screen.getByText(`Does your ${dominantLabel} profile feel accurate to you? Give one recent example.`)).toBeInTheDocument();
+    expect(screen.getByText(`What is one thing from today you want to check back on in 90 days?`)).toBeInTheDocument();
+    expect(screen.getAllByText((_, el) => el.textContent.includes(developLabel) && el.tagName === 'LI').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/\{developArea\}/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/\{dominant\}/)).not.toBeInTheDocument();
+  });
+
   it('renders all three profile blocks', () => {
     render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
     // Use mode-specific h4 headings to verify all three profile blocks exist

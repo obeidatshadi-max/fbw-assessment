@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { L, t, tf, dirFor, LANGS, UI } from './translations.js';
+import { L, t, tf, interpolate, dirFor, LANGS, UI } from './translations.js';
 import { SCENARIOS } from '../data/scenarios.js';
 import { ORG_ITEMS } from '../data/orgItems.js';
 import { COMPLIANCE_ITEMS } from '../data/complianceItems.js';
+import { DEV_PLAN } from '../data/devPlan.js';
+import { MANAGER_DEBRIEF_QUESTIONS } from '../data/managerDebrief.js';
 import { DIM } from '../data/dimensions.js';
 
 describe('L', () => {
@@ -31,6 +33,16 @@ describe('t / tf', () => {
 
   it('interpolates {placeholders}', () => {
     expect(tf('en', 'header.stepP1', { n: 3, total: 15 })).toBe('Situation 3 of 15');
+  });
+});
+
+describe('interpolate', () => {
+  it('replaces {placeholders} with given vars', () => {
+    expect(interpolate('Hello {name}, you are {age}.', { name: 'Sam', age: 30 })).toBe('Hello Sam, you are 30.');
+  });
+
+  it('leaves a placeholder untouched if its var is missing', () => {
+    expect(interpolate('Hello {name}.', {})).toBe('Hello {name}.');
   });
 });
 
@@ -83,6 +95,22 @@ describe('translation completeness', () => {
   it('every compliance-courage item has en/ar/fr text', () => {
     COMPLIANCE_ITEMS.forEach((it, i) => {
       LANGS.forEach(lang => expect(L(it.t, lang), `compliance item ${i} t.${lang}`).toBeTruthy());
+    });
+  });
+
+  it('every dev-plan action has en/ar/fr text', () => {
+    ['F', 'B', 'W'].forEach(k => {
+      ['day30', 'day60', 'day90'].forEach(phase => {
+        DEV_PLAN[k][phase].forEach((action, i) => {
+          LANGS.forEach(lang => expect(L(action, lang), `${k}.${phase}[${i}].${lang}`).toBeTruthy());
+        });
+      });
+    });
+  });
+
+  it('every manager debrief question has en/ar/fr text', () => {
+    MANAGER_DEBRIEF_QUESTIONS.forEach((q, i) => {
+      LANGS.forEach(lang => expect(L(q, lang), `debrief question ${i}.${lang}`).toBeTruthy());
     });
   });
 

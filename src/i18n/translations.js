@@ -17,10 +17,16 @@ export function L(value, lang) {
   return value[lang] ?? value.en ?? value;
 }
 
+// Replaces {placeholders} in an already-resolved string with the given vars.
+// Shared by tf() (UI dict strings) and by data files (scenarios, dev plan,
+// manager debrief) that carry their own {en,ar,fr} text with placeholders.
+export function interpolate(raw, vars = {}) {
+  return raw.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{${k}}`));
+}
+
 // Interpolates {placeholders} in a translated string with the given vars.
 export function tf(lang, path, vars = {}) {
-  const raw = t(lang, path);
-  return raw.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{${k}}`));
+  return interpolate(t(lang, path), vars);
 }
 
 export function t(lang, path) {
@@ -125,6 +131,13 @@ export const UI = {
       complianceLowHead: 'An area to build.',
       complianceLowBody: 'Speaking up, reporting, and escalating are hard for you right now, even when they matter. This is common and worth building deliberately — it is not a judgment on your character.',
       complianceNote: 'This is self-reflection, not a compliance assessment. It describes how you see yourself today, not a finding about any specific incident.',
+      planTitle: 'Your 30/60/90-day plan',
+      planIntro: 'Simple, concrete actions to grow {developArea} over the next 90 days.',
+      planDay30: 'Day 1–30',
+      planDay60: 'Day 31–60',
+      planDay90: 'Day 61–90',
+      debriefTitle: 'Manager debrief guide',
+      debriefIntro: 'Questions a manager can use to discuss this report together — not a script to read word-for-word.',
       insightFitHead: 'Your style fits your environment.',
       insightFitBody: 'You lead most from {dom}, and your workplace also rewards it. This usually means your natural strengths are seen and valued — a good position to lead from.',
       insightGapHead: 'Your style and your environment pull in different directions.',
@@ -241,6 +254,13 @@ export const UI = {
       complianceLowHead: 'مجال للتطوير.',
       complianceLowBody: 'التعبير عن رأيك والإبلاغ والتصعيد أمور صعبة عليك حالياً، حتى عندما تكون مهمة. هذا أمر شائع ويستحق العمل عليه بوعي — وليس حكماً على شخصيتك.',
       complianceNote: 'هذا تأمل ذاتي، وليس تقييم امتثال. يصف كيف ترى نفسك اليوم، لا نتيجة تتعلق بحادثة معينة.',
+      planTitle: 'خطتك لتسعين يوماً (30/60/90)',
+      planIntro: 'إجراءات بسيطة وملموسة لتنمية {developArea} خلال التسعين يوماً القادمة.',
+      planDay30: 'الأيام ١–٣٠',
+      planDay60: 'الأيام ٣١–٦٠',
+      planDay90: 'الأيام ٦١–٩٠',
+      debriefTitle: 'دليل نقاش المدير',
+      debriefIntro: 'أسئلة يمكن للمدير استخدامها لمناقشة هذا التقرير معاً — وليست نصاً يُقرأ حرفياً.',
       insightFitHead: 'أسلوبك يتماشى مع بيئتك.',
       insightFitBody: 'تقود غالباً من خلال {dom}، وبيئة عملك تكافئ ذلك أيضاً. عادة ما يعني هذا أن نقاط قوتك الطبيعية مرئية ومُقدَّرة — موقع جيد لتقود منه.',
       insightGapHead: 'أسلوبك وبيئتك يشدّان في اتجاهين مختلفين.',
@@ -357,6 +377,13 @@ export const UI = {
       complianceLowHead: 'Un axe à développer.',
       complianceLowBody: "S'exprimer, signaler et faire remonter les problèmes est difficile pour vous en ce moment, même quand cela compte. C'est fréquent et cela mérite d'être développé délibérément — ce n'est pas un jugement sur votre caractère.",
       complianceNote: "Ceci est une réflexion personnelle, pas une évaluation de conformité. Cela décrit comment vous vous percevez aujourd'hui, pas un constat lié à un incident précis.",
+      planTitle: 'Votre plan à 30/60/90 jours',
+      planIntro: 'Des actions simples et concrètes pour développer {developArea} au cours des 90 prochains jours.',
+      planDay30: 'Jours 1–30',
+      planDay60: 'Jours 31–60',
+      planDay90: 'Jours 61–90',
+      debriefTitle: 'Guide de debrief pour le manager',
+      debriefIntro: "Des questions que le manager peut utiliser pour discuter ce rapport ensemble — pas un script à lire mot pour mot.",
       insightFitHead: 'Votre style correspond à votre environnement.',
       insightFitBody: 'Vous dirigez surtout depuis {dom}, et votre environnement de travail le valorise aussi. Cela signifie généralement que vos forces naturelles sont vues et reconnues — une bonne position pour diriger.',
       insightGapHead: 'Votre style et votre environnement tirent dans des directions différentes.',
