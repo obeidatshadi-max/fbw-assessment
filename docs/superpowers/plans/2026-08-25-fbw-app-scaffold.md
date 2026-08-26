@@ -2089,21 +2089,29 @@ Running `netlify deploy` (or linking this folder to a Netlify site) publishes th
 
 **Files:** none — verification only, per the playbook's own instruction to check a 375px mobile viewport before accepting a build.
 
-- [ ] **Step 1: Resize to a 375px-wide mobile viewport**
+- [x] **Step 1: Resize to a 375px-wide mobile viewport**
 
 Using either the `chrome-devtools` or `playwright` browser tool, open the app (`npm run dev` or `npm run preview` running locally) and set the viewport to 375×812 (iPhone-sized).
 
-- [ ] **Step 2: Walk the anonymous path**
+Done via `npm run dev` + Playwright MCP, viewport set to 375×812.
+
+- [x] **Step 2: Walk the anonymous path**
 
 Click through: intro → all 15 scenarios (verify chip taps are easy to hit and mutually-exclusive behavior matches the original) → all 9 org items → report. Confirm every section (summary band, ranked list, three profile blocks, org bars, disclaimer) renders without horizontal overflow, matching the visual identity of the original `fbw-assessment.html`. Take a screenshot of the intro screen, one scenario screen, and the report screen.
 
-- [ ] **Step 3: Walk the sign-in path (only if a Supabase project was provisioned per Task 12 Step 7)**
+Walked the full flow (intro → 15 scenarios → 9 org items → report). No horizontal overflow anywhere; all report sections present and matching the original's visual identity (dimension colors, card layout, progress bar). Screenshots taken of intro, scenario 1 (unanswered + answered chip states), scenario 15 (final "Continue to workplace" label), org screen, and full-page report.
+
+- [x] **Step 3: Walk the sign-in path (only if a Supabase project was provisioned per Task 12 Step 7)**
 
 From the report screen, enter a test email, send the link, and confirm the "Check your email" state renders correctly at 375px. If a live project is not yet provisioned, verify instead that entering an email and clicking "Send link" shows the "Sign-in is not configured yet." error state gracefully (no crash).
 
-- [ ] **Step 4: Report findings**
+No Supabase project provisioned yet. Entered an email and clicked "Send link" — the "Sign-in is not configured yet." error renders inline, no crash, layout intact at 375px.
+
+- [x] **Step 4: Report findings**
 
 If anything visually regresses from the original single-file tool, fix it in the relevant component before considering the scaffold done — this task is the acceptance gate the design spec's "zero regression" goal is checked against.
+
+No visual regressions found. "Start again" correctly resets to the intro screen. All 41 unit/component/integration tests pass (`npm run test`). Scaffold is functionally and visually complete; remaining work is Task 14 Step 4 (user go-ahead needed before any live Netlify deploy) and Prompts 1–8 as separate future sessions.
 
 ---
 
