@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/global.css';
 import App from './App.jsx';
+import { supabaseAuthAdapter } from './lib/authAdapter.js';
+import './styles/global.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <App authAdapter={supabaseAuthAdapter} />
   </React.StrictMode>
 );

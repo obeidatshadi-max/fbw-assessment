@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Header from './components/Header.jsx';
 import Navbar from './components/Navbar.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
@@ -77,6 +77,22 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     const result = await authAdapter.signInWithEmail(email);
     setAuthState(result.success ? { status: 'sent' } : { status: 'error', error: result.error || 'Could not send the link. Try again.' });
   }
+
+  useEffect(() => {
+    const unsubscribe = authAdapter.onAuthStateChange(async (session) => {
+      if (session && reportData && authState.status !== 'saved' && authState.status !== 'signedIn') {
+        setAuthState({ status: 'signedIn' });
+        const result = await authAdapter.saveAssessment({
+          p1Answers,
+          orgAnswers,
+          reportData,
+          userId: session.user.id,
+        });
+        setAuthState(result.success ? { status: 'saved' } : { status: 'error', error: result.error });
+      }
+    });
+    return unsubscribe;
+  }, [authAdapter, reportData, authState.status, p1Answers, orgAnswers]);
 
   const currentAnswer = p1Answers[p1Index];
   const p1Ready = currentAnswer && currentAnswer.most !== null && currentAnswer.least !== null;

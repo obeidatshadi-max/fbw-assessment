@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import App from './App.jsx';
 import { SCENARIOS } from './data/scenarios.js';
 import { ORG_ITEMS } from './data/orgItems.js';
@@ -55,5 +55,29 @@ describe('App', () => {
     expect(screen.getByText('Next')).toBeDisabled();
     fireEvent.click(screen.getAllByText('Least like me')[1]);
     expect(screen.getByText('Next')).toBeEnabled();
+  });
+});
+
+describe('App with a fake auth adapter', () => {
+  it('saves the assessment once a session appears after the report is built', async () => {
+    let authCallback;
+    const saveAssessment = vi.fn().mockResolvedValue({ success: true });
+    const fakeAdapter = {
+      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      saveAssessment,
+      getSession: vi.fn().mockResolvedValue(null),
+      onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
+    };
+
+    render(<App authAdapter={fakeAdapter} />);
+    completeFullFlow();
+
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
+    fireEvent.click(screen.getByText('Send link'));
+
+    await authCallback({ user: { id: 'user-123' } });
+
+    expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ userId: 'user-123' }));
+    expect(await screen.findByText('Saved to your account.', { exact: false })).toBeInTheDocument();
   });
 });
