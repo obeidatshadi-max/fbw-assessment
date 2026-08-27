@@ -20,6 +20,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const { lang, t, tf } = useLanguage();
   const [phase, setPhase] = useState('intro');
   const [role, setRole] = useState(DEFAULT_ROLE);
+  const [teamId, setTeamId] = useState(null);
   const [scenarios, setScenarios] = useState(() => getScenariosForRole(DEFAULT_ROLE));
   const [p1Index, setP1Index] = useState(0);
   const [p1Answers, setP1Answers] = useState(() => scenarios.map(() => ({ most: null, least: null })));
@@ -34,9 +35,10 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const doneP3 = complianceAnswers.filter(v => v !== null).length;
   const totalSteps = scenarios.length + ORG_ITEMS.length + COMPLIANCE_ITEMS.length;
 
-  function handleStart(selectedRole) {
+  function handleStart(selectedRole, selectedTeamId = null) {
     const nextScenarios = getScenariosForRole(selectedRole);
     setRole(selectedRole);
+    setTeamId(selectedTeamId);
     setScenarios(nextScenarios);
     setP1Answers(nextScenarios.map(() => ({ most: null, least: null })));
     setP1Index(0);
@@ -90,6 +92,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setReportData(null);
     setAuthState({ status: 'anon' });
     setRaterLink(null);
+    setTeamId(null);
     setPhase('intro');
   }
 
@@ -114,6 +117,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
           complianceAnswers,
           reportData,
           userId: session.user.id,
+          teamId,
         });
         setAuthState(
           result.success
@@ -123,7 +127,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       }
     });
     return unsubscribe;
-  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers]);
+  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers, teamId]);
 
   async function handleCreateRaterLink() {
     setRaterLink({ status: 'creating' });
@@ -160,7 +164,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       <Header stepLabel={stepLabel} done={doneP1 + doneP2 + doneP3} total={totalSteps} final={phase === 'report'} />
       <main>
         <div className="wrap">
-          {phase === 'intro' && <IntroScreen onStart={handleStart} />}
+          {phase === 'intro' && <IntroScreen onStart={handleStart} authAdapter={authAdapter} />}
           {phase === 'p1' && (
             <ScenarioScreen
               scenario={scenarios[p1Index]}

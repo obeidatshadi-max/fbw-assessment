@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import App from './App.jsx';
 import { SCENARIOS } from './data/scenarios.js';
@@ -134,5 +134,29 @@ describe('App with a fake auth adapter', () => {
 
     fireEvent.click(screen.getByText('Check for new responses'));
     expect(await screen.findByText('Self vs. others')).toBeInTheDocument();
+  });
+
+  it('passes the joined teamId through to saveAssessment', async () => {
+    let authCallback;
+    const saveAssessment = vi.fn().mockResolvedValue({ success: true });
+    const fakeAdapter = {
+      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      saveAssessment,
+      getSession: vi.fn().mockResolvedValue(null),
+      onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
+      validateTeamCode: vi.fn().mockResolvedValue({ valid: true, teamId: 'team-9' }),
+    };
+
+    render(<App authAdapter={fakeAdapter} />);
+    fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
+    await waitFor(() => expect(fakeAdapter.validateTeamCode).toHaveBeenCalled());
+    await screen.findByText('Joined — your result will count toward this team.');
+    completeFullFlow();
+
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
+    fireEvent.click(screen.getByText('Send link'));
+    await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
+
+    expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ teamId: 'team-9' }));
   });
 });
