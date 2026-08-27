@@ -25,6 +25,18 @@ export const noopAuthAdapter = {
   async get360Summary() {
     return { success: false, error: '360 feedback is not configured yet.' };
   },
+  async createTeam() {
+    return { success: false, error: 'Team dashboard is not configured yet.' };
+  },
+  async validateTeamCode() {
+    return { valid: false };
+  },
+  async listTeams() {
+    return { success: false, error: 'Team dashboard is not configured yet.' };
+  },
+  async getTeamSummary() {
+    return { success: false, error: 'Team dashboard is not configured yet.' };
+  },
 };
 
 export const supabaseAuthAdapter = {
@@ -33,17 +45,23 @@ export const supabaseAuthAdapter = {
     const { error } = await supabase.auth.signInWithOtp({ email });
     return error ? { success: false, error: error.message } : { success: true };
   },
-  async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId }) {
+  async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId }) {
     if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
     const { error: profileError } = await supabase.from('fbw_profiles').upsert({ id: userId }, { ignoreDuplicates: true });
     if (profileError) return { success: false, error: profileError.message };
     const { data, error } = await supabase.from('fbw_assessments').insert({
       profile_id: userId,
       role: role || null,
+      team_id: teamId || null,
       scenario_answers: p1Answers,
       org_answers: orgAnswers,
       compliance_answers: complianceAnswers || null,
-      scores: { most: reportData.ind.most, least: reportData.ind.least, org: reportData.org },
+      scores: {
+        most: reportData.ind.most,
+        least: reportData.ind.least,
+        org: reportData.org,
+        complianceScore: reportData.compliance ? reportData.compliance.score : null,
+      },
     }).select('id').single();
     if (error) return { success: false, error: error.message };
     return { success: true, assessmentId: data.id };
@@ -87,5 +105,38 @@ export const supabaseAuthAdapter = {
       dimension_scores: scores,
     });
     return error ? { success: false, error: error.message } : { success: true };
+  },
+
+  // Team dashboard — manager side (authenticated)
+  async createTeam({ name, userId }) {
+    if (!supabase) return { success: false, error: 'Team dashboard is not configured yet.' };
+    const { error: managerError } = await supabase.from('fbw_managers').upsert({ id: userId }, { ignoreDuplicates: true });
+    if (managerError) return { success: false, error: managerError.message };
+    const { data, error } = await supabase.from('fbw_teams')
+      .insert({ manager_id: userId, name })
+      .select('id, join_code').single();
+    return error ? { success: false, error: error.message } : { success: true, teamId: data.id, joinCode: data.join_code };
+  },
+  async listTeams({ userId }) {
+    if (!supabase) return { success: false, error: 'Team dashboard is not configured yet.' };
+    const { data, error } = await supabase.from('fbw_teams')
+      .select('id, name, join_code')
+      .eq('manager_id', userId)
+      .order('created_at', { ascending: true });
+    if (error) return { success: false, error: error.message };
+    return { success: true, teams: data.map(row => ({ id: row.id, name: row.name, joinCode: row.join_code })) };
+  },
+  async getTeamSummary({ teamId }) {
+    if (!supabase) return { success: false, error: 'Team dashboard is not configured yet.' };
+    const { data, error } = await supabase.rpc('get_team_summary', { p_team_id: teamId });
+    return error ? { success: false, error: error.message } : { success: true, count: data.count, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
+  },
+
+  // Team dashboard — rep side (anonymous, called during self-assessment)
+  async validateTeamCode({ code }) {
+    if (!supabase) return { valid: false };
+    const { data, error } = await supabase.rpc('validate_team_code', { p_code: code });
+    if (error) return { valid: false };
+    return { valid: Boolean(data.valid), teamId: data.team_id || null };
   },
 };
