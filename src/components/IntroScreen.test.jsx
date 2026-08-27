@@ -73,4 +73,33 @@ describe('IntroScreen team code', () => {
     fireEvent.click(screen.getByText('Start the reflection'));
     expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, null);
   });
+
+  it('discards a stale validation response when a newer code was entered before it resolved', async () => {
+    let resolveFirst, resolveSecond;
+    const validateTeamCode = vi.fn()
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveFirst = resolve; }))
+      .mockImplementationOnce(() => new Promise((resolve) => { resolveSecond = resolve; }));
+    const authAdapter = { validateTeamCode };
+    const onStart = vi.fn();
+    render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+
+    const input = screen.getByPlaceholderText('e.g. A1B2C3');
+    fireEvent.change(input, { target: { value: 'aaaaaa' } });
+    await waitFor(() => expect(validateTeamCode).toHaveBeenCalledWith({ code: 'AAAAAA' }));
+
+    // User changes their mind before the first lookup resolves — a second, overlapping lookup fires.
+    fireEvent.change(input, { target: { value: 'bbbbbb' } });
+    await waitFor(() => expect(validateTeamCode).toHaveBeenCalledWith({ code: 'BBBBBB' }));
+
+    // The second (later) call resolves before the first (stale) one — out-of-order resolution.
+    resolveSecond({ valid: true, teamId: 'team-b' });
+    await screen.findByText('Joined — your result will count toward this team.');
+
+    resolveFirst({ valid: true, teamId: 'team-a' });
+    // Flush any pending microtask continuations from the stale first call.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, 'team-b');
+  });
 });

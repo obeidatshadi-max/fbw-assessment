@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { DIM } from '../data/dimensions.js';
 import { ROLES, DEFAULT_ROLE } from '../data/roles.js';
@@ -11,9 +11,11 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
   const [teamCode, setTeamCode] = useState('');
   const [teamStatus, setTeamStatus] = useState('idle'); // idle | checking | valid | invalid
   const [teamId, setTeamId] = useState(null);
+  const latestTeamCodeRef = useRef('');
 
   async function handleTeamCodeChange(e) {
     const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    latestTeamCodeRef.current = value;
     setTeamCode(value);
     setTeamId(null);
     if (value.length < 6) {
@@ -22,6 +24,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
     }
     setTeamStatus('checking');
     const result = await authAdapter.validateTeamCode({ code: value });
+    if (latestTeamCodeRef.current !== value) return; // a newer code was entered — discard this stale response
     if (result.valid) {
       setTeamStatus('valid');
       setTeamId(result.teamId);
