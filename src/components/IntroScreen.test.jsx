@@ -1,5 +1,5 @@
 // src/components/IntroScreen.test.jsx
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import IntroScreen from './IntroScreen.jsx';
 import { LanguageProvider } from '../i18n/LanguageContext.jsx';
@@ -19,7 +19,7 @@ describe('IntroScreen', () => {
     render(<IntroScreen onStart={onStart} />);
     screen.getByText('Start the reflection').click();
     expect(onStart).toHaveBeenCalledOnce();
-    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE);
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, null);
   });
 
   it('calls onStart with the selected role, and shows a draft note for drafted roles', () => {
@@ -31,12 +31,46 @@ describe('IntroScreen', () => {
     expect(screen.getByText(/early draft for this role/)).toBeInTheDocument();
 
     screen.getByText('Start the reflection').click();
-    expect(onStart).toHaveBeenCalledWith('product_manager');
+    expect(onStart).toHaveBeenCalledWith('product_manager', null);
   });
 
   it('renders in French when the language context is set to fr', () => {
     render(<LanguageProvider initialLang="fr"><IntroScreen onStart={() => {}} /></LanguageProvider>);
     expect(screen.getByText("D'où dirigez-vous ?")).toBeInTheDocument();
     expect(screen.getByText('Commencer la réflexion')).toBeInTheDocument();
+  });
+});
+
+describe('IntroScreen team code', () => {
+  function makeAdapter(overrides = {}) {
+    return { validateTeamCode: vi.fn().mockResolvedValue({ valid: true, teamId: 'team-1' }), ...overrides };
+  }
+
+  it('starts with a null teamId when no code is entered', () => {
+    const onStart = vi.fn();
+    render(<IntroScreen onStart={onStart} authAdapter={makeAdapter()} />);
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, null);
+  });
+
+  it('validates a 6-character code and passes the resolved teamId to onStart', async () => {
+    const authAdapter = makeAdapter();
+    const onStart = vi.fn();
+    render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
+    await waitFor(() => expect(authAdapter.validateTeamCode).toHaveBeenCalledWith({ code: 'AB12CD' }));
+    await screen.findByText('Joined — your result will count toward this team.');
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, 'team-1');
+  });
+
+  it('shows an error for an invalid code and does not pass a teamId', async () => {
+    const authAdapter = makeAdapter({ validateTeamCode: vi.fn().mockResolvedValue({ valid: false }) });
+    const onStart = vi.fn();
+    render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'zzzzzz' } });
+    await screen.findByText('That code was not found. Check it and try again, or leave it blank.');
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, null);
   });
 });

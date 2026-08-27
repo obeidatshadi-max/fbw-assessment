@@ -3,10 +3,33 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { DIM } from '../data/dimensions.js';
 import { ROLES, DEFAULT_ROLE } from '../data/roles.js';
 import { isDraftRole } from '../data/scenarioSets.js';
+import { noopAuthAdapter } from '../lib/authAdapter.js';
 
-export default function IntroScreen({ onStart }) {
+export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) {
   const { t, tf, L } = useLanguage();
   const [role, setRole] = useState(DEFAULT_ROLE);
+  const [teamCode, setTeamCode] = useState('');
+  const [teamStatus, setTeamStatus] = useState('idle'); // idle | checking | valid | invalid
+  const [teamId, setTeamId] = useState(null);
+
+  async function handleTeamCodeChange(e) {
+    const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    setTeamCode(value);
+    setTeamId(null);
+    if (value.length < 6) {
+      setTeamStatus('idle');
+      return;
+    }
+    setTeamStatus('checking');
+    const result = await authAdapter.validateTeamCode({ code: value });
+    if (result.valid) {
+      setTeamStatus('valid');
+      setTeamId(result.teamId);
+    } else {
+      setTeamStatus('invalid');
+    }
+  }
+
   return (
     <section className="screen active" id="screen-intro">
       <div className="hero">
@@ -57,8 +80,23 @@ export default function IntroScreen({ onStart }) {
         {isDraftRole(role) && <div className="q" style={{ marginTop: 8 }}>{t('role.draftNote')}</div>}
       </div>
 
+      <div className="note" style={{ marginTop: 16 }}>
+        <label htmlFor="team-code"><b>{t('team.codeLabel')}</b></label>
+        <div className="q" style={{ marginBottom: 8 }}>{t('team.codeHelp')}</div>
+        <input
+          id="team-code"
+          value={teamCode}
+          placeholder={t('team.codePlaceholder')}
+          onChange={handleTeamCodeChange}
+          style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1.5px solid var(--line)', textTransform: 'uppercase' }}
+        />
+        {teamStatus === 'checking' && <div className="q" style={{ marginTop: 8 }}>{t('team.codeChecking')}</div>}
+        {teamStatus === 'valid' && <div className="q" style={{ marginTop: 8, color: 'var(--fn)' }}>{t('team.codeValid')}</div>}
+        {teamStatus === 'invalid' && <div className="q" style={{ marginTop: 8, color: '#b3261e' }}>{t('team.codeInvalid')}</div>}
+      </div>
+
       <div style={{ height: 20 }} />
-      <button className="btn" onClick={() => onStart(role)}>{t('intro.start')}</button>
+      <button className="btn" onClick={() => onStart(role, teamStatus === 'valid' ? teamId : null)}>{t('intro.start')}</button>
     </section>
   );
 }
