@@ -1,9 +1,9 @@
-// REVIEW: Arabic and French strings below are a first draft (MSA Arabic,
-// general French). Shadi is the domain/language owner for this framework —
-// please review before shipping, especially the DIM labels (Function/Being/
-// Will) and pharma-facing copy, which set the tone for every screen.
+// REVIEW: Arabic strings below are a first draft (MSA Arabic). Shadi is the
+// domain/language owner for this framework — please review before shipping,
+// especially the DIM labels (Function/Being/Will) and pharma-facing copy,
+// which set the tone for every screen.
 
-export const LANGS = ['en', 'ar', 'fr'];
+export const LANGS = ['en', 'ar'];
 export const RTL_LANGS = ['ar'];
 
 export function dirFor(lang) {
@@ -11,7 +11,7 @@ export function dirFor(lang) {
 }
 
 // Localizes a value that may be a plain string (untranslated / test fixture)
-// or a { en, ar, fr } object. Falls back to English, then to the raw value.
+// or a { en, ar } object. Falls back to English, then to the raw value.
 export function L(value, lang) {
   if (value == null || typeof value === 'string') return value;
   return value[lang] ?? value.en ?? value;
@@ -19,7 +19,7 @@ export function L(value, lang) {
 
 // Replaces {placeholders} in an already-resolved string with the given vars.
 // Shared by tf() (UI dict strings) and by data files (scenarios, dev plan,
-// manager debrief) that carry their own {en,ar,fr} text with placeholders.
+// manager debrief) that carry their own {en,ar} text with placeholders.
 export function interpolate(raw, vars = {}) {
   return raw.replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{${k}}`));
 }
@@ -42,7 +42,7 @@ function getPath(obj, path) {
 
 export const UI = {
   en: {
-    lang: { en: 'EN', ar: 'AR', fr: 'FR' },
+    lang: { en: 'EN', ar: 'AR' },
     brand: { kicker: 'Integral Leadership Dynamics™', name: 'Function · Being · Will' },
     intro: {
       eyebrow: 'Leadership self-reflection',
@@ -233,7 +233,7 @@ export const UI = {
   },
 
   ar: {
-    lang: { en: 'EN', ar: 'AR', fr: 'FR' },
+    lang: { en: 'EN', ar: 'AR' },
     brand: { kicker: 'ديناميكيات القيادة المتكاملة™', name: 'الوظيفة · الكينونة · الإرادة' },
     intro: {
       eyebrow: 'تأمّل ذاتي في القيادة',
@@ -419,197 +419,6 @@ export const UI = {
       codeChecking: 'جارٍ التحقّق…',
       codeValid: 'تم الانضمام — ستُحتسب نتيجتك ضمن هذا الفريق.',
       codeInvalid: 'لم يتم العثور على هذا الرمز. تحقّق منه أو اتركه فارغاً.',
-    },
-
-  },
-
-  fr: {
-    lang: { en: 'EN', ar: 'AR', fr: 'FR' },
-    brand: { kicker: 'Integral Leadership Dynamics™', name: 'Fonction · Être · Volonté' },
-    intro: {
-      eyebrow: 'Réflexion sur le leadership',
-      title: "D'où dirigez-vous ?",
-      lead: "Chaque leader puise à trois sources intérieures. Cette courte réflexion montre laquelle vous guide, laquelle vous soutient, et laquelle est votre axe de progression — et comment votre environnement actuel façonne les trois.",
-      dimQ: {
-        F: 'Ce que je sais faire — mes compétences et mes résultats.',
-        B: 'Qui je suis — mon caractère et ma présence.',
-        W: "Pourquoi j'agis — mon but, mon élan, mon courage.",
-      },
-      noteHeading: 'Comment répondre honnêtement.',
-      note1: 'Vous allez lire {n} situations professionnelles réelles. Pour chacune, choisissez la réponse {most} et celle {least}.',
-      note1Most: 'qui vous ressemble le plus',
-      note1Least: 'qui vous ressemble le moins',
-      note2: "Toutes les réponses sont valables. Il n'y a pas de « bonne » réponse — choisissez ce qui est vraiment vous, pas ce qui sonne bien.",
-      note3: "Répondez vite, à l'instinct. Votre première réaction est la plus sincère.",
-      note4: 'Puis répondez à {n} courtes questions sur votre environnement de travail.',
-      note5: "Cela prend environ {minutes} minutes. Rien n'est enregistré ni envoyé, sauf si vous choisissez de sauvegarder votre rapport.",
-      start: 'Commencer la réflexion',
-    },
-    role: {
-      heading: 'Votre rôle',
-      help: 'Les situations sont adaptées à votre rôle lorsque cela est disponible.',
-      draftNote: 'Ces situations sont une première ébauche pour ce rôle et sont encore en cours de finalisation.',
-    },
-    scenario: {
-      kicker: 'Partie 1 · Situation {n}/{total}',
-      sub: 'Choisissez une réponse qui vous ressemble le plus et une qui vous ressemble le moins.',
-      mostLike: 'Me ressemble le plus',
-      leastLike: 'Me ressemble le moins',
-    },
-    org: {
-      eyebrow: 'Partie 2 sur 3',
-      title: 'Votre environnement de travail',
-      lead: "Pensez à votre équipe ou votre organisation telle qu'elle est aujourd'hui. À quelle fréquence chaque affirmation est-elle vraie ?",
-      rarely: 'Rarement',
-      sometimes: 'Parfois',
-      often: 'Souvent',
-    },
-    compliance: {
-      eyebrow: 'Partie 3 sur 3',
-      title: 'Courage de conformité',
-      lead: "Quelques courtes questions sur le fait de vous exprimer, même quand c'est gênant. À quelle fréquence chaque affirmation est-elle vraie pour vous ?",
-      note: "Ceci est une réflexion personnelle, pas une évaluation de conformité ni un audit.",
-    },
-    nav: { back: 'Retour', next: 'Suivant', continueToWorkplace: "Continuer vers l'environnement de travail", continueToCompliance: 'Continuer', seeReport: 'Voir mon rapport' },
-    header: { stepP1: 'Situation {n} sur {total}', stepP2: "Questions sur l'environnement de travail", stepP3: 'Questions sur le courage de conformité' },
-    report: {
-      eyebrow: 'Votre rapport de réflexion',
-      title: 'La matrice Fonction · Être · Volonté',
-      lead: 'Vous dirigez surtout depuis {dominant}, soutenu par {backup}. Votre axe de progression est {developArea}.',
-      summaryTitle: 'Résumé',
-      summaryIntro: 'La fréquence à laquelle vous avez choisi chaque style parmi les {n} situations :',
-      of: 'sur',
-      detailedTitle: 'Profil détaillé',
-      roleFull: 'Profil principal',
-      roleBackup: 'Profil de soutien',
-      roleDevelop: 'Axe de développement',
-      fullIntro: "C'est la source vers laquelle vous vous tournez en premier. C'est votre principale force de leader — et, en excès, votre principal risque.",
-      fullStrengthHeading: 'Ce qui fait votre force',
-      fullWatchHeading: 'Points de vigilance en cas d’excès',
-      backupIntro: "C'est votre seconde source. Vous l'utilisez bien pour soutenir votre style principal, surtout quand la situation l'exige.",
-      backupStrengthHeading: 'Comment elle vous soutient',
-      backupWatchHeading: 'Un point à surveiller',
-      developIntro: "Vous avez choisi ce style le moins souvent. Ce n'est pas une faiblesse — c'est simplement la source la moins développée pour l'instant. La développer rend votre leadership plus complet et équilibré.",
-      developHeading: 'Des pistes simples pour progresser ici',
-      orgTitle: "Profil de l'organisation",
-      orgIntro: 'Ce que votre environnement valorise et attend — car vos réponses ci-dessus sont influencées par votre lieu de travail.',
-      emphasis: "d'accent",
-      levelHigh: 'Élevé',
-      levelMedium: 'Moyen',
-      levelLow: 'Faible',
-      orgValuesHeading: 'Ce que votre environnement valorise',
-      orgValuesBody: "Votre environnement de travail accorde le plus de poids à {top} ({topWord}) et le moins à {low} ({lowWord}).",
-      orgWord: {
-        F: 'les résultats, la compétence et l’exécution',
-        B: 'la confiance, les personnes et le caractère',
-        W: 'le sens, le courage et la direction',
-      },
-      orgNote: "Rappel : vos propres réponses sont en partie une réaction à cet environnement. Si un style y est rarement valorisé, vous risquez de l'utiliser moins — même s'il vous est naturel. En relisant votre profil ci-dessus, demandez-vous : est-ce vraiment moi, ou ce que mon environnement de travail m'a appris à être ?",
-      complianceLineLabel: 'Courage de conformité',
-      complianceHighHead: 'Une force à protéger.',
-      complianceHighBody: "Vous vous exprimez, signalez et faites remonter les problèmes de façon constante, même quand c'est gênant. C'est une véritable force — continuez à protéger les conditions qui vous permettent cela.",
-      complianceMediumHead: 'Un tableau contrasté.',
-      complianceMediumBody: "Vous vous exprimez une partie du temps. Observez ce qui rend cela plus facile ou plus difficile sur le moment, et cherchez de petites façons d'être plus constant.",
-      complianceLowHead: 'Un axe à développer.',
-      complianceLowBody: "S'exprimer, signaler et faire remonter les problèmes est difficile pour vous en ce moment, même quand cela compte. C'est fréquent et cela mérite d'être développé délibérément — ce n'est pas un jugement sur votre caractère.",
-      complianceNote: "Ceci est une réflexion personnelle, pas une évaluation de conformité. Cela décrit comment vous vous percevez aujourd'hui, pas un constat lié à un incident précis.",
-      planTitle: 'Votre plan à 30/60/90 jours',
-      planIntro: 'Des actions simples et concrètes pour développer {developArea} au cours des 90 prochains jours.',
-      planDay30: 'Jours 1–30',
-      planDay60: 'Jours 31–60',
-      planDay90: 'Jours 61–90',
-      debriefTitle: 'Guide de debrief pour le manager',
-      debriefIntro: "Des questions que le manager peut utiliser pour discuter ce rapport ensemble — pas un script à lire mot pour mot.",
-      insightFitHead: 'Votre style correspond à votre environnement.',
-      insightFitBody: 'Vous dirigez surtout depuis {dom}, et votre environnement de travail le valorise aussi. Cela signifie généralement que vos forces naturelles sont vues et reconnues — une bonne position pour diriger.',
-      insightGapHead: 'Votre style et votre environnement tirent dans des directions différentes.',
-      insightGapBody: "Vous dirigez depuis {dom}, mais votre environnement de travail lui laisse peu de place. Cela peut vous laisser un sentiment d'être invisible ou fatigué, et peut expliquer certaines tensions ressenties. Il vaut la peine de le nommer — l'écart concerne l'environnement, pas vous.",
-      insightPartialHead: 'Une adéquation partielle avec votre environnement.',
-      insightPartialBody: "Vous dirigez depuis {dom}, et votre environnement de travail lui offre un certain soutien, mais pas total. Il y a une marge pour façonner l'environnement selon votre meilleure façon de diriger.",
-      insightExtra: "À noter aussi : votre environnement met le plus de pression sur {dev}, votre axe de progression. Cette pression peut être inconfortable — mais c'est aussi une réelle occasion de développer la source que vous utilisez le moins.",
-      disclaimerHeading: 'Merci de lire ceci.',
-      disclaimerBody: "Cet outil est une réflexion structurée fondée sur le cadre Integral Leadership Dynamics™. Ce n'est pas un test psychométrique validé. Parce que vous choisissez entre des options, vos scores sont relatifs à vos propres réponses uniquement — ils montrent vers quel style vous penchez le plus, sans pouvoir être comparés à d'autres personnes ni lus comme des percentiles. Vos résultats décrivent comment vous avez répondu aujourd'hui et peuvent être influencés par votre rôle actuel, votre humeur et votre environnement de travail. Utilisez-le pour amorcer une réflexion et un dialogue, pas comme un jugement définitif.",
-      startAgain: 'Recommencer',
-      savePrint: 'Enregistrer / imprimer',
-      footer: 'Integral Leadership Dynamics™ · Fonction · Être · Volonté',
-      inviteHeading: "Recueillir l'avis des autres",
-      inviteBody: "Comparez votre propre vision à la façon dont les autres vous perçoivent. Générez un lien et partagez-le avec quelques personnes qui travaillent avec vous — collaborateurs, manager, pairs.",
-      inviteGenerate: 'Générer un lien de retour',
-      inviteGenerating: 'Génération…',
-      inviteCopy: 'Copier le lien',
-      inviteCopied: 'Copié !',
-      inviteShareNote: 'Partagez ce lien avec des personnes qui travaillent avec vous. Leurs réponses sont anonymes.',
-      inviteCountWaiting: '{count} réponse(s) sur {min} nécessaires avant l\'affichage des résultats.',
-      inviteError: "Impossible de générer un lien. Réessayez.",
-      gapTitle: 'Vous vs les autres',
-      gapIntro: "Votre propre vision comparée à la moyenne de {count} évaluateurs anonymes.",
-      gapBlindSpot: "Vous évaluez ce point plus haut que les autres — un possible angle mort.",
-      gapHiddenStrength: "Les autres évaluent ce point plus haut que vous — une force cachée que vous sous-estimez peut-être.",
-      gapAligned: 'Votre vision et celle des autres concordent largement ici.',
-      gapSelfLabel: 'Vous',
-      gapOthersLabel: 'Les autres',
-      gapRefresh: 'Vérifier les nouvelles réponses',
-    },
-    auth: {
-      savedNote: 'Enregistré dans votre compte. Vous retrouverez ce rapport à votre prochaine connexion.',
-      savingNote: 'Enregistrement de votre rapport…',
-      askHeading: 'Enregistrer ce rapport ?',
-      askBody: "Entrez votre e-mail pour recevoir un lien de connexion. Rien n'est enregistré sauf si vous le faites.",
-      emailPlaceholder: 'you@company.com',
-      sending: 'Envoi en cours…',
-      sendLink: 'Envoyer le lien',
-      checkEmail: 'Consultez votre e-mail pour le lien de connexion.',
-      sendError: "Impossible d'envoyer le lien. Réessayez.",
-    },
-    rate: {
-      eyebrow: 'Retour à 360°',
-      title: 'Évaluez la façon dont cette personne se comporte au travail',
-      lead: "Quelqu'un avec qui vous travaillez a partagé ce lien pour recueillir un avis sur son leadership. Vos réponses sont anonymes — elles ne seront vues que dans une moyenne combinée avec d'autres évaluateurs.",
-      invalidHeading: "Ce lien n'est pas disponible",
-      invalidBody: "Il a peut-être été fermé, ou l'adresse est incomplète. Demandez un nouveau lien à la personne qui vous l'a partagé.",
-      submit: "Envoyer l'avis",
-      submitting: 'Envoi en cours…',
-      submitError: "Impossible d'envoyer. Réessayez.",
-      doneHeading: 'Merci',
-      doneBody: 'Votre avis a été envoyé de façon anonyme.',
-      rarely: 'Rarement',
-      sometimes: 'Parfois',
-      often: 'Souvent',
-    },
-    team: {
-      eyebrow: 'Tableau de bord d’équipe',
-      title: 'Découvrez le profil de votre équipe',
-      lead: 'Créez une équipe, partagez le code avec vos représentants, et consultez le profil Fonction/Être/Volonté agrégé une fois que suffisamment de personnes ont répondu. Les résultats individuels ne sont jamais affichés.',
-      signInHeading: 'Connectez-vous pour gérer votre équipe',
-      signInBody: 'Entrez votre e-mail pour recevoir un lien de connexion.',
-      emailPlaceholder: 'vous@entreprise.com',
-      sending: 'Envoi…',
-      sendLink: 'Envoyer le lien',
-      checkEmail: 'Consultez votre e-mail pour le lien de connexion.',
-      sendError: 'Impossible d’envoyer le lien. Réessayez.',
-      createHeading: 'Établir une équipe',
-      createNameLabel: 'Nom de l’équipe',
-      createNamePlaceholder: 'ex. District de Bagdad',
-      createButton: 'Établir l’équipe',
-      createError: 'Impossible d’établir l’équipe. Réessayez.',
-      joinCodeHeading: 'Partagez ce code avec votre équipe',
-      joinCodeShareNote: 'Toute personne qui saisit ce code avant de terminer sa propre auto-évaluation rejoint cette équipe. Aucun nom ni e-mail n’est collecté.',
-      copyCode: 'Copier le code',
-      copied: 'Copié !',
-      countWaiting: '{count} réponse(s) sur {min} nécessaires avant que le profil d’équipe apparaisse.',
-      dashboardTitle: 'Profil de l’équipe',
-      roleBreakdownTitle: 'Par rôle',
-      imbalanceHeading: 'Signal de déséquilibre',
-      imbalanceNote: '{high} est fort ({highPct} %), {low} est faible ({lowPct} %) dans l’équipe — un signal indicatif, pas un résultat statistique.',
-      noFlag: 'Aucun déséquilibre marqué détecté dans l’équipe.',
-      refresh: 'Vérifier les nouvelles réponses',
-      switchTeam: 'Changer d’équipe',
-      codeLabel: 'Vous avez un code d’équipe ?',
-      codeHelp: 'Facultatif — saisissez le code partagé par votre manager pour inclure votre résultat dans le profil d’équipe.',
-      codePlaceholder: 'ex. A1B2C3',
-      codeChecking: 'Vérification…',
-      codeValid: 'Rejoint — votre résultat comptera pour cette équipe.',
-      codeInvalid: 'Code introuvable. Vérifiez-le ou laissez le champ vide.',
     },
 
   },

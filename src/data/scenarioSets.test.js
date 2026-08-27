@@ -10,7 +10,7 @@ describe('SCENARIO_SETS', () => {
     });
   });
 
-  it('every scenario and option in every set has en/ar/fr text', () => {
+  it('every scenario and option in every set has en/ar text', () => {
     Object.entries(SCENARIO_SETS).forEach(([roleId, scenarios]) => {
       scenarios.forEach((sc, i) => {
         LANGS.forEach(lang => expect(L(sc.s, lang), `${roleId} scenario ${i} s.${lang}`).toBeTruthy());
@@ -22,10 +22,10 @@ describe('SCENARIO_SETS', () => {
   });
 
   it('rejects a set with an unbalanced scenario', () => {
-    const bad = [{ s: { en: 'x', ar: 'x', fr: 'x' }, opts: [
-      { t: { en: 'a', ar: 'a', fr: 'a' }, d: 'F' },
-      { t: { en: 'b', ar: 'b', fr: 'b' }, d: 'F' },
-      { t: { en: 'c', ar: 'c', fr: 'c' }, d: 'W' },
+    const bad = [{ s: { en: 'x', ar: 'x' }, opts: [
+      { t: { en: 'a', ar: 'a' }, d: 'F' },
+      { t: { en: 'b', ar: 'b' }, d: 'F' },
+      { t: { en: 'c', ar: 'c' }, d: 'W' },
     ] }];
     expect(() => assertBalancedScenarios(bad.concat(Array(14).fill(bad[0])), 'bad set')).toThrow(/one F, one B, one W/);
   });

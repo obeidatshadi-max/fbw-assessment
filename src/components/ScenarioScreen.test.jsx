@@ -14,11 +14,11 @@ const scenario = {
 };
 
 const bilingualScenario = {
-  s: { en: 'A project is falling behind schedule.', ar: 'مشروع بدأ يتأخر عن الجدول الزمني.', fr: 'Un projet prend du retard.' },
+  s: { en: 'A project is falling behind schedule.', ar: 'مشروع بدأ يتأخر عن الجدول الزمني.' },
   opts: [
-    { t: { en: 'Fix the plan.', ar: 'أصلح الخطة.', fr: 'Je corrige le plan.' }, d: 'F' },
-    { t: { en: 'Check how the team feels.', ar: 'أتحقق من شعور الفريق.', fr: "Je prends la température de l'équipe." }, d: 'B' },
-    { t: { en: 'Recommit everyone to the goal.', ar: 'أُعيد التزام الجميع بالهدف.', fr: "Je remobilise tout le monde." }, d: 'W' },
+    { t: { en: 'Fix the plan.', ar: 'أصلح الخطة.' }, d: 'F' },
+    { t: { en: 'Check how the team feels.', ar: 'أتحقق من شعور الفريق.' }, d: 'B' },
+    { t: { en: 'Recommit everyone to the goal.', ar: 'أُعيد التزام الجميع بالهدف.' }, d: 'W' },
   ],
 };
 

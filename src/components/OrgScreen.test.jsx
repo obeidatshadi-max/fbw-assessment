@@ -2,7 +2,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import OrgScreen from './OrgScreen.jsx';
-import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 
 const items = [
   { t: 'Results and performance get the most attention here.', d: 'F' },
@@ -26,11 +25,5 @@ describe('OrgScreen', () => {
   it('marks the selected answer as on', () => {
     render(<OrgScreen items={items} answers={[3, null]} onSelect={() => {}} />);
     expect(screen.getAllByText('Often')[0]).toHaveClass('on');
-  });
-
-  it('renders the answer scale labels in French', () => {
-    render(<LanguageProvider initialLang="fr"><OrgScreen items={items} answers={[null, null]} onSelect={() => {}} /></LanguageProvider>);
-    expect(screen.getAllByText('Souvent').length).toBeGreaterThan(0);
-    expect(screen.getByText('Votre environnement de travail')).toBeInTheDocument();
   });
 });

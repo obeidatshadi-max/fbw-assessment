@@ -13,11 +13,11 @@ describe('L', () => {
   });
 
   it('picks the requested language from a translation object', () => {
-    expect(L({ en: 'Hello', ar: 'مرحبا', fr: 'Bonjour' }, 'ar')).toBe('مرحبا');
+    expect(L({ en: 'Hello', ar: 'مرحبا' }, 'ar')).toBe('مرحبا');
   });
 
   it('falls back to english when the language is missing', () => {
-    expect(L({ en: 'Hello' }, 'fr')).toBe('Hello');
+    expect(L({ en: 'Hello' }, 'xx')).toBe('Hello');
   });
 });
 
@@ -50,12 +50,12 @@ describe('dirFor', () => {
   it('is rtl only for arabic', () => {
     expect(dirFor('ar')).toBe('rtl');
     expect(dirFor('en')).toBe('ltr');
-    expect(dirFor('fr')).toBe('ltr');
+    expect(dirFor('xx')).toBe('ltr');
   });
 });
 
 describe('translation completeness', () => {
-  it('every UI key present in english exists in arabic and french', () => {
+  it('every UI key present in english exists in arabic', () => {
     const missing = [];
     function walk(enNode, path) {
       if (enNode == null || typeof enNode !== 'object') return;
@@ -77,7 +77,7 @@ describe('translation completeness', () => {
     expect(missing).toEqual([]);
   });
 
-  it('every scenario and option has en/ar/fr text', () => {
+  it('every scenario and option has en/ar text', () => {
     SCENARIOS.forEach((sc, i) => {
       LANGS.forEach(lang => expect(L(sc.s, lang), `scenario ${i} s.${lang}`).toBeTruthy());
       sc.opts.forEach((o, j) => {
@@ -86,19 +86,19 @@ describe('translation completeness', () => {
     });
   });
 
-  it('every org item has en/ar/fr text', () => {
+  it('every org item has en/ar text', () => {
     ORG_ITEMS.forEach((it, i) => {
       LANGS.forEach(lang => expect(L(it.t, lang), `org item ${i} t.${lang}`).toBeTruthy());
     });
   });
 
-  it('every compliance-courage item has en/ar/fr text', () => {
+  it('every compliance-courage item has en/ar text', () => {
     COMPLIANCE_ITEMS.forEach((it, i) => {
       LANGS.forEach(lang => expect(L(it.t, lang), `compliance item ${i} t.${lang}`).toBeTruthy());
     });
   });
 
-  it('every dev-plan action has en/ar/fr text', () => {
+  it('every dev-plan action has en/ar text', () => {
     ['F', 'B', 'W'].forEach(k => {
       ['day30', 'day60', 'day90'].forEach(phase => {
         DEV_PLAN[k][phase].forEach((action, i) => {
@@ -108,13 +108,13 @@ describe('translation completeness', () => {
     });
   });
 
-  it('every manager debrief question has en/ar/fr text', () => {
+  it('every manager debrief question has en/ar text', () => {
     MANAGER_DEBRIEF_QUESTIONS.forEach((q, i) => {
       LANGS.forEach(lang => expect(L(q, lang), `debrief question ${i}.${lang}`).toBeTruthy());
     });
   });
 
-  it('every dimension has en/ar/fr label, tag, and content arrays', () => {
+  it('every dimension has en/ar label, tag, and content arrays', () => {
     ['F', 'B', 'W'].forEach(key => {
       const d = DIM[key];
       LANGS.forEach(lang => {

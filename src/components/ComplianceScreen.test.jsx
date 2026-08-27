@@ -2,7 +2,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ComplianceScreen from './ComplianceScreen.jsx';
-import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 
 const items = [
   { t: 'I speak up when something feels off.', d: 'W' },
@@ -27,11 +26,5 @@ describe('ComplianceScreen', () => {
   it('marks the selected answer as on', () => {
     render(<ComplianceScreen items={items} answers={[3, null]} onSelect={() => {}} />);
     expect(screen.getAllByText('Often')[0]).toHaveClass('on');
-  });
-
-  it('renders in French', () => {
-    render(<LanguageProvider initialLang="fr"><ComplianceScreen items={items} answers={[null, null]} onSelect={() => {}} /></LanguageProvider>);
-    expect(screen.getByText('Courage de conformité')).toBeInTheDocument();
-    expect(screen.getAllByText('Souvent').length).toBeGreaterThan(0);
   });
 });

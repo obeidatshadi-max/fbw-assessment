@@ -2,7 +2,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import IntroScreen from './IntroScreen.jsx';
-import { LanguageProvider } from '../i18n/LanguageContext.jsx';
 import { DEFAULT_ROLE } from '../data/roles.js';
 
 describe('IntroScreen', () => {
@@ -32,12 +31,6 @@ describe('IntroScreen', () => {
 
     screen.getByText('Start the reflection').click();
     expect(onStart).toHaveBeenCalledWith('product_manager', null);
-  });
-
-  it('renders in French when the language context is set to fr', () => {
-    render(<LanguageProvider initialLang="fr"><IntroScreen onStart={() => {}} /></LanguageProvider>);
-    expect(screen.getByText("D'où dirigez-vous ?")).toBeInTheDocument();
-    expect(screen.getByText('Commencer la réflexion')).toBeInTheDocument();
   });
 });
 
