@@ -196,7 +196,7 @@ export const UI = {
     },
     team: {
       eyebrow: 'Team dashboard',
-      title: 'See your team\'s pattern',
+      title: 'See your team’s pattern',
       lead: 'Create a team, share the code with your reps, and see the aggregated Function/Being/Will pattern once enough people have answered. Individual results are never shown.',
       signInHeading: 'Sign in to manage your team',
       signInBody: 'Enter your email for a sign-in link.',
@@ -229,6 +229,7 @@ export const UI = {
       codeValid: 'Joined — your result will count toward this team.',
       codeInvalid: 'That code was not found. Check it and try again, or leave it blank.',
     },
+
   },
 
   ar: {
@@ -419,6 +420,7 @@ export const UI = {
       codeValid: 'تم الانضمام — ستُحتسب نتيجتك ضمن هذا الفريق.',
       codeInvalid: 'لم يتم العثور على هذا الرمز. تحقّق منه أو اتركه فارغاً.',
     },
+
   },
 
   fr: {
@@ -575,7 +577,7 @@ export const UI = {
       often: 'Souvent',
     },
     team: {
-      eyebrow: 'Tableau de bord d\'équipe',
+      eyebrow: 'Tableau de bord d’équipe',
       title: 'Découvrez le profil de votre équipe',
       lead: 'Créez une équipe, partagez le code avec vos représentants, et consultez le profil Fonction/Être/Volonté agrégé une fois que suffisamment de personnes ont répondu. Les résultats individuels ne sont jamais affichés.',
       signInHeading: 'Connectez-vous pour gérer votre équipe',
@@ -584,30 +586,31 @@ export const UI = {
       sending: 'Envoi…',
       sendLink: 'Envoyer le lien',
       checkEmail: 'Consultez votre e-mail pour le lien de connexion.',
-      sendError: 'Impossible d\'envoyer le lien. Réessayez.',
+      sendError: 'Impossible d’envoyer le lien. Réessayez.',
       createHeading: 'Établir une équipe',
-      createNameLabel: 'Nom de l\'équipe',
+      createNameLabel: 'Nom de l’équipe',
       createNamePlaceholder: 'ex. District de Bagdad',
-      createButton: 'Établir l\'équipe',
-      createError: 'Impossible d\'établir l\'équipe. Réessayez.',
+      createButton: 'Établir l’équipe',
+      createError: 'Impossible d’établir l’équipe. Réessayez.',
       joinCodeHeading: 'Partagez ce code avec votre équipe',
-      joinCodeShareNote: 'Toute personne qui saisit ce code avant de terminer sa propre auto-évaluation rejoint cette équipe. Aucun nom ni e-mail n\'est collecté.',
+      joinCodeShareNote: 'Toute personne qui saisit ce code avant de terminer sa propre auto-évaluation rejoint cette équipe. Aucun nom ni e-mail n’est collecté.',
       copyCode: 'Copier le code',
       copied: 'Copié !',
-      countWaiting: '{count} réponse(s) sur {min} nécessaires avant que le profil d\'équipe apparaisse.',
-      dashboardTitle: 'Profil de l\'équipe',
+      countWaiting: '{count} réponse(s) sur {min} nécessaires avant que le profil d’équipe apparaisse.',
+      dashboardTitle: 'Profil de l’équipe',
       roleBreakdownTitle: 'Par rôle',
       imbalanceHeading: 'Signal de déséquilibre',
-      imbalanceNote: '{high} est fort ({highPct} %), {low} est faible ({lowPct} %) dans l\'équipe — un signal indicatif, pas un résultat statistique.',
-      noFlag: 'Aucun déséquilibre marqué détecté dans l\'équipe.',
+      imbalanceNote: '{high} est fort ({highPct} %), {low} est faible ({lowPct} %) dans l’équipe — un signal indicatif, pas un résultat statistique.',
+      noFlag: 'Aucun déséquilibre marqué détecté dans l’équipe.',
       refresh: 'Vérifier les nouvelles réponses',
-      switchTeam: 'Changer d\'équipe',
-      codeLabel: 'Vous avez un code d\'équipe ?',
-      codeHelp: 'Facultatif — saisissez le code partagé par votre manager pour inclure votre résultat dans le profil d\'équipe.',
+      switchTeam: 'Changer d’équipe',
+      codeLabel: 'Vous avez un code d’équipe ?',
+      codeHelp: 'Facultatif — saisissez le code partagé par votre manager pour inclure votre résultat dans le profil d’équipe.',
       codePlaceholder: 'ex. A1B2C3',
       codeChecking: 'Vérification…',
       codeValid: 'Rejoint — votre résultat comptera pour cette équipe.',
       codeInvalid: 'Code introuvable. Vérifiez-le ou laissez le champ vide.',
     },
+
   },
 };
