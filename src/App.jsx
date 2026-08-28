@@ -21,6 +21,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const [phase, setPhase] = useState('intro');
   const [role, setRole] = useState(DEFAULT_ROLE);
   const [teamId, setTeamId] = useState(null);
+  const [sessionId, setSessionId] = useState(null);
   const [scenarios, setScenarios] = useState(() => getScenariosForRole(DEFAULT_ROLE));
   const [p1Index, setP1Index] = useState(0);
   const [p1Answers, setP1Answers] = useState(() => scenarios.map(() => ({ most: null, least: null })));
@@ -35,10 +36,11 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const doneP3 = complianceAnswers.filter(v => v !== null).length;
   const totalSteps = scenarios.length + ORG_ITEMS.length + COMPLIANCE_ITEMS.length;
 
-  function handleStart(selectedRole, selectedTeamId = null) {
+  function handleStart(selectedRole, code = null) {
     const nextScenarios = getScenariosForRole(selectedRole);
     setRole(selectedRole);
-    setTeamId(selectedTeamId);
+    setTeamId(code?.kind === 'team' ? code.id : null);
+    setSessionId(code?.kind === 'session' ? code.id : null);
     setScenarios(nextScenarios);
     setP1Answers(nextScenarios.map(() => ({ most: null, least: null })));
     setP1Index(0);
@@ -93,6 +95,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setAuthState({ status: 'anon' });
     setRaterLink(null);
     setTeamId(null);
+    setSessionId(null);
     setPhase('intro');
   }
 
@@ -118,6 +121,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
           reportData,
           userId: session.user.id,
           teamId,
+          sessionId,
         });
         setAuthState(
           result.success
@@ -127,7 +131,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       }
     });
     return unsubscribe;
-  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers, teamId]);
+  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers, teamId, sessionId]);
 
   async function handleCreateRaterLink() {
     setRaterLink({ status: 'creating' });

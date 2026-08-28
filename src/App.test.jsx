@@ -144,12 +144,12 @@ describe('App with a fake auth adapter', () => {
       saveAssessment,
       getSession: vi.fn().mockResolvedValue(null),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
-      validateTeamCode: vi.fn().mockResolvedValue({ valid: true, teamId: 'team-9' }),
+      validateCode: vi.fn().mockResolvedValue({ valid: true, kind: 'team', id: 'team-9' }),
     };
 
     render(<App authAdapter={fakeAdapter} />);
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
-    await waitFor(() => expect(fakeAdapter.validateTeamCode).toHaveBeenCalled());
+    await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
     await screen.findByText('Joined — your result will count toward this team.');
     completeFullFlow();
 
@@ -157,6 +157,30 @@ describe('App with a fake auth adapter', () => {
     fireEvent.click(screen.getByText('Send link'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
-    expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ teamId: 'team-9' }));
+    expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ teamId: 'team-9', sessionId: null }));
+  });
+
+  it('passes the joined sessionId through to saveAssessment', async () => {
+    let authCallback;
+    const saveAssessment = vi.fn().mockResolvedValue({ success: true });
+    const fakeAdapter = {
+      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      saveAssessment,
+      getSession: vi.fn().mockResolvedValue(null),
+      onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
+      validateCode: vi.fn().mockResolvedValue({ valid: true, kind: 'session', id: 'sess-9' }),
+    };
+
+    render(<App authAdapter={fakeAdapter} />);
+    fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
+    await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
+    await screen.findByText('Joined — your result will count toward this live session.');
+    completeFullFlow();
+
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
+    fireEvent.click(screen.getByText('Send link'));
+    await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
+
+    expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ sessionId: 'sess-9', teamId: null }));
   });
 });
