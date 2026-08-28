@@ -99,7 +99,10 @@ describe('ManagerApp session tab', () => {
 
     fireEvent.click(screen.getByText('Check for new responses'));
     await waitFor(() => expect(authAdapter.getSessionSummary).toHaveBeenCalledWith({ sessionId: 's1' }));
-    expect(await screen.findByText('Function is strong (50%), Will is low (18%) across the team — a rule-of-thumb signal, not a statistical finding.')).toBeInTheDocument();
+    // Session tab has no team-style imbalance-note paragraph — the
+    // discussion cards are the imbalance-driven content here. F:50/W:18
+    // computes to imbalance {high:F, low:W}, which keys the 'F-W' card set.
+    expect(await screen.findByText('This room delivers. Where have you personally held back from a hard call recently?')).toBeInTheDocument();
   });
 
   it('polls getSessionSummary automatically every 5 seconds while an unended session is open', async () => {

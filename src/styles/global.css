@@ -189,4 +189,5 @@
     .card{box-shadow:none; border-color:#ccc;}
     .screen{display:none !important;}
     #screen-report{display:block !important;}
+    #screen-session-live{display:block !important;}
   }
