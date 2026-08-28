@@ -8,28 +8,28 @@ import { noopAuthAdapter } from '../lib/authAdapter.js';
 export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) {
   const { t, tf, L } = useLanguage();
   const [role, setRole] = useState(DEFAULT_ROLE);
-  const [teamCode, setTeamCode] = useState('');
-  const [teamStatus, setTeamStatus] = useState('idle'); // idle | checking | valid | invalid
-  const [teamId, setTeamId] = useState(null);
-  const latestTeamCodeRef = useRef('');
+  const [joinCode, setJoinCode] = useState('');
+  const [codeStatus, setCodeStatus] = useState('idle'); // idle | checking | valid | invalid
+  const [codeResult, setCodeResult] = useState(null); // { kind, id } | null
+  const latestCodeRef = useRef('');
 
-  async function handleTeamCodeChange(e) {
+  async function handleCodeChange(e) {
     const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
-    latestTeamCodeRef.current = value;
-    setTeamCode(value);
-    setTeamId(null);
+    latestCodeRef.current = value;
+    setJoinCode(value);
+    setCodeResult(null);
     if (value.length < 6) {
-      setTeamStatus('idle');
+      setCodeStatus('idle');
       return;
     }
-    setTeamStatus('checking');
-    const result = await authAdapter.validateTeamCode({ code: value });
-    if (latestTeamCodeRef.current !== value) return; // a newer code was entered — discard this stale response
+    setCodeStatus('checking');
+    const result = await authAdapter.validateCode({ code: value });
+    if (latestCodeRef.current !== value) return; // a newer code was entered — discard this stale response
     if (result.valid) {
-      setTeamStatus('valid');
-      setTeamId(result.teamId);
+      setCodeStatus('valid');
+      setCodeResult({ kind: result.kind, id: result.id });
     } else {
-      setTeamStatus('invalid');
+      setCodeStatus('invalid');
     }
   }
 
@@ -88,18 +88,22 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
         <div className="q" style={{ marginBottom: 8 }}>{t('team.codeHelp')}</div>
         <input
           id="team-code"
-          value={teamCode}
+          value={joinCode}
           placeholder={t('team.codePlaceholder')}
-          onChange={handleTeamCodeChange}
+          onChange={handleCodeChange}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1.5px solid var(--line)', textTransform: 'uppercase' }}
         />
-        {teamStatus === 'checking' && <div className="q" style={{ marginTop: 8 }}>{t('team.codeChecking')}</div>}
-        {teamStatus === 'valid' && <div className="q" style={{ marginTop: 8, color: 'var(--fn)' }}>{t('team.codeValid')}</div>}
-        {teamStatus === 'invalid' && <div className="q" style={{ marginTop: 8, color: '#b3261e' }}>{t('team.codeInvalid')}</div>}
+        {codeStatus === 'checking' && <div className="q" style={{ marginTop: 8 }}>{t('team.codeChecking')}</div>}
+        {codeStatus === 'valid' && (
+          <div className="q" style={{ marginTop: 8, color: 'var(--fn)' }}>
+            {codeResult?.kind === 'session' ? t('team.codeValidSession') : t('team.codeValidTeam')}
+          </div>
+        )}
+        {codeStatus === 'invalid' && <div className="q" style={{ marginTop: 8, color: '#b3261e' }}>{t('team.codeInvalid')}</div>}
       </div>
 
       <div style={{ height: 20 }} />
-      <button className="btn" onClick={() => onStart(role, teamStatus === 'valid' ? teamId : null)}>{t('intro.start')}</button>
+      <button className="btn" onClick={() => onStart(role, codeStatus === 'valid' ? codeResult : null)}>{t('intro.start')}</button>
     </section>
   );
 }

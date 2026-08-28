@@ -34,31 +34,41 @@ describe('IntroScreen', () => {
   });
 });
 
-describe('IntroScreen team code', () => {
+describe('IntroScreen join code', () => {
   function makeAdapter(overrides = {}) {
-    return { validateTeamCode: vi.fn().mockResolvedValue({ valid: true, teamId: 'team-1' }), ...overrides };
+    return { validateCode: vi.fn().mockResolvedValue({ valid: true, kind: 'team', id: 'team-1' }), ...overrides };
   }
 
-  it('starts with a null teamId when no code is entered', () => {
+  it('starts with a null code when nothing is entered', () => {
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={makeAdapter()} />);
     fireEvent.click(screen.getByText('Start the reflection'));
     expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, null);
   });
 
-  it('validates a 6-character code and passes the resolved teamId to onStart', async () => {
+  it('validates a team code and passes {kind: "team", id} to onStart', async () => {
     const authAdapter = makeAdapter();
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
-    await waitFor(() => expect(authAdapter.validateTeamCode).toHaveBeenCalledWith({ code: 'AB12CD' }));
+    await waitFor(() => expect(authAdapter.validateCode).toHaveBeenCalledWith({ code: 'AB12CD' }));
     await screen.findByText('Joined — your result will count toward this team.');
     fireEvent.click(screen.getByText('Start the reflection'));
-    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, 'team-1');
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, { kind: 'team', id: 'team-1' });
   });
 
-  it('shows an error for an invalid code and does not pass a teamId', async () => {
-    const authAdapter = makeAdapter({ validateTeamCode: vi.fn().mockResolvedValue({ valid: false }) });
+  it('validates a session code and passes {kind: "session", id} to onStart, with session-specific copy', async () => {
+    const authAdapter = makeAdapter({ validateCode: vi.fn().mockResolvedValue({ valid: true, kind: 'session', id: 'sess-1' }) });
+    const onStart = vi.fn();
+    render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'zz99zz' } });
+    await screen.findByText('Joined — your result will count toward this live session.');
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, { kind: 'session', id: 'sess-1' });
+  });
+
+  it('shows an error for an invalid code and passes null', async () => {
+    const authAdapter = makeAdapter({ validateCode: vi.fn().mockResolvedValue({ valid: false }) });
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'zzzzzz' } });
@@ -69,30 +79,27 @@ describe('IntroScreen team code', () => {
 
   it('discards a stale validation response when a newer code was entered before it resolved', async () => {
     let resolveFirst, resolveSecond;
-    const validateTeamCode = vi.fn()
+    const validateCode = vi.fn()
       .mockImplementationOnce(() => new Promise((resolve) => { resolveFirst = resolve; }))
       .mockImplementationOnce(() => new Promise((resolve) => { resolveSecond = resolve; }));
-    const authAdapter = { validateTeamCode };
+    const authAdapter = { validateCode };
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
 
     const input = screen.getByPlaceholderText('e.g. A1B2C3');
     fireEvent.change(input, { target: { value: 'aaaaaa' } });
-    await waitFor(() => expect(validateTeamCode).toHaveBeenCalledWith({ code: 'AAAAAA' }));
+    await waitFor(() => expect(validateCode).toHaveBeenCalledWith({ code: 'AAAAAA' }));
 
-    // User changes their mind before the first lookup resolves — a second, overlapping lookup fires.
     fireEvent.change(input, { target: { value: 'bbbbbb' } });
-    await waitFor(() => expect(validateTeamCode).toHaveBeenCalledWith({ code: 'BBBBBB' }));
+    await waitFor(() => expect(validateCode).toHaveBeenCalledWith({ code: 'BBBBBB' }));
 
-    // The second (later) call resolves before the first (stale) one — out-of-order resolution.
-    resolveSecond({ valid: true, teamId: 'team-b' });
+    resolveSecond({ valid: true, kind: 'team', id: 'team-b' });
     await screen.findByText('Joined — your result will count toward this team.');
 
-    resolveFirst({ valid: true, teamId: 'team-a' });
-    // Flush any pending microtask continuations from the stale first call.
+    resolveFirst({ valid: true, kind: 'team', id: 'team-a' });
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     fireEvent.click(screen.getByText('Start the reflection'));
-    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, 'team-b');
+    expect(onStart).toHaveBeenCalledWith(DEFAULT_ROLE, { kind: 'team', id: 'team-b' });
   });
 });
