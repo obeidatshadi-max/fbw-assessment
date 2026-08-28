@@ -28,7 +28,16 @@ export const noopAuthAdapter = {
   async createTeam() {
     return { success: false, error: 'Team dashboard is not configured yet.' };
   },
-  async validateTeamCode() {
+  async createSession() {
+    return { success: false, error: 'Live sessions are not configured yet.' };
+  },
+  async endSession() {
+    return { success: false, error: 'Live sessions are not configured yet.' };
+  },
+  async getSessionSummary() {
+    return { success: false, error: 'Live sessions are not configured yet.' };
+  },
+  async validateCode() {
     return { valid: false };
   },
   async listTeams() {
@@ -45,7 +54,7 @@ export const supabaseAuthAdapter = {
     const { error } = await supabase.auth.signInWithOtp({ email });
     return error ? { success: false, error: error.message } : { success: true };
   },
-  async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId }) {
+  async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {
     if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
     const { error: profileError } = await supabase.from('fbw_profiles').upsert({ id: userId }, { ignoreDuplicates: true });
     if (profileError) return { success: false, error: profileError.message };
@@ -53,6 +62,7 @@ export const supabaseAuthAdapter = {
       profile_id: userId,
       role: role || null,
       team_id: teamId || null,
+      session_id: sessionId || null,
       scenario_answers: p1Answers,
       org_answers: orgAnswers,
       compliance_answers: complianceAnswers || null,
@@ -132,11 +142,33 @@ export const supabaseAuthAdapter = {
     return error ? { success: false, error: error.message } : { success: true, count: data.count, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
   },
 
-  // Team dashboard — rep side (anonymous, called during self-assessment)
-  async validateTeamCode({ code }) {
+  // Live sessions — facilitator side (authenticated)
+  async createSession({ name, userId }) {
+    if (!supabase) return { success: false, error: 'Live sessions are not configured yet.' };
+    const { data, error } = await supabase.from('fbw_sessions')
+      .insert({ facilitator_id: userId, name })
+      .select('id, join_code').single();
+    return error ? { success: false, error: error.message } : { success: true, sessionId: data.id, joinCode: data.join_code };
+  },
+  async endSession({ sessionId }) {
+    if (!supabase) return { success: false, error: 'Live sessions are not configured yet.' };
+    const { error } = await supabase.rpc('end_session', { p_session_id: sessionId });
+    return error ? { success: false, error: error.message } : { success: true };
+  },
+  async getSessionSummary({ sessionId }) {
+    if (!supabase) return { success: false, error: 'Live sessions are not configured yet.' };
+    const { data, error } = await supabase.rpc('get_session_summary', { p_session_id: sessionId });
+    return error ? { success: false, error: error.message } : { success: true, count: data.count, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
+  },
+
+  // Unified join code — rep side (anonymous, called during self-assessment).
+  // Replaces validateTeamCode: checks both fbw_teams and fbw_sessions via
+  // one RPC, so the intro screen never needs to know which kind of code
+  // the person was given.
+  async validateCode({ code }) {
     if (!supabase) return { valid: false };
-    const { data, error } = await supabase.rpc('validate_team_code', { p_code: code });
+    const { data, error } = await supabase.rpc('validate_code', { p_code: code });
     if (error) return { valid: false };
-    return { valid: Boolean(data.valid), teamId: data.team_id || null };
+    return { valid: Boolean(data.valid), kind: data.kind || null, id: data.id || null };
   },
 };
