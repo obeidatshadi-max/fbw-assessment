@@ -56,3 +56,84 @@ describe('ManagerApp', () => {
     expect(await screen.findByText('Function is strong (50%), Will is low (18%) across the team — a rule-of-thumb signal, not a statistical finding.')).toBeInTheDocument();
   });
 });
+
+describe('ManagerApp session tab', () => {
+  function makeAdapter(overrides = {}) {
+    let authCallback = () => {};
+    return {
+      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
+      listTeams: vi.fn().mockResolvedValue({ success: true, teams: [] }),
+      createSession: vi.fn().mockResolvedValue({ success: true, sessionId: 's1', joinCode: 'ZZ99ZZ' }),
+      endSession: vi.fn().mockResolvedValue({ success: true }),
+      getSessionSummary: vi.fn().mockResolvedValue({ success: true, count: 5, distribution: { F: 50, B: 32, W: 18, C: 60 }, roleBreakdown: { rep: 5 } }),
+      triggerAuth: (session) => authCallback(session),
+      ...overrides,
+    };
+  }
+
+  it('switches to the session tab, starts a session, and shows the join code', async () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
+    await screen.findByPlaceholderText('e.g. Baghdad District');
+
+    fireEvent.click(screen.getByText('Live session'));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Leadership Workshop — Aug 28'), { target: { value: 'Workshop A' } });
+    fireEvent.click(screen.getByText('Start session'));
+
+    await waitFor(() => expect(authAdapter.createSession).toHaveBeenCalledWith({ name: 'Workshop A', userId: 'u1' }));
+    expect(await screen.findByDisplayValue('ZZ99ZZ')).toBeInTheDocument();
+  });
+
+  it('refreshes the session summary and computes the imbalance flag', async () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
+    fireEvent.click(screen.getByText('Live session'));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Leadership Workshop — Aug 28'), { target: { value: 'Workshop A' } });
+    fireEvent.click(screen.getByText('Start session'));
+    await screen.findByDisplayValue('ZZ99ZZ');
+
+    fireEvent.click(screen.getByText('Check for new responses'));
+    await waitFor(() => expect(authAdapter.getSessionSummary).toHaveBeenCalledWith({ sessionId: 's1' }));
+    expect(await screen.findByText('Function is strong (50%), Will is low (18%) across the team — a rule-of-thumb signal, not a statistical finding.')).toBeInTheDocument();
+  });
+
+  it('polls getSessionSummary automatically every 5 seconds while an unended session is open', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
+    fireEvent.click(screen.getByText('Live session'));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Leadership Workshop — Aug 28'), { target: { value: 'Workshop A' } });
+    fireEvent.click(screen.getByText('Start session'));
+    await screen.findByDisplayValue('ZZ99ZZ');
+
+    expect(authAdapter.getSessionSummary).not.toHaveBeenCalled();
+    await act(async () => { vi.advanceTimersByTime(5000); });
+    expect(authAdapter.getSessionSummary).toHaveBeenCalledWith({ sessionId: 's1' });
+    await act(async () => { vi.advanceTimersByTime(5000); });
+    expect(authAdapter.getSessionSummary).toHaveBeenCalledTimes(2);
+
+    vi.useRealTimers();
+  });
+
+  it('ends the session', async () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
+    fireEvent.click(screen.getByText('Live session'));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Leadership Workshop — Aug 28'), { target: { value: 'Workshop A' } });
+    fireEvent.click(screen.getByText('Start session'));
+    await screen.findByDisplayValue('ZZ99ZZ');
+
+    fireEvent.click(screen.getByText('End session'));
+    await waitFor(() => expect(authAdapter.endSession).toHaveBeenCalledWith({ sessionId: 's1' }));
+    expect(await screen.findByText('This session has ended — the code no longer works.')).toBeInTheDocument();
+  });
+});
