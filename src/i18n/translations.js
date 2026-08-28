@@ -251,6 +251,7 @@ export const UI = {
       printCards: 'Print discussion cards',
       endSession: 'End session',
       endedNote: 'This session has ended — the code no longer works.',
+      startNew: 'Start another session',
     },
 
   },
@@ -465,6 +466,7 @@ export const UI = {
       printCards: 'طباعة بطاقات النقاش',
       endSession: 'إنهاء الجلسة',
       endedNote: 'انتهت هذه الجلسة — لم يعد الرمز صالحاً.',
+      startNew: 'ابدأ جلسة أخرى',
     },
 
   },

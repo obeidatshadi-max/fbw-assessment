@@ -139,4 +139,22 @@ describe('ManagerApp session tab', () => {
     await waitFor(() => expect(authAdapter.endSession).toHaveBeenCalledWith({ sessionId: 's1' }));
     expect(await screen.findByText('This session has ended — the code no longer works.')).toBeInTheDocument();
   });
+
+  it('returns to the create-session form after starting another session', async () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
+    fireEvent.click(screen.getByText('Live session'));
+    fireEvent.change(screen.getByPlaceholderText('e.g. Leadership Workshop — Aug 28'), { target: { value: 'Workshop A' } });
+    fireEvent.click(screen.getByText('Start session'));
+    await screen.findByDisplayValue('ZZ99ZZ');
+
+    fireEvent.click(screen.getByText('End session'));
+    await screen.findByText('This session has ended — the code no longer works.');
+
+    fireEvent.click(screen.getByText('Start another session'));
+    expect(await screen.findByPlaceholderText('e.g. Leadership Workshop — Aug 28')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('ZZ99ZZ')).not.toBeInTheDocument();
+  });
 });

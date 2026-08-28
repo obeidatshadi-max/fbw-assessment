@@ -19,6 +19,7 @@ function renderScreen(props) {
         onRefresh={() => {}}
         onEndSession={() => {}}
         onPrintCards={() => {}}
+        onStartNewSession={() => {}}
         {...props}
       />
     </LanguageProvider>
@@ -87,6 +88,18 @@ describe('SessionLiveScreen', () => {
     });
     expect(screen.getByText('This session has ended — the code no longer works.')).toBeInTheDocument();
     expect(screen.queryByText('End session')).not.toBeInTheDocument();
+  });
+
+  it('shows a start-new-session button once ended, and calls onStartNewSession when clicked', () => {
+    const onStartNewSession = vi.fn();
+    renderScreen({
+      session: { id: 's1', name: 'Workshop A', joinCode: 'ZZ99ZZ' },
+      summary: { count: 5, distribution: { F: 34, B: 33, W: 33, C: 60 }, roleBreakdown: { rep: 5 } },
+      ended: true,
+      onStartNewSession,
+    });
+    fireEvent.click(screen.getByText('Start another session'));
+    expect(onStartNewSession).toHaveBeenCalled();
   });
 
   it('calls onPrintCards when the print button is clicked', () => {

@@ -4,7 +4,7 @@ import { DISCUSSION_CARDS, getDiscussionCardKey } from '../data/discussionCards.
 
 const MIN_RESPONSES = 3;
 
-export default function SessionLiveScreen({ session, summary, imbalance, dim, createStatus, createError, ended, onCreateSession, onRefresh, onEndSession, onPrintCards }) {
+export default function SessionLiveScreen({ session, summary, imbalance, dim, createStatus, createError, ended, onCreateSession, onRefresh, onEndSession, onPrintCards, onStartNewSession }) {
   const { t, tf, L } = useLanguage();
   const [name, setName] = useState('');
   const [copied, setCopied] = useState(false);
@@ -65,7 +65,10 @@ export default function SessionLiveScreen({ session, summary, imbalance, dim, cr
           </div>
           <p style={{ fontSize: 13.5, color: 'var(--muted)', margin: '0 0 10px' }}>{t('session.joinCodeShareNote')}</p>
           {ended ? (
-            <p style={{ fontSize: 13.5, fontWeight: 600 }}>{t('session.endedNote')}</p>
+            <>
+              <p style={{ fontSize: 13.5, fontWeight: 600 }}>{t('session.endedNote')}</p>
+              <button className="btn sm" onClick={onStartNewSession}>{t('session.startNew')}</button>
+            </>
           ) : (
             <>
               {!gapData && (
@@ -98,6 +101,7 @@ export default function SessionLiveScreen({ session, summary, imbalance, dim, cr
               })}
             </div>
 
+            <div className="sec-title">{t('team.roleBreakdownTitle')}</div>
             <div className="card pad" style={{ marginBottom: 18 }}>
               {Object.entries(summary.roleBreakdown || {}).map(([role, n]) => (
                 <div key={role} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>

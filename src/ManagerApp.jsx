@@ -111,6 +111,13 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     if (result.success) setSessionEnded(true);
   }
 
+  function handleStartNewSession() {
+    setSession(null);
+    setSessionSummary(null);
+    setSessionCreateStatus('idle');
+    setSessionEnded(false);
+  }
+
   function handlePrintCards() {
     window.print();
   }
@@ -155,6 +162,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
             onRefresh={handleRefreshSession}
             onEndSession={handleEndSession}
             onPrintCards={handlePrintCards}
+            onStartNewSession={handleStartNewSession}
           />
         )}
       </div>
