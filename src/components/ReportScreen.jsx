@@ -153,7 +153,7 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   );
 }
 
-export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateRaterLink, onRefreshRaterSummary }) {
+export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onCreateRaterLink, onRefreshRaterSummary }) {
   const { t, tf, L } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
 
@@ -205,6 +205,19 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
           {summaryInsight.extra && <p>{summaryInsight.extra}</p>}
         </div>
       </div>
+
+      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} />
+
+      {authState.status === 'saved' && onCreateRaterLink && (
+        <InviteFeedback
+          raterLink={raterLink}
+          ind={reportData.ind}
+          compliance={compliance}
+          dim={dim}
+          onCreateRaterLink={onCreateRaterLink}
+          onRefreshRaterSummary={onRefreshRaterSummary}
+        />
+      )}
 
       <div className="sec-title">{t('report.detailedTitle')}</div>
       <div className="card pad">
@@ -271,19 +284,6 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
       <div className="disclaimer">
         <b>{t('report.disclaimerHeading')}</b> {t('report.disclaimerBody')}
       </div>
-
-      <AuthPanel authState={authState} onSignIn={onSignIn} />
-
-      {authState.status === 'saved' && onCreateRaterLink && (
-        <InviteFeedback
-          raterLink={raterLink}
-          ind={reportData.ind}
-          compliance={compliance}
-          dim={dim}
-          onCreateRaterLink={onCreateRaterLink}
-          onRefreshRaterSummary={onRefreshRaterSummary}
-        />
-      )}
 
       <div className="no-print" style={{ marginTop: 22, display: 'flex', gap: 12 }}>
         <button className="btn ghost" onClick={onRestart}>{t('report.startAgain')}</button>

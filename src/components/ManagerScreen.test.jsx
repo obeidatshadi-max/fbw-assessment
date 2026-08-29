@@ -17,6 +17,7 @@ function renderScreen(props) {
         createStatus="idle"
         createError={null}
         onSignIn={() => {}}
+        onCreateAccount={() => {}}
         onCreateTeam={() => {}}
         onRefresh={() => {}}
         onSwitchTeam={() => {}}
@@ -32,12 +33,22 @@ describe('ManagerScreen', () => {
     expect(screen.getByPlaceholderText('you@company.com')).toBeInTheDocument();
   });
 
-  it('calls onSignIn with the entered email', () => {
+  it('calls onSignIn with the entered email and password', () => {
     const onSignIn = vi.fn();
     renderScreen({ onSignIn });
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'm@x.com' } });
-    fireEvent.click(screen.getByText('Send link'));
-    expect(onSignIn).toHaveBeenCalledWith('m@x.com');
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Sign in'));
+    expect(onSignIn).toHaveBeenCalledWith('m@x.com', 'secret123');
+  });
+
+  it('calls onCreateAccount with the entered email and password', () => {
+    const onCreateAccount = vi.fn();
+    renderScreen({ onCreateAccount });
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'm@x.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Create account'));
+    expect(onCreateAccount).toHaveBeenCalledWith('m@x.com', 'secret123');
   });
 
   it('shows the create-team form once signed in with no team', () => {

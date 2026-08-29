@@ -3,9 +3,10 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const MIN_RESPONSES = 3;
 
-export default function ManagerScreen({ authState, team, teams = [], summary, imbalance, dim, createStatus, createError, onSignIn, onCreateTeam, onRefresh, onSwitchTeam }) {
+export default function ManagerScreen({ authState, team, teams = [], summary, imbalance, dim, createStatus, createError, onSignIn, onCreateAccount, onCreateTeam, onRefresh, onSwitchTeam }) {
   const { t, tf, L } = useLanguage();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [teamName, setTeamName] = useState('');
   const [copied, setCopied] = useState(false);
 
@@ -24,19 +25,28 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
         <p className="lead" style={{ marginBottom: 18 }}>{t('team.lead')}</p>
         <div className="card pad">
           <p style={{ margin: '0 0 8px' }}><b>{t('team.signInHeading')}</b> {t('team.signInBody')}</p>
+          <input
+            type="email"
+            value={email}
+            placeholder={t('team.emailPlaceholder')}
+            onChange={e => setEmail(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+          />
+          <input
+            type="password"
+            value={password}
+            placeholder={t('team.passwordPlaceholder')}
+            onChange={e => setPassword(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+          />
           <div style={{ display: 'flex', gap: 8 }}>
-            <input
-              type="email"
-              value={email}
-              placeholder={t('team.emailPlaceholder')}
-              onChange={e => setEmail(e.target.value)}
-              style={{ flex: 1, padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10 }}
-            />
-            <button className="btn sm" disabled={!email || authState.status === 'sending'} onClick={() => onSignIn(email)}>
-              {authState.status === 'sending' ? t('team.sending') : t('team.sendLink')}
+            <button className="btn sm" disabled={!email || !password || authState.status === 'sending'} onClick={() => onSignIn(email, password)}>
+              {authState.status === 'sending' ? t('team.sending') : t('team.signIn')}
+            </button>
+            <button className="btn sm ghost" disabled={!email || !password || authState.status === 'sending'} onClick={() => onCreateAccount(email, password)}>
+              {authState.status === 'sending' ? t('team.sending') : t('team.createAccount')}
             </button>
           </div>
-          {authState.status === 'sent' && <p style={{ margin: '8px 0 0', fontSize: 13.5 }}>{t('team.checkEmail')}</p>}
           {authState.status === 'error' && <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{authState.error || t('team.sendError')}</p>}
         </div>
       </section>

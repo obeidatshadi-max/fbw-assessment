@@ -90,7 +90,8 @@ describe('App with a fake auth adapter', () => {
     let authCallback;
     const saveAssessment = vi.fn().mockResolvedValue({ success: true });
     const fakeAdapter = {
-      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+      signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
       saveAssessment,
       getSession: vi.fn().mockResolvedValue(null),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
@@ -100,7 +101,8 @@ describe('App with a fake auth adapter', () => {
     completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
-    fireEvent.click(screen.getByText('Send link'));
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Sign in'));
 
     await act(async () => {
       await authCallback({ user: { id: 'user-123' } });
@@ -113,7 +115,8 @@ describe('App with a fake auth adapter', () => {
   it('generates a rater link and shows the gap card once enough responses exist', async () => {
     let authCallback;
     const fakeAdapter = {
-      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+      signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
       saveAssessment: vi.fn().mockResolvedValue({ success: true, assessmentId: 'assess-1' }),
       getSession: vi.fn().mockResolvedValue(null),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
@@ -125,7 +128,8 @@ describe('App with a fake auth adapter', () => {
     completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
-    fireEvent.click(screen.getByText('Send link'));
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
     fireEvent.click(await screen.findByText('Generate feedback link'));
@@ -140,7 +144,8 @@ describe('App with a fake auth adapter', () => {
     let authCallback;
     const saveAssessment = vi.fn().mockResolvedValue({ success: true });
     const fakeAdapter = {
-      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+      signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
       saveAssessment,
       getSession: vi.fn().mockResolvedValue(null),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
@@ -148,13 +153,15 @@ describe('App with a fake auth adapter', () => {
     };
 
     render(<App authAdapter={fakeAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
     await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
     await screen.findByText('Joined — your result will count toward this team.');
     completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
-    fireEvent.click(screen.getByText('Send link'));
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
     expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ teamId: 'team-9', sessionId: null }));
@@ -164,7 +171,8 @@ describe('App with a fake auth adapter', () => {
     let authCallback;
     const saveAssessment = vi.fn().mockResolvedValue({ success: true });
     const fakeAdapter = {
-      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+      signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
       saveAssessment,
       getSession: vi.fn().mockResolvedValue(null),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
@@ -172,13 +180,15 @@ describe('App with a fake auth adapter', () => {
     };
 
     render(<App authAdapter={fakeAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
     await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
     await screen.findByText('Joined — your result will count toward this live session.');
     completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
-    fireEvent.click(screen.getByText('Send link'));
+    fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
     expect(saveAssessment).toHaveBeenCalledWith(expect.objectContaining({ sessionId: 'sess-9', teamId: null }));

@@ -1,7 +1,10 @@
 import { supabase } from './supabaseClient.js';
 
 export const noopAuthAdapter = {
-  async signInWithEmail() {
+  async signInWithPassword() {
+    return { success: false, error: 'Sign-in is not configured yet.' };
+  },
+  async signUpWithPassword() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
   async saveAssessment() {
@@ -49,9 +52,34 @@ export const noopAuthAdapter = {
 };
 
 export const supabaseAuthAdapter = {
-  async signInWithEmail(email) {
+  // Password sign-in — used by both the leader (report screen, to save
+  // their assessment and unlock the 360 feedback-link invite) and the
+  // facilitator (team/live-session screens). No magic-link email. Mirrors
+  // the `/manager-signup` pattern used by this project's siblings
+  // (sps-style, styleshift-app) against the same shared Supabase project:
+  // account creation goes through a Netlify function using the
+  // service-role key (admin.createUser({ email_confirm: true })), so a new
+  // account is usable immediately with no SMTP round-trip.
+  async signInWithPassword({ email, password }) {
     if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return error ? { success: false, error: error.message } : { success: true };
+  },
+  async signUpWithPassword({ email, password }) {
+    if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
+    let res;
+    try {
+      res = await fetch('/.netlify/functions/account-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+    } catch {
+      return { success: false, error: 'Could not reach the sign-up service. Try again.' };
+    }
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { success: false, error: data.error || 'Could not create account.' };
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return error ? { success: false, error: error.message } : { success: true };
   },
   async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {

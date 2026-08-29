@@ -103,10 +103,18 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     window.print();
   }
 
-  async function handleSignIn(email) {
+  async function handleSignIn(email, password) {
     setAuthState({ status: 'sending' });
-    const result = await authAdapter.signInWithEmail(email);
-    setAuthState(result.success ? { status: 'sent' } : { status: 'error', error: result.error || t('auth.sendError') });
+    const result = await authAdapter.signInWithPassword({ email, password });
+    if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
+    // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
+  }
+
+  async function handleCreateAccount(email, password) {
+    setAuthState({ status: 'sending' });
+    const result = await authAdapter.signUpWithPassword({ email, password });
+    if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
+    // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
   useEffect(() => {
@@ -189,6 +197,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onRestart={handleRestart}
               onPrint={handlePrint}
               onSignIn={handleSignIn}
+              onCreateAccount={handleCreateAccount}
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />

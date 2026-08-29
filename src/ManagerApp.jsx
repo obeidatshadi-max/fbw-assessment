@@ -36,10 +36,18 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     return unsubscribe;
   }, [authAdapter]);
 
-  async function handleSignIn(email) {
+  async function handleSignIn(email, password) {
     setAuthState({ status: 'sending' });
-    const result = await authAdapter.signInWithEmail(email);
-    setAuthState(result.success ? { status: 'sent' } : { status: 'error', error: result.error });
+    const result = await authAdapter.signInWithPassword({ email, password });
+    if (!result.success) setAuthState({ status: 'error', error: result.error });
+    // On success, the onAuthStateChange listener above transitions to 'signedIn'.
+  }
+
+  async function handleCreateAccount(email, password) {
+    setAuthState({ status: 'sending' });
+    const result = await authAdapter.signUpWithPassword({ email, password });
+    if (!result.success) setAuthState({ status: 'error', error: result.error });
+    // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
   async function handleCreateTeam(name) {
@@ -145,6 +153,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
             createStatus={createStatus}
             createError={createError}
             onSignIn={handleSignIn}
+            onCreateAccount={handleCreateAccount}
             onCreateTeam={handleCreateTeam}
             onSwitchTeam={handleSwitchTeam}
             onRefresh={handleRefresh}

@@ -50,6 +50,7 @@ describe('IntroScreen join code', () => {
     const authAdapter = makeAdapter();
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
     await waitFor(() => expect(authAdapter.validateCode).toHaveBeenCalledWith({ code: 'AB12CD' }));
     await screen.findByText('Joined — your result will count toward this team.');
@@ -61,6 +62,7 @@ describe('IntroScreen join code', () => {
     const authAdapter = makeAdapter({ validateCode: vi.fn().mockResolvedValue({ valid: true, kind: 'session', id: 'sess-1' }) });
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'zz99zz' } });
     await screen.findByText('Joined — your result will count toward this live session.');
     fireEvent.click(screen.getByText('Start the reflection'));
@@ -71,6 +73,7 @@ describe('IntroScreen join code', () => {
     const authAdapter = makeAdapter({ validateCode: vi.fn().mockResolvedValue({ valid: false }) });
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'zzzzzz' } });
     await screen.findByText('That code was not found. Check it and try again, or leave it blank.');
     fireEvent.click(screen.getByText('Start the reflection'));
@@ -85,6 +88,7 @@ describe('IntroScreen join code', () => {
     const authAdapter = { validateCode };
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} authAdapter={authAdapter} />);
+    fireEvent.click(screen.getByText('Have a code?'));
 
     const input = screen.getByPlaceholderText('e.g. A1B2C3');
     fireEvent.change(input, { target: { value: 'aaaaaa' } });

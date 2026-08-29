@@ -18,6 +18,18 @@ describe('noopAuthAdapter team methods', () => {
   });
 });
 
+describe('noopAuthAdapter facilitator password auth', () => {
+  it('signInWithPassword fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.signInWithPassword({ email: 'm@x.com', password: 'secret123' });
+    expect(result.success).toBe(false);
+  });
+
+  it('signUpWithPassword fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.signUpWithPassword({ email: 'm@x.com', password: 'secret123' });
+    expect(result.success).toBe(false);
+  });
+});
+
 describe('noopAuthAdapter session methods', () => {
   it('createSession fails safely when not configured', async () => {
     const result = await noopAuthAdapter.createSession({ name: 'X', userId: 'u1' });

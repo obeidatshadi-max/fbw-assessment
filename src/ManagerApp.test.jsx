@@ -6,7 +6,8 @@ import { LanguageProvider } from './i18n/LanguageContext.jsx';
 function makeAdapter(overrides = {}) {
   let authCallback = () => {};
   return {
-    signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+    signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+    signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
     onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
     createTeam: vi.fn().mockResolvedValue({ success: true, teamId: 't1', joinCode: 'AB12CD' }),
     listTeams: vi.fn().mockResolvedValue({ success: true, teams: [] }),
@@ -61,7 +62,8 @@ describe('ManagerApp session tab', () => {
   function makeAdapter(overrides = {}) {
     let authCallback = () => {};
     return {
-      signInWithEmail: vi.fn().mockResolvedValue({ success: true }),
+      signInWithPassword: vi.fn().mockResolvedValue({ success: true }),
+    signUpWithPassword: vi.fn().mockResolvedValue({ success: true }),
       onAuthStateChange: (cb) => { authCallback = cb; return () => {}; },
       listTeams: vi.fn().mockResolvedValue({ success: true, teams: [] }),
       createSession: vi.fn().mockResolvedValue({ success: true, sessionId: 's1', joinCode: 'ZZ99ZZ' }),

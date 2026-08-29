@@ -9,6 +9,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
   const { t, tf, L } = useLanguage();
   const [role, setRole] = useState(DEFAULT_ROLE);
   const [joinCode, setJoinCode] = useState('');
+  const [showCode, setShowCode] = useState(false);
   const [codeStatus, setCodeStatus] = useState('idle'); // idle | checking | valid | invalid
   const [codeResult, setCodeResult] = useState(null); // { kind, id } | null
   const latestCodeRef = useRef('');
@@ -64,6 +65,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
           <li>{t('intro.note3')}</li>
           <li>{tf('intro.note4', { n: 9 })}</li>
           <li>{tf('intro.note5', { minutes: 7 })}</li>
+          <li>{t('intro.note6')}</li>
         </ul>
       </div>
 
@@ -83,24 +85,36 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
         {isDraftRole(role) && <div className="q" style={{ marginTop: 8 }}>{t('role.draftNote')}</div>}
       </div>
 
-      <div className="note" style={{ marginTop: 16 }}>
-        <label htmlFor="team-code"><b>{t('team.codeLabel')}</b></label>
-        <div className="q" style={{ marginBottom: 8 }}>{t('team.codeHelp')}</div>
-        <input
-          id="team-code"
-          value={joinCode}
-          placeholder={t('team.codePlaceholder')}
-          onChange={handleCodeChange}
-          style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1.5px solid var(--line)', textTransform: 'uppercase' }}
-        />
-        {codeStatus === 'checking' && <div className="q" style={{ marginTop: 8 }}>{t('team.codeChecking')}</div>}
-        {codeStatus === 'valid' && (
-          <div className="q" style={{ marginTop: 8, color: 'var(--fn)' }}>
-            {codeResult?.kind === 'session' ? t('team.codeValidSession') : t('team.codeValidTeam')}
-          </div>
-        )}
-        {codeStatus === 'invalid' && <div className="q" style={{ marginTop: 8, color: '#b3261e' }}>{t('team.codeInvalid')}</div>}
-      </div>
+      {!showCode && (
+        <button
+          type="button"
+          className="btn ghost sm"
+          style={{ marginTop: 16 }}
+          onClick={() => setShowCode(true)}
+        >
+          {t('team.codeLabel')}
+        </button>
+      )}
+      {showCode && (
+        <div className="note" style={{ marginTop: 16 }}>
+          <label htmlFor="team-code"><b>{t('team.codeLabel')}</b></label>
+          <div className="q" style={{ marginBottom: 8 }}>{t('team.codeHelp')}</div>
+          <input
+            id="team-code"
+            value={joinCode}
+            placeholder={t('team.codePlaceholder')}
+            onChange={handleCodeChange}
+            style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1.5px solid var(--line)', textTransform: 'uppercase' }}
+          />
+          {codeStatus === 'checking' && <div className="q" style={{ marginTop: 8 }}>{t('team.codeChecking')}</div>}
+          {codeStatus === 'valid' && (
+            <div className="q" style={{ marginTop: 8, color: 'var(--fn)' }}>
+              {codeResult?.kind === 'session' ? t('team.codeValidSession') : t('team.codeValidTeam')}
+            </div>
+          )}
+          {codeStatus === 'invalid' && <div className="q" style={{ marginTop: 8, color: '#b3261e' }}>{t('team.codeInvalid')}</div>}
+        </div>
+      )}
 
       <div style={{ height: 20 }} />
       <button className="btn" onClick={() => onStart(role, codeStatus === 'valid' ? codeResult : null)}>{t('intro.start')}</button>
