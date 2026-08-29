@@ -42,7 +42,8 @@ export default function RaterScreen({ status, answers, onSelect, onSubmit, error
       </div>
       <div className="eyebrow">{t('rate.eyebrow')}</div>
       <h1 style={{ fontSize: 'clamp(24px,6vw,32px)', marginBottom: 6 }}>{t('rate.title')}</h1>
-      <p className="lead" style={{ marginBottom: 18 }}>{t('rate.lead')}</p>
+      <p className="lead" style={{ marginBottom: 10 }}>{t('rate.lead')}</p>
+      <p style={{ fontSize: 13.5, color: 'var(--muted)', fontStyle: 'italic', marginBottom: 18 }}>{t('rate.candorNote')}</p>
       <div className="card pad">
         {RATER_ITEMS.map((it, i) => (
           <div className="lk-item" key={i}>

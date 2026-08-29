@@ -208,7 +208,8 @@ export const UI = {
     rate: {
       eyebrow: '360 feedback',
       title: 'Rate how this person shows up at work',
-      lead: 'Someone you work with shared this link to get feedback on how they lead. Your answers are anonymous — they will only be seen as part of a combined average with other raters.',
+      lead: 'Someone you work with shared this link to get feedback on how they lead. Your answers are fully anonymous — not even they can see individual responses, only a combined average once at least 3 people respond.',
+      candorNote: 'Honest, specific answers help them grow more than kind ones.',
       invalidHeading: 'This link is not available',
       invalidBody: 'It may have been closed, or the address is incomplete. Ask the person who shared it for a new link.',
       submit: 'Submit feedback',
@@ -453,7 +454,8 @@ export const UI = {
     rate: {
       eyebrow: 'آراء ٣٦٠ درجة',
       title: 'قيّم كيف يظهر هذا الشخص في العمل',
-      lead: 'شارك معك شخص تعمل معه هذا الرابط للحصول على رأيك في أسلوبه القيادي. إجاباتك مجهولة الهوية — لن تُرى إلا ضمن متوسط مجمّع مع مقيّمين آخرين.',
+      lead: 'شارك معك شخص تعمل معه هذا الرابط للحصول على رأيك في أسلوبه القيادي. إجاباتك مجهولة الهوية تماماً — حتى هو لا يستطيع رؤية إجابة فردية، بل فقط متوسطاً مجمّعاً بعد أن يجيب ٣ أشخاص على الأقل.',
+      candorNote: 'إجابة صادقة ومحددة تساعده على النمو أكثر من إجابة لطيفة فقط.',
       invalidHeading: 'هذا الرابط غير متاح',
       invalidBody: 'ربما أُغلق، أو العنوان غير مكتمل. اطلب رابطاً جديداً ممن شاركه معك.',
       submit: 'إرسال الرأي',
