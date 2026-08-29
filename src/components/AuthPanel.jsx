@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-export default function AuthPanel({ authState, onSignIn, onCreateAccount }) {
+export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [resetStatus, setResetStatus] = useState('idle'); // idle | sending | sent | error
   const { t } = useLanguage();
+
+  function handleForgotPassword() {
+    setResetStatus('sending');
+    onRequestReset(email).then(result => setResetStatus(result.success ? 'sent' : 'error'));
+  }
 
   if (authState.status === 'saved') {
     return (
@@ -55,6 +61,22 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount }) {
           </div>
           {authState.status === 'error' && (
             <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{authState.error}</p>
+          )}
+          {resetStatus === 'sent' ? (
+            <p style={{ margin: '8px 0 0', fontSize: 13.5 }}>{t('auth.resetSent')}</p>
+          ) : (
+            <button
+              type="button"
+              className="btn ghost sm"
+              style={{ marginTop: 8 }}
+              disabled={!email || resetStatus === 'sending'}
+              onClick={handleForgotPassword}
+            >
+              {resetStatus === 'sending' ? t('auth.sending') : t('auth.forgotPassword')}
+            </button>
+          )}
+          {resetStatus === 'error' && (
+            <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{t('auth.resetError')}</p>
           )}
         </>
       )}

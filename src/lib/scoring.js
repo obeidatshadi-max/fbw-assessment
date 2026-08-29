@@ -68,6 +68,24 @@ function buildInsight(dominant, developArea, orgScore, dim, lang) {
   return { head, body, extra };
 }
 
+// "Antigravity" framing (per Shadi's methodology): recognize the recurring
+// overuse pattern of the person's DOMINANT dimension ("gravity") and pair it
+// with that SAME dimension's own corrective practice ("antigravity") — not
+// the growth-edge dimension, which is already covered by the separate
+// develop/plan sections below. dim[key].watch[i] and dim[key].develop[i] were
+// already authored as index-aligned opposing pairs (e.g. F.watch[0] "focus on
+// task, forget people" <-> F.develop[0] "ask who is affected, not only
+// what") — dominant.develop was simply never rendered anywhere before this.
+// Zero new content, zero new questions.
+function buildAntigravityInsight(dominant, dim, lang) {
+  const d = dim[dominant];
+  const pairs = d.watch.map((w, i) => ({ gravityPattern: w, antigravityForce: d.develop[i] }));
+  return {
+    label: L(d.label, lang),
+    pairs: pairs.slice(0, 2),
+  };
+}
+
 function buildComplianceResult(score, lang) {
   const level = score >= 7 ? t(lang, 'report.levelHigh') : score >= 5 ? t(lang, 'report.levelMedium') : t(lang, 'report.levelLow');
   const pct = Math.max(6, ((score - 3) / 6) * 100);
@@ -135,5 +153,6 @@ export function buildReportData(p1Answers, orgAnswers, scenarios, orgItems, dim,
     },
     orgInsight: buildOrgInsight(orgOrder, lang),
     compliance: complianceAnswers ? buildComplianceResult(scoreCompliance(complianceAnswers), lang) : null,
+    antigravity: buildAntigravityInsight(dominant, dim, lang),
   };
 }

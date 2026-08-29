@@ -3,12 +3,18 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 
 const MIN_RESPONSES = 3;
 
-export default function ManagerScreen({ authState, team, teams = [], summary, imbalance, dim, createStatus, createError, onSignIn, onCreateAccount, onCreateTeam, onRefresh, onSwitchTeam }) {
+export default function ManagerScreen({ authState, team, teams = [], summary, imbalance, dim, createStatus, createError, onSignIn, onCreateAccount, onRequestReset, onCreateTeam, onRefresh, onSwitchTeam }) {
   const { t, tf, L } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [teamName, setTeamName] = useState('');
   const [copied, setCopied] = useState(false);
+  const [resetStatus, setResetStatus] = useState('idle'); // idle | sending | sent | error
+
+  function handleForgotPassword() {
+    setResetStatus('sending');
+    onRequestReset(email).then(result => setResetStatus(result.success ? 'sent' : 'error'));
+  }
 
   function copyCode(code) {
     navigator.clipboard?.writeText(code).then(() => {
@@ -48,6 +54,14 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
             </button>
           </div>
           {authState.status === 'error' && <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{authState.error || t('team.sendError')}</p>}
+          {resetStatus === 'sent' ? (
+            <p style={{ margin: '8px 0 0', fontSize: 13.5 }}>{t('team.resetSent')}</p>
+          ) : (
+            <button type="button" className="btn ghost sm" style={{ marginTop: 8 }} disabled={!email || resetStatus === 'sending'} onClick={handleForgotPassword}>
+              {resetStatus === 'sending' ? t('team.sending') : t('team.forgotPassword')}
+            </button>
+          )}
+          {resetStatus === 'error' && <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{t('team.resetError')}</p>}
         </div>
       </section>
     );

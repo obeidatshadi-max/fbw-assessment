@@ -50,6 +50,10 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
+  function handleRequestReset(email) {
+    return authAdapter.requestPasswordReset({ email });
+  }
+
   async function handleCreateTeam(name) {
     setCreateStatus('creating');
     setCreateError(null);
@@ -154,6 +158,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
             createError={createError}
             onSignIn={handleSignIn}
             onCreateAccount={handleCreateAccount}
+            onRequestReset={handleRequestReset}
             onCreateTeam={handleCreateTeam}
             onSwitchTeam={handleSwitchTeam}
             onRefresh={handleRefresh}

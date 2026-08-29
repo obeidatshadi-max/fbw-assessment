@@ -117,6 +117,10 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
+  function handleRequestReset(email) {
+    return authAdapter.requestPasswordReset({ email });
+  }
+
   useEffect(() => {
     const unsubscribe = authAdapter.onAuthStateChange(async (session) => {
       if (session && reportData && authState.status !== 'saved' && authState.status !== 'signedIn') {
@@ -198,6 +202,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onPrint={handlePrint}
               onSignIn={handleSignIn}
               onCreateAccount={handleCreateAccount}
+              onRequestReset={handleRequestReset}
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />

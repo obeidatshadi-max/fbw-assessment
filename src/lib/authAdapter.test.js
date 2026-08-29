@@ -28,6 +28,16 @@ describe('noopAuthAdapter facilitator password auth', () => {
     const result = await noopAuthAdapter.signUpWithPassword({ email: 'm@x.com', password: 'secret123' });
     expect(result.success).toBe(false);
   });
+
+  it('requestPasswordReset fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.requestPasswordReset({ email: 'm@x.com' });
+    expect(result.success).toBe(false);
+  });
+
+  it('updatePassword fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.updatePassword({ password: 'secret123' });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('noopAuthAdapter session methods', () => {

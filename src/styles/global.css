@@ -67,9 +67,18 @@
   .pad{padding:22px;}
 
   /* Intro */
+  .hero-brand{text-align:center; margin-bottom:28px;}
+  .hero-brand-kicker{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);}
+  .hero-brand-name{font-family:var(--serif); font-weight:500; font-size:clamp(22px,6vw,30px); color:var(--ink); margin:4px 0 14px; letter-spacing:-.01em;}
+  .hero-brand-bar{height:4px; width:72px; margin:0 auto; border-radius:4px; background:linear-gradient(90deg, var(--fn), var(--be), var(--wl));}
+
   .eyebrow{font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;}
   .hero h1{font-size:clamp(28px,7vw,40px); margin-bottom:8px;}
   .hero .lead{color:var(--muted); font-size:16px; margin:10px 0 0;}
+
+  .footer-signature{text-align:center; margin-top:24px; font-size:12.5px; color:var(--muted);}
+  .footer-signature a{color:var(--muted); font-weight:600; text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px; transition:color .15s ease, border-color .15s ease;}
+  .footer-signature a:hover{color:var(--ink); border-color:var(--ink);}
 
   .triple{display:grid; gap:10px; margin:22px 0;}
   .dimrow{display:flex; align-items:flex-start; gap:14px; padding:14px 16px; border-radius:var(--r-sm); border:1px solid var(--line-soft);}

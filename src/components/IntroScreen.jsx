@@ -36,6 +36,12 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
 
   return (
     <section className="screen active" id="screen-intro">
+      <div className="hero-brand">
+        <div className="hero-brand-kicker">{t('brand.kicker')}</div>
+        <div className="hero-brand-name">{t('brand.name')}</div>
+        <div className="hero-brand-bar" />
+      </div>
+
       <div className="hero">
         <div className="eyebrow">{t('intro.eyebrow')}</div>
         <h1>{t('intro.title')}</h1>
@@ -118,6 +124,11 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
 
       <div style={{ height: 20 }} />
       <button className="btn" onClick={() => onStart(role, codeStatus === 'valid' ? codeResult : null)}>{t('intro.start')}</button>
+
+      <div className="footer-signature">
+        {t('footer.developedBy')}{' '}
+        <a href="https://madarlead.com" target="_blank" rel="noopener noreferrer" dir="ltr">Madarlead.com</a>
+      </div>
     </section>
   );
 }

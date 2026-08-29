@@ -153,7 +153,7 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   );
 }
 
-export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onCreateRaterLink, onRefreshRaterSummary }) {
+export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onCreateRaterLink, onRefreshRaterSummary }) {
   const { t, tf, L } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
 
@@ -206,7 +206,7 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
         </div>
       </div>
 
-      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} />
+      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} onRequestReset={onRequestReset} />
 
       {authState.status === 'saved' && onCreateRaterLink && (
         <InviteFeedback
@@ -256,6 +256,21 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
           </p>
           <p style={{ marginTop: 8 }}>{orgInsight.note}</p>
         </div>
+      </div>
+
+      <div className="sec-title">{t('report.antigravityTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>
+          {tf('report.antigravityIntro', { dominant: L(dim[dominant].label) })}
+        </p>
+        {reportData.antigravity.pairs.map((pair, i) => (
+          <div key={i} style={i > 0 ? { marginTop: 14 } : undefined}>
+            <h4 style={{ color: dim[dominant].color, margin: '0 0 4px' }}>{t('report.antigravityGravityHeading')}</h4>
+            <p style={{ margin: '0 0 8px' }}>{L(pair.gravityPattern)}</p>
+            <h4 style={{ margin: '0 0 4px' }}>{t('report.antigravityForceHeading')}</h4>
+            <p>{L(pair.antigravityForce)}</p>
+          </div>
+        ))}
       </div>
 
       <div className="sec-title">{t('report.planTitle')}</div>

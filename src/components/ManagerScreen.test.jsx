@@ -18,6 +18,7 @@ function renderScreen(props) {
         createError={null}
         onSignIn={() => {}}
         onCreateAccount={() => {}}
+        onRequestReset={() => {}}
         onCreateTeam={() => {}}
         onRefresh={() => {}}
         onSwitchTeam={() => {}}
@@ -49,6 +50,15 @@ describe('ManagerScreen', () => {
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
     fireEvent.click(screen.getByText('Create account'));
     expect(onCreateAccount).toHaveBeenCalledWith('m@x.com', 'secret123');
+  });
+
+  it('calls onRequestReset with the entered email and shows confirmation', async () => {
+    const onRequestReset = vi.fn().mockResolvedValue({ success: true });
+    renderScreen({ onRequestReset });
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'm@x.com' } });
+    fireEvent.click(screen.getByText('Forgot password?'));
+    expect(onRequestReset).toHaveBeenCalledWith('m@x.com');
+    expect(await screen.findByText('reset link is on its way', { exact: false })).toBeInTheDocument();
   });
 
   it('shows the create-team form once signed in with no team', () => {

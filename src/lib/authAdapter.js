@@ -7,6 +7,12 @@ export const noopAuthAdapter = {
   async signUpWithPassword() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
+  async requestPasswordReset() {
+    return { success: false, error: 'Sign-in is not configured yet.' };
+  },
+  async updatePassword() {
+    return { success: false, error: 'Sign-in is not configured yet.' };
+  },
   async saveAssessment() {
     return { success: false, error: 'Saving is not configured yet.' };
   },
@@ -82,6 +88,26 @@ export const supabaseAuthAdapter = {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return error ? { success: false, error: error.message } : { success: true };
   },
+
+  // Password reset — this still depends on Supabase's own configured
+  // mailer (there is no service-role bypass here: proving control of the
+  // email address is the whole point). If that mailer proves as slow as
+  // the magic-link OTP flow this project moved away from, the real fix is
+  // custom SMTP (e.g. Brevo) on the Supabase project's Auth settings, not
+  // more app code.
+  async requestPasswordReset({ email }) {
+    if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    return error ? { success: false, error: error.message } : { success: true };
+  },
+  async updatePassword({ password }) {
+    if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
+    const { error } = await supabase.auth.updateUser({ password });
+    return error ? { success: false, error: error.message } : { success: true };
+  },
+
   async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {
     if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
     const { error: profileError } = await supabase.from('fbw_profiles').upsert({ id: userId }, { ignoreDuplicates: true });
