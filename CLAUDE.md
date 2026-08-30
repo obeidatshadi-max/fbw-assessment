@@ -149,9 +149,30 @@ and `0003_fbw_360_hardening.sql` (fixes below).
   reflective use; would need per-rater one-time tokens to close — revisit
   if this tool is ever used for Prompt 8 (talent review).
 
-## Data-protection checklist (placeholder, expand at Prompt 8)
-Before deploying anything that stores 360/team/longitudinal data:
-verify **current** data-protection requirements per country of use
-(e.g. Saudi PDPL and equivalents elsewhere) against **official current
-sources** at build time — do not treat any specific rule stated in this
-repo as legal fact; it must be confirmed, not assumed.
+## Data-protection checklist (Prompt 8)
+
+Before deploying anything that stores 360/team/longitudinal/talent-review
+data to a new country or customer:
+
+- [ ] Verify the **current** data-protection law for that country against an
+      **official current source** (e.g. Saudi Arabia's PDPL, UAE's PDPL,
+      or the equivalent for wherever the deploying company operates) —
+      never treat any specific rule stated in this repo as legal fact.
+- [ ] Confirm whether that law requires a **local data-residency**
+      arrangement (the shared `madarlead-assessment` Supabase project is
+      hosted wherever Supabase's default region for that project is — check
+      it, don't assume).
+- [ ] Confirm the notice text in `src/lib/consent.js` /
+      `src/i18n/translations.js` (`auth.consentNotice` and friends) has
+      been reviewed by someone qualified to confirm it meets that law's
+      plain-language and specificity requirements — the checked-in copy is
+      a first draft, not legal advice.
+- [ ] Confirm whether that law grants a right to **erasure/portability**
+      that this tool does not yet implement (no "delete my data" flow
+      exists as of this sub-project — see the consent-gate spec's "Not
+      doing yet" section).
+- [ ] If the deploying company has its own DPO/legal/compliance function,
+      route this checklist through them rather than relying on this repo's
+      notes alone.
+
+This checklist is a reminder to verify, not a substitute for verifying.
