@@ -37,7 +37,7 @@ export function assertBalancedScenarios(scenarios, setName = 'scenario set') {
 
 // --- First-line Manager — DRAFT, needs Shadi's review/rewrite ---
 const SCENARIOS_FIRST_LINE_MANAGER = [
-  { s: { en: 'Your team is behind quarterly target with two weeks left.', ar: 'فريقك متأخر عن الهدف الفصلي وتبقى أسبوعان فقط.' }, opts: [
+  { s: { en: 'Your team is behind quarterly target with two weeks left.', ar: 'فريقك متأخر عن الهدف الفصلي ويبقى أسبوعان فقط.' }, opts: [
       { t: { en: 'I dig into the call/coverage data to find where the gap really is.', ar: 'أُحلل بيانات الزيارات والتغطية لأحدد أين الفجوة فعلاً.' }, d: 'F' },
       { t: { en: 'I get in the field with reps to understand what they are facing.', ar: 'أرافق المندوبين ميدانياً لأفهم ما يواجهونه.' }, d: 'B' },
       { t: { en: 'I rally the team on the push we need for the final stretch.', ar: 'أُحفّز الفريق للاندفاعة الأخيرة المطلوبة.' }, d: 'W' } ] },
@@ -167,20 +167,20 @@ const SCENARIOS_PRODUCT_MANAGER = [
 const SCENARIOS_SALES = [
   { s: { en: 'Two doctors cancel your morning calls at the last minute.', ar: 'يُلغي طبيبان زيارتيهما الصباحيتين في اللحظة الأخيرة.' }, opts: [
       { t: { en: 'I quickly rework my route to fill the gaps with other accounts.', ar: 'أُعيد ترتيب مسار زياراتي بسرعة لملء الفراغ بحسابات أخرى.' }, d: 'F' },
-      { t: { en: "I check with their staff that everything is okay on their end.", ar: 'أتحقق من طاقم العيادة أن كل شيء على ما يرام لديهم.' }, d: 'B' },
+      { t: { en: "I check with their staff that everything is okay on their end.", ar: 'أتحقق مع طاقم العيادة من أن كل شيء على ما يرام لديهم.' }, d: 'B' },
       { t: { en: 'I decide which one call matters most today and go all-in on it.', ar: 'أُحدد أي زيارة اليوم هي الأهم وأُركّز جهدي عليها بالكامل.' }, d: 'W' } ] },
   { s: { en: "A physician raises a tough objection about your product's side-effect profile.", ar: 'يُثير طبيب اعتراضاً صعباً حول ملف الآثار الجانبية لمنتجك.' }, opts: [
       { t: { en: 'I pull the exact clinical data and answer with the numbers.', ar: 'أستحضر البيانات السريرية الدقيقة وأُجيب بالأرقام.' }, d: 'F' },
       { t: { en: 'I listen fully to the concern before saying anything back.', ar: 'أستمع بالكامل لقلقه قبل أن أرد بأي شيء.' }, d: 'B' },
       { t: { en: "I stand firmly behind the product's real value despite the pushback.", ar: 'أتمسك بثبات بقيمة المنتج الحقيقية رغم الاعتراض.' }, d: 'W' } ] },
-  { s: { en: 'You are behind your monthly call-average target with one week left.', ar: 'أنت متأخر عن هدف متوسط زياراتك الشهري وتبقى أسبوع واحد فقط.' }, opts: [
+  { s: { en: 'You are behind your monthly call-average target with one week left.', ar: 'أنت متأخر عن هدف متوسط زياراتك الشهري ويبقى أسبوع واحد فقط.' }, opts: [
       { t: { en: 'I tighten my daily route to fit in more calls efficiently.', ar: 'أُحكم مسار زياراتي اليومي لأُدرج زيارات أكثر بكفاءة.' }, d: 'F' },
       { t: { en: "I'm honest with my manager about the pressure I'm under.", ar: 'أُصارح مديري بالضغط الذي أشعر به.' }, d: 'B' },
       { t: { en: 'I push myself harder for the final stretch, whatever it takes.', ar: 'أدفع نفسي أكثر في المرحلة الأخيرة، مهما تطلب الأمر.' }, d: 'W' } ] },
   { s: { en: 'A rep from a competing company grows unusually close to your key doctor.', ar: 'يُصبح مندوب من شركة منافسة قريباً بشكل لافت من طبيبك الرئيسي.' }, opts: [
       { t: { en: 'I review my own call notes to see if my coverage has slipped.', ar: 'أُراجع ملاحظات زياراتي لأتحقق إن كانت تغطيتي قد تراجعت.' }, d: 'F' },
       { t: { en: 'I invest in the relationship through genuine, honest interactions.', ar: 'أستثمر في العلاقة من خلال تواصل صادق وحقيقي.' }, d: 'B' },
-      { t: { en: 'I decide to compete harder for the account, not step back.', ar: 'أُقرر التنافس بقوة أكبر على هذا الحساب، لا التراجع.' }, d: 'W' } ] },
+      { t: { en: 'I decide to compete harder for the account, not step back.', ar: 'أُقرر التنافس بقوة أكبر على هذا الحساب بدلاً من التراجع.' }, d: 'W' } ] },
   { s: { en: "You notice your samples inventory doesn't match your log.", ar: 'تلاحظ أن مخزون العينات لديك لا يطابق سجلك.' }, opts: [
       { t: { en: 'I recount everything carefully and correct the record.', ar: 'أُعيد الجرد بدقة وأُصحح السجل.' }, d: 'F' },
       { t: { en: "I talk to my supervisor honestly about what happened.", ar: 'أُحدّث مشرفي بصدق عمّا حدث.' }, d: 'B' },
@@ -207,7 +207,7 @@ const SCENARIOS_SALES = [
       { t: { en: "I encourage them to be honest about what's really going on.", ar: 'أُشجّعه على أن يكون صادقاً بشأن ما يحدث فعلاً.' }, d: 'W' } ] },
   { s: { en: 'Head office rolls out a new CRM system mid-quarter.', ar: 'يُطلق المكتب الرئيسي نظام إدارة علاقات عملاء جديداً في منتصف الفصل.' }, opts: [
       { t: { en: 'I build myself a simple guide to learn it fast.', ar: 'أُعدّ لنفسي دليلاً مبسطاً لتعلّمه بسرعة.' }, d: 'F' },
-      { t: { en: 'I help the teammate who is struggling most with it.', ar: 'أُساعد الزميل الأكثر معاناة معه.' }, d: 'B' },
+      { t: { en: 'I help the teammate who is struggling most with it.', ar: 'أُساعد الزميل الأكثر تعثراً في استخدامه.' }, d: 'B' },
       { t: { en: 'I commit to using it fully, even though it slows me down at first.', ar: 'ألتزم باستخدامه بالكامل، حتى لو أبطأني في البداية.' }, d: 'W' } ] },
   { s: { en: 'You land the biggest sale of your career.', ar: 'تُحقق أكبر صفقة في مسيرتك المهنية.' }, opts: [
       { t: { en: 'I document exactly what worked so I can repeat it.', ar: 'أُوثّق بدقة ما نجح لأتمكن من تكراره.' }, d: 'F' },
@@ -218,8 +218,8 @@ const SCENARIOS_SALES = [
       { t: { en: 'I share honestly what rejection actually feels like for me.', ar: 'أُشارك بصدق كيف يبدو الرفض فعلاً بالنسبة لي.' }, d: 'B' },
       { t: { en: 'I tell them why I keep showing up despite it.', ar: 'أُخبره لماذا أستمر في الحضور رغم ذلك.' }, d: 'W' } ] },
   { s: { en: 'You discover a formulary restriction that could hurt your numbers this month.', ar: 'تكتشف قيداً في القائمة الدوائية قد يُضرّ بأرقامك هذا الشهر.' }, opts: [
-      { t: { en: 'I dig into the exact terms to find a compliant path around it.', ar: 'أتعمّق في التفاصيل الدقيقة لإيجاد طريق ملتزم لتجاوزه.' }, d: 'F' },
-      { t: { en: 'I check with fellow reps on how they are navigating it.', ar: 'أتحقق مع زملائي المندوبين كيف يتعاملون معه.' }, d: 'B' },
+      { t: { en: 'I dig into the exact terms to find a compliant path around it.', ar: 'أتعمّق في التفاصيل الدقيقة لإيجاد مسار متوافق مع القواعد لتجاوزه.' }, d: 'F' },
+      { t: { en: 'I check with fellow reps on how they are navigating it.', ar: 'أسأل زملائي المندوبين كيف يتعاملون معه.' }, d: 'B' },
       { t: { en: 'I push harder on my other accounts rather than dwell on it.', ar: 'أدفع بقوة أكبر على حساباتي الأخرى بدل الانشغال به.' }, d: 'W' } ] },
   { s: { en: "You're offered a stretch assignment covering a colleague's territory.", ar: 'يُعرض عليك تكليف إضافي بتغطية منطقة زميل لك.' }, opts: [
       { t: { en: 'I ask for the data on that territory before deciding.', ar: 'أطلب بيانات تلك المنطقة قبل اتخاذ القرار.' }, d: 'F' },
