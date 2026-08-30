@@ -44,15 +44,11 @@ describe('ROLES', () => {
 
 describe('getScenariosForRole', () => {
   it('returns the drafted set for a role that has one', () => {
-    expect(getScenariosForRole('product_manager')).toBe(SCENARIO_SETS.product_manager);
+    expect(getScenariosForRole('marketing')).toBe(SCENARIO_SETS.marketing);
   });
 
-  it('falls back to the generic set for a role without a drafted set', () => {
-    expect(getScenariosForRole('market_access')).toBe(SCENARIO_SETS.medical_rep);
-  });
-
-  it('falls back to the generic set for an unknown role id', () => {
-    expect(getScenariosForRole('not_a_real_role')).toBe(SCENARIO_SETS.medical_rep);
+  it('falls back to the general set for an unknown role id', () => {
+    expect(getScenariosForRole('not_a_real_role')).toBe(SCENARIO_SETS.general);
   });
 });
 

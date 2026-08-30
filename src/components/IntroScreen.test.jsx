@@ -24,13 +24,14 @@ describe('IntroScreen', () => {
   it('calls onStart with the selected role, and shows a draft note for drafted roles', () => {
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} />);
+    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'general' } });
     expect(screen.queryByText(/early draft for this role/)).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'product_manager' } });
+    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'marketing' } });
     expect(screen.getByText(/early draft for this role/)).toBeInTheDocument();
 
     screen.getByText('Start the reflection').click();
-    expect(onStart).toHaveBeenCalledWith('product_manager', null);
+    expect(onStart).toHaveBeenCalledWith('marketing', null);
   });
 });
 

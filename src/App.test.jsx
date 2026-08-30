@@ -40,6 +40,7 @@ function checkStoreConsent() {
 describe('App', () => {
   it('walks the full flow and renders a report matching buildReportData directly', () => {
     render(<App />);
+    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'general' } });
     completeFullFlow();
 
     const expectedAnswers = SCENARIOS.map(() => ({ most: 0, least: 1 }));
@@ -79,10 +80,10 @@ describe('App', () => {
 
   it('loads the role-specific scenario set once a non-default role is chosen', () => {
     render(<App />);
-    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'product_manager' } });
+    fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'marketing' } });
     fireEvent.click(screen.getByText('Start the reflection'));
 
-    const pmScenarios = SCENARIO_SETS.product_manager;
+    const pmScenarios = SCENARIO_SETS.marketing;
     expect(pmScenarios).not.toEqual(SCENARIOS);
     expect(screen.getByText(pmScenarios[0].s.en)).toBeInTheDocument();
     expect(screen.getByText('Situation 1 of 15')).toBeInTheDocument();

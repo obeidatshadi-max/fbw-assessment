@@ -12,7 +12,7 @@
 // DRAFT_ROLE_IDS marks which sets are first-pass pharma scenario drafts that
 // still need Shadi's review/rewrite (he is the domain owner — see CLAUDE.md
 // and the standing rule in memory). Roles not listed in SCENARIO_SETS fall
-// back to the generic set via getScenariosForRole().
+// back to the generic ("general") set via getScenariosForRole().
 //
 // REVIEW: Arabic text below is a first-pass translation draft, same
 // status as translations.js — needs language review before ship.
@@ -163,15 +163,81 @@ const SCENARIOS_PRODUCT_MANAGER = [
       { t: { en: 'I held a clear conviction on the strategy and did not waver.', ar: 'تمسكت بقناعة واضحة تجاه الاستراتيجية ولم أتراجع عنها.' }, d: 'W' } ] },
 ];
 
-export const DRAFT_ROLE_IDS = ['first_line_manager', 'product_manager'];
+// --- Sales / Medical Rep — DRAFT, needs Shadi's review/rewrite ---
+const SCENARIOS_SALES = [
+  { s: { en: 'Two doctors cancel your morning calls at the last minute.', ar: 'يُلغي طبيبان زيارتيهما الصباحيتين في اللحظة الأخيرة.' }, opts: [
+      { t: { en: 'I quickly rework my route to fill the gaps with other accounts.', ar: 'أُعيد ترتيب مسار زياراتي بسرعة لملء الفراغ بحسابات أخرى.' }, d: 'F' },
+      { t: { en: "I check with their staff that everything is okay on their end.", ar: 'أتحقق من طاقم العيادة أن كل شيء على ما يرام لديهم.' }, d: 'B' },
+      { t: { en: 'I decide which one call matters most today and go all-in on it.', ar: 'أُحدد أي زيارة اليوم هي الأهم وأُركّز جهدي عليها بالكامل.' }, d: 'W' } ] },
+  { s: { en: "A physician raises a tough objection about your product's side-effect profile.", ar: 'يُثير طبيب اعتراضاً صعباً حول ملف الآثار الجانبية لمنتجك.' }, opts: [
+      { t: { en: 'I pull the exact clinical data and answer with the numbers.', ar: 'أستحضر البيانات السريرية الدقيقة وأُجيب بالأرقام.' }, d: 'F' },
+      { t: { en: 'I listen fully to the concern before saying anything back.', ar: 'أستمع بالكامل لقلقه قبل أن أرد بأي شيء.' }, d: 'B' },
+      { t: { en: "I stand firmly behind the product's real value despite the pushback.", ar: 'أتمسك بثبات بقيمة المنتج الحقيقية رغم الاعتراض.' }, d: 'W' } ] },
+  { s: { en: 'You are behind your monthly call-average target with one week left.', ar: 'أنت متأخر عن هدف متوسط زياراتك الشهري وتبقى أسبوع واحد فقط.' }, opts: [
+      { t: { en: 'I tighten my daily route to fit in more calls efficiently.', ar: 'أُحكم مسار زياراتي اليومي لأُدرج زيارات أكثر بكفاءة.' }, d: 'F' },
+      { t: { en: "I'm honest with my manager about the pressure I'm under.", ar: 'أُصارح مديري بالضغط الذي أشعر به.' }, d: 'B' },
+      { t: { en: 'I push myself harder for the final stretch, whatever it takes.', ar: 'أدفع نفسي أكثر في المرحلة الأخيرة، مهما تطلب الأمر.' }, d: 'W' } ] },
+  { s: { en: 'A rep from a competing company grows unusually close to your key doctor.', ar: 'يُصبح مندوب من شركة منافسة قريباً بشكل لافت من طبيبك الرئيسي.' }, opts: [
+      { t: { en: 'I review my own call notes to see if my coverage has slipped.', ar: 'أُراجع ملاحظات زياراتي لأتحقق إن كانت تغطيتي قد تراجعت.' }, d: 'F' },
+      { t: { en: 'I invest in the relationship through genuine, honest interactions.', ar: 'أستثمر في العلاقة من خلال تواصل صادق وحقيقي.' }, d: 'B' },
+      { t: { en: 'I decide to compete harder for the account, not step back.', ar: 'أُقرر التنافس بقوة أكبر على هذا الحساب، لا التراجع.' }, d: 'W' } ] },
+  { s: { en: "You notice your samples inventory doesn't match your log.", ar: 'تلاحظ أن مخزون العينات لديك لا يطابق سجلك.' }, opts: [
+      { t: { en: 'I recount everything carefully and correct the record.', ar: 'أُعيد الجرد بدقة وأُصحح السجل.' }, d: 'F' },
+      { t: { en: "I talk to my supervisor honestly about what happened.", ar: 'أُحدّث مشرفي بصدق عمّا حدث.' }, d: 'B' },
+      { t: { en: 'I report it accurately, even though it is uncomfortable.', ar: 'أُبلغ عنه بدقة، حتى لو كان ذلك محرجاً.' }, d: 'W' } ] },
+  { s: { en: 'A pharmacy asks you to bend a promotional material rule "just this once."', ar: 'تطلب منك صيدلية التساهل في قاعدة المواد الترويجية "لمرة واحدة فقط".' }, opts: [
+      { t: { en: 'I explain exactly what the approved guidelines allow.', ar: 'أشرح بدقة ما تسمح به الإرشادات المعتمدة.' }, d: 'F' },
+      { t: { en: 'I try to understand why they are asking, without judging.', ar: 'أُحاول أن أفهم سبب الطلب، دون إصدار حكم.' }, d: 'B' },
+      { t: { en: 'I say no clearly, even though it strains the relationship.', ar: 'أرفض بوضوح، حتى لو أثّر ذلك على العلاقة.' }, d: 'W' } ] },
+  { s: { en: 'Your best quarter yet ends and you reflect on what made it work.', ar: 'ينتهي أفضل فصل لك حتى الآن وتتأمل فيما جعله ناجحاً.' }, opts: [
+      { t: { en: 'I credit the sharper territory planning and account priorities.', ar: 'أعزو الفضل إلى تخطيط المنطقة الأدق وترتيب أولويات الحسابات.' }, d: 'F' },
+      { t: { en: 'I credit the genuine relationships I built with my doctors.', ar: 'أعزو الفضل إلى العلاقات الصادقة التي بنيتها مع أطبائي.' }, d: 'B' },
+      { t: { en: 'I credit staying committed to my goals even on the hard days.', ar: 'أعزو الفضل إلى التزامي بأهدافي حتى في الأيام الصعبة.' }, d: 'W' } ] },
+  { s: { en: 'A key doctor stops seeing you after years of a strong relationship.', ar: 'يتوقف طبيب رئيسي عن استقبالك بعد سنوات من علاقة قوية.' }, opts: [
+      { t: { en: 'I analyze what changed in my call pattern or offering.', ar: 'أُحلل ما الذي تغيّر في نمط زياراتي أو عرضي.' }, d: 'F' },
+      { t: { en: 'I reach out personally to understand what happened.', ar: 'أتواصل معه شخصياً لأفهم ما الذي حدث.' }, d: 'B' },
+      { t: { en: 'I decide to keep showing up professionally, without taking it personally.', ar: 'أُقرر الاستمرار في الحضور باحترافية، دون أن آخذ الأمر بشكل شخصي.' }, d: 'W' } ] },
+  { s: { en: 'Your manager gives you tough feedback about your presentation skills.', ar: 'يُقدّم لك مديرك ملاحظات صعبة حول مهاراتك في العرض.' }, opts: [
+      { t: { en: 'I study the exact skills I need to sharpen and practice them.', ar: 'أدرس المهارات الدقيقة التي أحتاج إلى صقلها وأتدرّب عليها.' }, d: 'F' },
+      { t: { en: 'I reflect honestly on how the feedback makes me feel.', ar: 'أتأمل بصدق في كيف تُشعرني هذه الملاحظات.' }, d: 'B' },
+      { t: { en: 'I decide what to change and commit to doing it.', ar: 'أُقرر ما يجب تغييره وألتزم بتنفيذه.' }, d: 'W' } ] },
+  { s: { en: "A colleague on your team seems to be struggling but hasn't said anything.", ar: 'يبدو أن زميلاً في فريقك يُعاني لكنه لم يُصرّح بشيء.' }, opts: [
+      { t: { en: 'I check if a heavier workload is the real cause.', ar: 'أتحقق إن كان عبء العمل الزائد هو السبب الحقيقي.' }, d: 'F' },
+      { t: { en: 'I reach out privately just to check in on them.', ar: 'أتواصل معه على انفراد للاطمئنان عليه.' }, d: 'B' },
+      { t: { en: "I encourage them to be honest about what's really going on.", ar: 'أُشجّعه على أن يكون صادقاً بشأن ما يحدث فعلاً.' }, d: 'W' } ] },
+  { s: { en: 'Head office rolls out a new CRM system mid-quarter.', ar: 'يُطلق المكتب الرئيسي نظام إدارة علاقات عملاء جديداً في منتصف الفصل.' }, opts: [
+      { t: { en: 'I build myself a simple guide to learn it fast.', ar: 'أُعدّ لنفسي دليلاً مبسطاً لتعلّمه بسرعة.' }, d: 'F' },
+      { t: { en: 'I help the teammate who is struggling most with it.', ar: 'أُساعد الزميل الأكثر معاناة معه.' }, d: 'B' },
+      { t: { en: 'I commit to using it fully, even though it slows me down at first.', ar: 'ألتزم باستخدامه بالكامل، حتى لو أبطأني في البداية.' }, d: 'W' } ] },
+  { s: { en: 'You land the biggest sale of your career.', ar: 'تُحقق أكبر صفقة في مسيرتك المهنية.' }, opts: [
+      { t: { en: 'I document exactly what worked so I can repeat it.', ar: 'أُوثّق بدقة ما نجح لأتمكن من تكراره.' }, d: 'F' },
+      { t: { en: 'I thank everyone who helped make it happen.', ar: 'أشكر كل من ساعد في تحقيق ذلك.' }, d: 'B' },
+      { t: { en: "I feel a surge of pride in proving what's possible.", ar: 'أشعر بفخر كبير لإثبات ما هو ممكن.' }, d: 'W' } ] },
+  { s: { en: 'A new hire shadows you and asks how you handle rejection.', ar: 'يُرافقك موظف جديد ويسألك كيف تتعامل مع الرفض.' }, opts: [
+      { t: { en: 'I show them the practical scripts and tools I rely on.', ar: 'أُريه النصوص والأدوات العملية التي أعتمد عليها.' }, d: 'F' },
+      { t: { en: 'I share honestly what rejection actually feels like for me.', ar: 'أُشارك بصدق كيف يبدو الرفض فعلاً بالنسبة لي.' }, d: 'B' },
+      { t: { en: 'I tell them why I keep showing up despite it.', ar: 'أُخبره لماذا أستمر في الحضور رغم ذلك.' }, d: 'W' } ] },
+  { s: { en: 'You discover a formulary restriction that could hurt your numbers this month.', ar: 'تكتشف قيداً في القائمة الدوائية قد يُضرّ بأرقامك هذا الشهر.' }, opts: [
+      { t: { en: 'I dig into the exact terms to find a compliant path around it.', ar: 'أتعمّق في التفاصيل الدقيقة لإيجاد طريق ملتزم لتجاوزه.' }, d: 'F' },
+      { t: { en: 'I check with fellow reps on how they are navigating it.', ar: 'أتحقق مع زملائي المندوبين كيف يتعاملون معه.' }, d: 'B' },
+      { t: { en: 'I push harder on my other accounts rather than dwell on it.', ar: 'أدفع بقوة أكبر على حساباتي الأخرى بدل الانشغال به.' }, d: 'W' } ] },
+  { s: { en: "You're offered a stretch assignment covering a colleague's territory.", ar: 'يُعرض عليك تكليف إضافي بتغطية منطقة زميل لك.' }, opts: [
+      { t: { en: 'I ask for the data on that territory before deciding.', ar: 'أطلب بيانات تلك المنطقة قبل اتخاذ القرار.' }, d: 'F' },
+      { t: { en: 'I think about how it affects my own team relationships.', ar: 'أُفكّر في تأثير ذلك على علاقاتي مع فريقي.' }, d: 'B' },
+      { t: { en: "I say yes because it's a chance to grow and prove myself.", ar: 'أُوافق لأنها فرصة للنمو وإثبات قدراتي.' }, d: 'W' } ] },
+];
 
-assertBalancedScenarios(SCENARIOS_FIRST_LINE_MANAGER, 'first_line_manager scenarios');
-assertBalancedScenarios(SCENARIOS_PRODUCT_MANAGER, 'product_manager scenarios');
+export const DRAFT_ROLE_IDS = ['sales', 'marketing', 'management'];
+
+assertBalancedScenarios(SCENARIOS_SALES, 'sales scenarios');
+assertBalancedScenarios(SCENARIOS_FIRST_LINE_MANAGER, 'management scenarios');
+assertBalancedScenarios(SCENARIOS_PRODUCT_MANAGER, 'marketing scenarios');
 
 export const SCENARIO_SETS = {
-  medical_rep: GENERIC_SCENARIOS,
-  first_line_manager: SCENARIOS_FIRST_LINE_MANAGER,
-  product_manager: SCENARIOS_PRODUCT_MANAGER,
+  sales: SCENARIOS_SALES,
+  marketing: SCENARIOS_PRODUCT_MANAGER,
+  management: SCENARIOS_FIRST_LINE_MANAGER,
+  general: GENERIC_SCENARIOS,
 };
 
 export function getScenariosForRole(roleId) {

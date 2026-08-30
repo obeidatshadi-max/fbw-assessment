@@ -2,15 +2,21 @@
 // domain/language owner and should review before ship.
 
 // A role's `id` is the key used in scenarioSets.js's SCENARIO_SETS map.
-// Roles without a drafted set of their own fall back to the generic
-// ("medical_rep") scenarios via getScenariosForRole() — see scenarioSets.js.
+// Every role below has its own dedicated scenario set (see scenarioSets.js);
+// an id that isn't in ROLES at all (shouldn't happen in normal use) falls
+// back to the neutral "general" set via getScenariosForRole().
+//
+// Kept deliberately small: three pharma/medtech/diagnostics-flavored
+// functions (the product's edge — Shadi is a pharmacist and this is his
+// target market) plus one neutral catch-all for anyone outside that
+// industry. Collapsed from an earlier 6-role list where half the roles
+// (medical_msl, market_access, country_manager) had no real content of
+// their own and silently reused the generic set anyway.
 export const ROLES = [
-  { id: 'medical_rep', label: { en: 'Medical Rep', ar: 'مندوب طبي' } },
-  { id: 'first_line_manager', label: { en: 'First-line Manager', ar: 'مدير الخط الأول' } },
-  { id: 'product_manager', label: { en: 'Product Manager', ar: 'مدير المنتج' } },
-  { id: 'medical_msl', label: { en: 'Medical / MSL', ar: 'الشؤون الطبية / MSL' } },
-  { id: 'market_access', label: { en: 'Market Access', ar: 'الوصول إلى السوق' } },
-  { id: 'country_manager', label: { en: 'Country Manager', ar: 'مدير الدولة' } },
+  { id: 'sales', label: { en: 'Sales / Medical Rep', ar: 'المبيعات / المندوب الطبي' } },
+  { id: 'marketing', label: { en: 'Marketing / Product', ar: 'التسويق / إدارة المنتج' } },
+  { id: 'management', label: { en: 'Management / Team Lead', ar: 'الإدارة / قيادة الفريق' } },
+  { id: 'general', label: { en: 'General / Other (any corporate role)', ar: 'عام / أخرى (أي دور في الشركات)' } },
 ];
 
-export const DEFAULT_ROLE = 'medical_rep';
+export const DEFAULT_ROLE = 'sales';
