@@ -1,10 +1,46 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset }) {
+function ConsentCheckboxes({ consent, onChange, t }) {
+  return (
+    <div style={{ margin: '4px 0 10px' }}>
+      <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--muted)' }}>{t('auth.consentNotice')}</p>
+      <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '6px 0', fontSize: 13.5 }}>
+        <input
+          type="checkbox"
+          checked={consent.storeResults}
+          onChange={e => onChange({ ...consent, storeResults: e.target.checked })}
+          style={{ marginTop: 3 }}
+        />
+        <span>{t('auth.consentStoreLabel')}</span>
+      </label>
+      <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '6px 0', fontSize: 13.5 }}>
+        <input
+          type="checkbox"
+          checked={consent.longitudinalTracking}
+          onChange={e => onChange({ ...consent, longitudinalTracking: e.target.checked })}
+          style={{ marginTop: 3 }}
+        />
+        <span>{t('auth.consentLongitudinalLabel')}</span>
+      </label>
+      <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '6px 0', fontSize: 13.5 }}>
+        <input
+          type="checkbox"
+          checked={consent.shareWithManager}
+          onChange={e => onChange({ ...consent, shareWithManager: e.target.checked })}
+          style={{ marginTop: 3 }}
+        />
+        <span>{t('auth.consentShareLabel')}</span>
+      </label>
+    </div>
+  );
+}
+
+export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [resetStatus, setResetStatus] = useState('idle'); // idle | sending | sent | error
+  const [consent, setConsent] = useState({ storeResults: false, longitudinalTracking: false, shareWithManager: false });
   const { t } = useLanguage();
 
   function handleForgotPassword() {
@@ -20,6 +56,24 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
     );
   }
 
+  if (authState.status === 'needsConsent') {
+    return (
+      <div className="note no-print" style={{ marginTop: 16 }}>
+        <p style={{ margin: '0 0 8px' }}>
+          <b>{t('auth.needsConsentHeading')}</b> {t('auth.needsConsentBody')}
+        </p>
+        <ConsentCheckboxes consent={consent} onChange={setConsent} t={t} />
+        <button
+          className="btn sm"
+          disabled={!consent.storeResults}
+          onClick={() => onConfirmConsent(consent)}
+        >
+          {t('auth.consentContinue')}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="note no-print" style={{ marginTop: 16 }}>
       {authState.status === 'signedIn' ? (
@@ -29,6 +83,7 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
           <p style={{ margin: '0 0 8px' }}>
             <b>{t('auth.askHeading')}</b> {t('auth.askBody')}
           </p>
+          <ConsentCheckboxes consent={consent} onChange={setConsent} t={t} />
           <input
             type="email"
             value={email}
@@ -46,15 +101,15 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
           <div style={{ display: 'flex', gap: 8 }}>
             <button
               className="btn sm"
-              disabled={!email || !password || authState.status === 'sending'}
-              onClick={() => onSignIn(email, password)}
+              disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
+              onClick={() => onSignIn(email, password, consent)}
             >
               {authState.status === 'sending' ? t('auth.sending') : t('auth.signIn')}
             </button>
             <button
               className="btn sm ghost"
-              disabled={!email || !password || authState.status === 'sending'}
-              onClick={() => onCreateAccount(email, password)}
+              disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
+              onClick={() => onCreateAccount(email, password, consent)}
             >
               {authState.status === 'sending' ? t('auth.sending') : t('auth.createAccount')}
             </button>
