@@ -49,6 +49,21 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
       </div>
 
       <div className="triple">
+        <div className="dimrow dr-wl">
+          <span className="dot" />
+          <div><div className="lab" style={{ fontSize: 16 }}>{t('intro.hook1Title')}</div><div className="q">{t('intro.hook1Body')}</div></div>
+        </div>
+        <div className="dimrow dr-fn">
+          <span className="dot" />
+          <div><div className="lab" style={{ fontSize: 16 }}>{t('intro.hook2Title')}</div><div className="q">{t('intro.hook2Body')}</div></div>
+        </div>
+        <div className="dimrow dr-be">
+          <span className="dot" />
+          <div><div className="lab" style={{ fontSize: 16 }}>{t('intro.hook3Title')}</div><div className="q">{t('intro.hook3Body')}</div></div>
+        </div>
+      </div>
+
+      <div className="triple">
         <div className="dimrow dr-fn">
           <span className="dot" />
           <div><div className="lab">{L(DIM.F.label)}</div><div className="q">{t('intro.dimQ.F')}</div></div>
