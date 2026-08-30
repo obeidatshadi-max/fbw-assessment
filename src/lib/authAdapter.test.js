@@ -61,3 +61,10 @@ describe('noopAuthAdapter session methods', () => {
     expect(result.valid).toBe(false);
   });
 });
+
+describe('noopAuthAdapter consent', () => {
+  it('recordConsent fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.recordConsent({ userId: 'u1', storeResults: true, longitudinalTracking: false, shareWithManager: false });
+    expect(result.success).toBe(false);
+  });
+});

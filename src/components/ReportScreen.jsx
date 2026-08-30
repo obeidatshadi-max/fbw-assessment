@@ -153,7 +153,7 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   );
 }
 
-export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onCreateRaterLink, onRefreshRaterSummary }) {
+export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onCreateRaterLink, onRefreshRaterSummary }) {
   const { t, tf, L } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
 
@@ -206,7 +206,7 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
         </div>
       </div>
 
-      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} onRequestReset={onRequestReset} />
+      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} onRequestReset={onRequestReset} onConfirmConsent={onConfirmConsent} />
 
       {authState.status === 'saved' && onCreateRaterLink && (
         <InviteFeedback

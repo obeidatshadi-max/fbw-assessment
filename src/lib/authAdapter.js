@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient.js';
+import { CURRENT_NOTICE_VERSION } from './consent.js';
 
 export const noopAuthAdapter = {
   async signInWithPassword() {
@@ -14,6 +15,9 @@ export const noopAuthAdapter = {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
   async saveAssessment() {
+    return { success: false, error: 'Saving is not configured yet.' };
+  },
+  async recordConsent() {
     return { success: false, error: 'Saving is not configured yet.' };
   },
   async getSession() {
@@ -110,6 +114,17 @@ export const supabaseAuthAdapter = {
 
   async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {
     if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
+    const { data: consentRow, error: consentReadError } = await supabase
+      .from('fbw_consents')
+      .select('store_results, notice_version')
+      .eq('profile_id', userId)
+      .maybeSingle();
+    if (consentReadError) return { success: false, error: consentReadError.message };
+    const hasCurrentConsent = Boolean(
+      consentRow && consentRow.store_results === true && consentRow.notice_version === CURRENT_NOTICE_VERSION
+    );
+    if (!hasCurrentConsent) return { success: false, error: 'consent_required', needsConsent: true };
+
     const { error: profileError } = await supabase.from('fbw_profiles').upsert({ id: userId }, { ignoreDuplicates: true });
     if (profileError) return { success: false, error: profileError.message };
     const { data, error } = await supabase.from('fbw_assessments').insert({
@@ -129,6 +144,20 @@ export const supabaseAuthAdapter = {
     }).select('id').single();
     if (error) return { success: false, error: error.message };
     return { success: true, assessmentId: data.id };
+  },
+  async recordConsent({ userId, storeResults, longitudinalTracking, shareWithManager }) {
+    if (!supabase) return { success: false, error: 'Saving is not configured yet.' };
+    const { error: profileError } = await supabase.from('fbw_profiles').upsert({ id: userId }, { ignoreDuplicates: true });
+    if (profileError) return { success: false, error: profileError.message };
+    const { error } = await supabase.from('fbw_consents').upsert({
+      profile_id: userId,
+      store_results: Boolean(storeResults),
+      longitudinal_tracking: Boolean(longitudinalTracking),
+      share_with_manager: Boolean(shareWithManager),
+      notice_version: CURRENT_NOTICE_VERSION,
+      consented_at: new Date().toISOString(),
+    }, { onConflict: 'profile_id' });
+    return error ? { success: false, error: error.message } : { success: true };
   },
   async getSession() {
     if (!supabase) return null;

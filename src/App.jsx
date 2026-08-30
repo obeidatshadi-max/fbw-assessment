@@ -30,6 +30,8 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const [reportData, setReportData] = useState(null);
   const [authState, setAuthState] = useState({ status: 'anon' });
   const [raterLink, setRaterLink] = useState(null); // { id, count, scores }
+  const [pendingConsent, setPendingConsent] = useState(null); // consent captured at sign-in, consumed once by the save effect
+  const [pendingSavePayload, setPendingSavePayload] = useState(null); // set when a returning session needs fresh consent before saving
 
   const doneP1 = p1Answers.filter(a => a.most !== null && a.least !== null).length;
   const doneP2 = orgAnswers.filter(v => v !== null).length;
@@ -96,6 +98,8 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setRaterLink(null);
     setTeamId(null);
     setSessionId(null);
+    setPendingConsent(null);
+    setPendingSavePayload(null);
     setPhase('intro');
   }
 
@@ -103,14 +107,16 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     window.print();
   }
 
-  async function handleSignIn(email, password) {
+  async function handleSignIn(email, password, consent) {
+    setPendingConsent(consent);
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithPassword({ email, password });
     if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
-  async function handleCreateAccount(email, password) {
+  async function handleCreateAccount(email, password, consent) {
+    setPendingConsent(consent);
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signUpWithPassword({ email, password });
     if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
@@ -121,29 +127,69 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     return authAdapter.requestPasswordReset({ email });
   }
 
+  async function attemptSave(userId, consent) {
+    const payload = { role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId };
+    const result = await authAdapter.saveAssessment(payload);
+    if (result.success) {
+      setAuthState({ status: 'saved', assessmentId: result.assessmentId, userId });
+      return;
+    }
+    if (result.needsConsent) {
+      if (consent) {
+        const recordResult = await authAdapter.recordConsent({ userId, ...consent });
+        setPendingConsent(null);
+        if (!recordResult.success) {
+          setAuthState({ status: 'error', error: recordResult.error });
+          return;
+        }
+        const retryResult = await authAdapter.saveAssessment(payload);
+        setAuthState(
+          retryResult.success
+            ? { status: 'saved', assessmentId: retryResult.assessmentId, userId }
+            : { status: 'error', error: retryResult.error }
+        );
+        return;
+      }
+      setPendingSavePayload(payload);
+      setAuthState({ status: 'needsConsent', userId });
+      return;
+    }
+    setAuthState({ status: 'error', error: result.error });
+  }
+
+  async function handleConfirmConsent(consent) {
+    if (!pendingSavePayload) return;
+    const { userId } = pendingSavePayload;
+    setAuthState({ status: 'signedIn' });
+    const recordResult = await authAdapter.recordConsent({ userId, ...consent });
+    if (!recordResult.success) {
+      setAuthState({ status: 'error', error: recordResult.error });
+      return;
+    }
+    const result = await authAdapter.saveAssessment(pendingSavePayload);
+    setPendingSavePayload(null);
+    setAuthState(
+      result.success
+        ? { status: 'saved', assessmentId: result.assessmentId, userId }
+        : { status: 'error', error: result.error }
+    );
+  }
+
   useEffect(() => {
     const unsubscribe = authAdapter.onAuthStateChange(async (session) => {
-      if (session && reportData && authState.status !== 'saved' && authState.status !== 'signedIn') {
+      if (
+        session &&
+        reportData &&
+        authState.status !== 'saved' &&
+        authState.status !== 'signedIn' &&
+        authState.status !== 'needsConsent'
+      ) {
         setAuthState({ status: 'signedIn' });
-        const result = await authAdapter.saveAssessment({
-          role,
-          p1Answers,
-          orgAnswers,
-          complianceAnswers,
-          reportData,
-          userId: session.user.id,
-          teamId,
-          sessionId,
-        });
-        setAuthState(
-          result.success
-            ? { status: 'saved', assessmentId: result.assessmentId, userId: session.user.id }
-            : { status: 'error', error: result.error }
-        );
+        await attemptSave(session.user.id, pendingConsent);
       }
     });
     return unsubscribe;
-  }, [authAdapter, reportData, authState.status, role, p1Answers, orgAnswers, complianceAnswers, teamId, sessionId]);
+  }, [authAdapter, reportData, authState.status, pendingConsent, role, p1Answers, orgAnswers, complianceAnswers, teamId, sessionId]);
 
   async function handleCreateRaterLink() {
     setRaterLink({ status: 'creating' });
@@ -203,6 +249,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onSignIn={handleSignIn}
               onCreateAccount={handleCreateAccount}
               onRequestReset={handleRequestReset}
+              onConfirmConsent={handleConfirmConsent}
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />
