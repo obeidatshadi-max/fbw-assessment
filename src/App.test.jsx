@@ -33,6 +33,10 @@ function completeFullFlow() {
   fireEvent.click(screen.getByText('See my report'));
 }
 
+function checkStoreConsent() {
+  fireEvent.click(screen.getByLabelText('Store my results so I can see this report again'));
+}
+
 describe('App', () => {
   it('walks the full flow and renders a report matching buildReportData directly', () => {
     render(<App />);
@@ -102,6 +106,7 @@ describe('App with a fake auth adapter', () => {
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    checkStoreConsent();
     fireEvent.click(screen.getByText('Sign in'));
 
     await act(async () => {
@@ -129,6 +134,7 @@ describe('App with a fake auth adapter', () => {
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    checkStoreConsent();
     fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
@@ -161,6 +167,7 @@ describe('App with a fake auth adapter', () => {
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    checkStoreConsent();
     fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
@@ -188,6 +195,7 @@ describe('App with a fake auth adapter', () => {
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
+    checkStoreConsent();
     fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
