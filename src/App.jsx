@@ -127,6 +127,14 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     return authAdapter.requestPasswordReset({ email });
   }
 
+  // Deliberately does not reset authState on success — AuthPanel shows its
+  // own "account deleted" note while staying on the (now stale, session-
+  // only) report; the user leaves via the normal "Start again" button,
+  // which already resets everything through handleRestart.
+  function handleDeleteAccount() {
+    return authAdapter.deleteAccount();
+  }
+
   async function attemptSave(userId, consent) {
     const payload = { role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId };
     const result = await authAdapter.saveAssessment(payload);
@@ -250,6 +258,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onCreateAccount={handleCreateAccount}
               onRequestReset={handleRequestReset}
               onConfirmConsent={handleConfirmConsent}
+              onDeleteAccount={handleDeleteAccount}
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />

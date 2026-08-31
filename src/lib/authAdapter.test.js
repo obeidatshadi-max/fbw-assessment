@@ -38,6 +38,11 @@ describe('noopAuthAdapter facilitator password auth', () => {
     const result = await noopAuthAdapter.updatePassword({ password: 'secret123' });
     expect(result.success).toBe(false);
   });
+
+  it('deleteAccount fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.deleteAccount();
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('noopAuthAdapter session methods', () => {

@@ -14,6 +14,9 @@ export const noopAuthAdapter = {
   async updatePassword() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
+  async deleteAccount() {
+    return { success: false, error: 'Sign-in is not configured yet.' };
+  },
   async saveAssessment() {
     return { success: false, error: 'Saving is not configured yet.' };
   },
@@ -110,6 +113,38 @@ export const supabaseAuthAdapter = {
     if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
     const { error } = await supabase.auth.updateUser({ password });
     return error ? { success: false, error: error.message } : { success: true };
+  },
+
+  // Self-serve erasure (Prompt 8 data-protection checklist item, closed).
+  // The client can't delete its own auth.users row, so this goes through a
+  // Netlify function on the service-role key — same admin pattern as
+  // account-signup.js — which verifies the caller's own access token before
+  // deleting *that* user. Every dependent row (fbw_profiles, fbw_consents,
+  // fbw_assessments, fbw_rater_links, ...) cascades via `on delete cascade`
+  // (see supabase/migrations/0001_init.sql, 0008_fbw_consents.sql), so one
+  // call erases the account and everything it owns. Anonymous 360 rater
+  // responses about this person are untouched — deliberately: they carry no
+  // identity linking them back here, so there is nothing to find and erase.
+  async deleteAccount() {
+    if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) return { success: false, error: 'Not signed in.' };
+    let res;
+    try {
+      res = await fetch('/.netlify/functions/account-delete', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      return { success: false, error: 'Could not reach the account service. Try again.' };
+    }
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      return { success: false, error: data.error || 'Could not delete your account.' };
+    }
+    await supabase.auth.signOut();
+    return { success: true };
   },
 
   async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {

@@ -4,7 +4,9 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 function ConsentCheckboxes({ consent, onChange, t }) {
   return (
     <div style={{ margin: '4px 0 10px' }}>
-      <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--muted)' }}>{t('auth.consentNotice')}</p>
+      <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--muted)' }}>
+        {t('auth.consentNotice')} <a href="/privacy" target="_blank" rel="noopener noreferrer">{t('footer.privacyLink')}</a>
+      </p>
       <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', margin: '6px 0', fontSize: 13.5 }}>
         <input
           type="checkbox"
@@ -36,22 +38,83 @@ function ConsentCheckboxes({ consent, onChange, t }) {
   );
 }
 
-export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent }) {
+export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [resetStatus, setResetStatus] = useState('idle'); // idle | sending | sent | error
   const [consent, setConsent] = useState({ storeResults: false, longitudinalTracking: false, shareWithManager: false });
-  const { t } = useLanguage();
+  const [deleteStep, setDeleteStep] = useState('idle'); // idle | confirming | deleting | error | done
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const { t, tf } = useLanguage();
 
   function handleForgotPassword() {
     setResetStatus('sending');
     onRequestReset(email).then(result => setResetStatus(result.success ? 'sent' : 'error'));
   }
 
+  async function handleDeleteAccount() {
+    setDeleteStep('deleting');
+    const result = await onDeleteAccount();
+    setDeleteStep(result.success ? 'done' : 'error');
+  }
+
   if (authState.status === 'saved') {
+    if (deleteStep === 'done') {
+      return (
+        <div className="note no-print" style={{ marginTop: 16 }}>
+          {t('auth.deleteDone')}
+        </div>
+      );
+    }
     return (
       <div className="note no-print" style={{ marginTop: 16 }}>
         {t('auth.savedNote')}
+        {deleteStep === 'idle' && (
+          <div style={{ marginTop: 10 }}>
+            <button type="button" className="btn ghost sm" onClick={() => setDeleteStep('confirming')}>
+              {t('auth.deleteAccountLink')}
+            </button>
+          </div>
+        )}
+        {(deleteStep === 'confirming' || deleteStep === 'deleting' || deleteStep === 'error') && (
+          <div style={{ marginTop: 10 }}>
+            <p style={{ margin: '0 0 8px' }}>
+              <b>{t('auth.deleteHeading')}</b> {t('auth.deleteBody')}
+            </p>
+            <label htmlFor="delete-confirm" style={{ display: 'block', fontSize: 13, marginBottom: 6 }}>
+              {t('auth.deleteConfirmLabel')}
+            </label>
+            <input
+              id="delete-confirm"
+              value={deleteConfirmText}
+              onChange={e => setDeleteConfirmText(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+            />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                type="button"
+                className="btn sm"
+                disabled={deleteConfirmText !== 'DELETE' || deleteStep === 'deleting'}
+                onClick={handleDeleteAccount}
+              >
+                {deleteStep === 'deleting' ? t('auth.deleting') : t('auth.deleteButton')}
+              </button>
+              <button
+                type="button"
+                className="btn ghost sm"
+                disabled={deleteStep === 'deleting'}
+                onClick={() => { setDeleteStep('idle'); setDeleteConfirmText(''); }}
+              >
+                {t('auth.deleteCancel')}
+              </button>
+            </div>
+            {deleteStep === 'error' && (
+              <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>
+                {tf('auth.deleteError', { email: 'obeidatshadi@gmail.com' })}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     );
   }

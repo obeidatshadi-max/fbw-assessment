@@ -136,6 +136,10 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
       <div className="footer-signature">
         {t('footer.developedBy')}{' '}
         <a href="https://madarlead.com" target="_blank" rel="noopener noreferrer" dir="ltr">Madarlead.com</a>
+        {' · '}
+        <a href="/privacy">{t('footer.privacyLink')}</a>
+        {' · '}
+        <a href="/terms">{t('footer.termsLink')}</a>
       </div>
     </section>
   );

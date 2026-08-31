@@ -167,10 +167,16 @@ data to a new country or customer:
       been reviewed by someone qualified to confirm it meets that law's
       plain-language and specificity requirements — the checked-in copy is
       a first draft, not legal advice.
-- [ ] Confirm whether that law grants a right to **erasure/portability**
-      that this tool does not yet implement (no "delete my data" flow
-      exists as of this sub-project — see the consent-gate spec's "Not
-      doing yet" section).
+- [ ] Confirm whether that law grants a right to **erasure/portability**.
+      **Closed 2026-08-31**: a self-serve "Delete my account" flow exists
+      (`AuthPanel.jsx`'s `saved` state → `netlify/functions/account-delete.js`,
+      service-role `admin.deleteUser()`, verified via the caller's own
+      access token). Cascades through every dependent table
+      (`fbw_profiles`, `fbw_consents`, `fbw_assessments`,
+      `fbw_rater_links`, ...) via `on delete cascade`. Anonymous 360 rater
+      responses about a deleted person are *not* removed — they carry no
+      identity to find them by, by design (see the 360 section above).
+      Portability (export-your-data) is still not implemented.
 - [ ] If the deploying company has its own DPO/legal/compliance function,
       route this checklist through them rather than relying on this repo's
       notes alone.

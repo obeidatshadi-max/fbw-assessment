@@ -67,6 +67,39 @@ describe('AuthPanel', () => {
     expect(screen.getByText('Saved to your account.', { exact: false })).toBeInTheDocument();
   });
 
+  it('gates account deletion behind a typed DELETE confirmation', async () => {
+    const onDeleteAccount = vi.fn().mockResolvedValue({ success: true });
+    render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} onDeleteAccount={onDeleteAccount} />);
+    fireEvent.click(screen.getByText('Delete my account'));
+    const deleteButton = screen.getByText('Permanently delete my account');
+    expect(deleteButton).toBeDisabled();
+    fireEvent.change(screen.getByLabelText('Type DELETE to confirm'), { target: { value: 'nope' } });
+    expect(deleteButton).toBeDisabled();
+    fireEvent.change(screen.getByLabelText('Type DELETE to confirm'), { target: { value: 'DELETE' } });
+    expect(deleteButton).not.toBeDisabled();
+    fireEvent.click(deleteButton);
+    expect(onDeleteAccount).toHaveBeenCalled();
+    expect(await screen.findByText('Your account has been deleted.')).toBeInTheDocument();
+  });
+
+  it('shows an error and lets the user retry when deletion fails', async () => {
+    const onDeleteAccount = vi.fn().mockResolvedValue({ success: false });
+    render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} onDeleteAccount={onDeleteAccount} />);
+    fireEvent.click(screen.getByText('Delete my account'));
+    fireEvent.change(screen.getByLabelText('Type DELETE to confirm'), { target: { value: 'DELETE' } });
+    fireEvent.click(screen.getByText('Permanently delete my account'));
+    expect(await screen.findByText('Could not delete your account.', { exact: false })).toBeInTheDocument();
+  });
+
+  it('cancels back to the saved note without deleting', () => {
+    const onDeleteAccount = vi.fn();
+    render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} onDeleteAccount={onDeleteAccount} />);
+    fireEvent.click(screen.getByText('Delete my account'));
+    fireEvent.click(screen.getByText('Cancel'));
+    expect(onDeleteAccount).not.toHaveBeenCalled();
+    expect(screen.getByText('Delete my account')).toBeInTheDocument();
+  });
+
   it('shows the save prompt in Arabic', () => {
     render(<LanguageProvider initialLang="ar"><AuthPanel authState={{ status: 'anon' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} /></LanguageProvider>);
     expect(screen.getByText('تريد حفظ هذا التقرير', { exact: false })).toBeInTheDocument();
