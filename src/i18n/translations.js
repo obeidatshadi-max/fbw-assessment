@@ -291,7 +291,7 @@ export const UI = {
     admin: {
       eyebrow: 'Admin',
       title: 'Activity overview',
-      signInHeading: 'Sign in',
+      signInHeading: 'Admin access',
       signInBody: 'Sign in with your account to view site activity.',
       emailPlaceholder: 'you@company.com',
       passwordPlaceholder: 'Password',
@@ -628,7 +628,7 @@ export const UI = {
     admin: {
       eyebrow: 'الإدارة',
       title: 'نظرة عامة على النشاط',
-      signInHeading: 'تسجيل الدخول',
+      signInHeading: 'الوصول الإداري',
       signInBody: 'سجّل الدخول بحسابك للاطّلاع على نشاط الموقع.',
       emailPlaceholder: 'you@company.com',
       passwordPlaceholder: 'كلمة المرور',
