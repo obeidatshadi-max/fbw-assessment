@@ -62,6 +62,9 @@ export const noopAuthAdapter = {
   async getTeamSummary() {
     return { success: false, error: 'Team dashboard is not configured yet.' };
   },
+  async getAdminStats() {
+    return { success: false, error: 'Admin stats are not configured yet.' };
+  },
 };
 
 export const supabaseAuthAdapter = {
@@ -288,5 +291,12 @@ export const supabaseAuthAdapter = {
     const { data, error } = await supabase.rpc('validate_code', { p_code: code });
     if (error) return { valid: false };
     return { valid: Boolean(data.valid), kind: data.kind || null, id: data.id || null };
+  },
+
+  // Admin dashboard — owner-only aggregate stats (authenticated)
+  async getAdminStats() {
+    if (!supabase) return { success: false, error: 'Admin stats are not configured yet.' };
+    const { data, error } = await supabase.rpc('get_admin_stats');
+    return error ? { success: false, error: error.message } : { success: true, stats: data };
   },
 };

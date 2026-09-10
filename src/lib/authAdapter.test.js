@@ -73,3 +73,10 @@ describe('noopAuthAdapter consent', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('noopAuthAdapter admin stats', () => {
+  it('getAdminStats fails safely when not configured', async () => {
+    const result = await noopAuthAdapter.getAdminStats();
+    expect(result.success).toBe(false);
+  });
+});
