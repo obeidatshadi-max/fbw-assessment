@@ -14,9 +14,9 @@
 // their own and silently reused the generic set anyway.
 export const ROLES = [
   { id: 'sales', label: { en: 'Sales / Medical Rep', ar: 'المبيعات / المندوب الطبي' } },
-  { id: 'marketing', label: { en: 'Marketing / Product', ar: 'التسويق / إدارة المنتج' } },
-  { id: 'management', label: { en: 'Management / Team Lead', ar: 'الإدارة / قيادة الفريق' } },
-  { id: 'general', label: { en: 'General / Other (any corporate role)', ar: 'عام / أخرى (أي دور في الشركات)' } },
+  { id: 'marketing', label: { en: 'Marketing / Product (Pharma)', ar: 'التسويق / إدارة المنتج (الأدوية)' } },
+  { id: 'management', label: { en: 'Management / Team Lead (Pharma)', ar: 'الإدارة / قيادة الفريق (الأدوية)' } },
+  { id: 'general', label: { en: 'General (Non-Pharma)', ar: 'عام (غير أدوية)' } },
 ];
 
 export const DEFAULT_ROLE = 'sales';

@@ -49,7 +49,7 @@ export const UI = {
   en: {
     lang: { en: 'EN', ar: 'AR' },
     brand: { kicker: 'Integral Leadership Dynamics™', name: 'Function · Being · Will' },
-    footer: { developedBy: 'Developed by', privacyLink: 'Privacy Policy', termsLink: 'Terms of Service' },
+    footer: { developedBy: 'Developed by', privacyLink: 'Privacy Policy', termsLink: 'Terms of Service', managerLink: 'Manager? Create a team code' },
     intro: {
       eyebrow: 'Leadership self-reflection',
       title: 'Where do you lead from?',
@@ -386,7 +386,7 @@ export const UI = {
   ar: {
     lang: { en: 'EN', ar: 'AR' },
     brand: { kicker: 'ديناميكيات القيادة المتكاملة™', name: 'الوظيفة · الكينونة · الإرادة' },
-    footer: { developedBy: 'تطوير', privacyLink: 'سياسة الخصوصية', termsLink: 'شروط الخدمة' },
+    footer: { developedBy: 'تطوير', privacyLink: 'سياسة الخصوصية', termsLink: 'شروط الخدمة', managerLink: 'مدير؟ أنشئ رمز فريق' },
     intro: {
       eyebrow: 'تأمّل ذاتي في القيادة',
       title: 'من أين تقود؟',

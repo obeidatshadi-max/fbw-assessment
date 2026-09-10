@@ -140,6 +140,8 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
         <a href="/privacy">{t('footer.privacyLink')}</a>
         {' · '}
         <a href="/terms">{t('footer.termsLink')}</a>
+        {' · '}
+        <a href="/manager">{t('footer.managerLink')}</a>
       </div>
     </section>
   );
