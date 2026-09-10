@@ -48,6 +48,26 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
         <p className="lead">{t('intro.lead')}</p>
       </div>
 
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '18px 0' }}>
+        {['builtForSales', 'builtForMarketing', 'builtForManagement'].map(key => (
+          <span key={key} style={{
+            fontSize: 12.5, fontWeight: 600, color: 'var(--muted)',
+            border: '1px solid var(--line)', borderRadius: 999, padding: '5px 12px',
+          }}>{t(`intro.${key}`)}</span>
+        ))}
+      </div>
+
+      <div className="note">
+        <b>{t('intro.compareHeading')}</b>
+        <ul className="clean" style={{ marginTop: 8 }}>
+          <li>{t('intro.compareScenarios')}</li>
+          <li>{t('intro.compareTeam')}</li>
+          <li>{t('intro.compareFollowThrough')}</li>
+        </ul>
+      </div>
+
+      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '12px 0 0' }}>{t('intro.trustLine')}</p>
+
       <div style={{ textAlign: 'center', margin: '26px 0' }}>
         <div className="hero-brand-kicker">{t('intro.hookEyebrow')}</div>
         <div style={{ fontFamily: 'var(--serif)', fontWeight: 500, fontSize: 'clamp(18px,4vw,22px)', color: 'var(--ink)', margin: '6px auto 14px', maxWidth: 560, lineHeight: 1.4 }}>
