@@ -2,9 +2,21 @@
 -- Owner-only standalone activity dashboard at /admin. See
 -- docs/superpowers/specs/2026-09-10-admin-dashboard-design.md.
 
-alter table fbw_profiles add column is_admin boolean not null default false;
+alter table fbw_profiles add column if not exists is_admin boolean not null default false;
 
-create or replace function get_admin_stats()
+-- The pre-existing insert policy from 0002 (`auth.uid() = id`) constrains
+-- which row a caller may insert but not which columns, and the app already
+-- does `supabase.from('fbw_profiles').upsert({id: userId}, {ignoreDuplicates:
+-- true})` client-side (see src/lib/authAdapter.js). Without this, any
+-- signed-up user could INSERT their own row with `is_admin: true` directly
+-- via the REST API, self-granting admin. Replacing it with a check that also
+-- requires `is_admin is false` still allows the existing client upsert
+-- (is_admin defaults to false) but blocks a client from ever setting it true.
+drop policy "insert own profile" on fbw_profiles;
+create policy "insert own profile" on fbw_profiles
+  for insert with check (auth.uid() = id and is_admin is false);
+
+create or replace function fbw_get_admin_stats()
 returns jsonb
 language plpgsql
 security definer
@@ -14,6 +26,10 @@ declare
   v_is_admin boolean;
   v_result jsonb;
 begin
+  if auth.uid() is null then
+    raise exception 'not authorized';
+  end if;
+
   select is_admin into v_is_admin from fbw_profiles where id = auth.uid();
   if not coalesce(v_is_admin, false) then
     raise exception 'not authorized';
@@ -47,4 +63,6 @@ begin
 end;
 $$;
 
-grant execute on function get_admin_stats() to authenticated;
+revoke execute on function fbw_get_admin_stats() from public;
+revoke execute on function fbw_get_admin_stats() from anon;
+grant execute on function fbw_get_admin_stats() to authenticated;

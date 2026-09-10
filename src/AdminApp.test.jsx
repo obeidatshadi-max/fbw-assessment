@@ -1,4 +1,4 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import AdminApp from './AdminApp.jsx';
 import { LanguageProvider } from './i18n/LanguageContext.jsx';
@@ -53,7 +53,21 @@ describe('AdminApp', () => {
 
     await act(async () => { authAdapter.triggerAuth({ user: { id: 'u1' } }); });
     await screen.findByText('42');
-    screen.getByText('Refresh').click();
+    fireEvent.click(screen.getByText('Refresh'));
     await waitFor(() => expect(authAdapter.getAdminStats).toHaveBeenCalledTimes(2));
+  });
+
+  it('shows an error when sign-in fails', async () => {
+    const authAdapter = makeAdapter({
+      signInWithPassword: vi.fn().mockResolvedValue({ success: false, error: 'bad creds' }),
+    });
+    render(<LanguageProvider><AdminApp authAdapter={authAdapter} /></LanguageProvider>);
+
+    fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@x.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'secret123' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
+
+    expect(await screen.findByText('bad creds')).toBeInTheDocument();
+    expect(authAdapter.signInWithPassword).toHaveBeenCalledWith({ email: 'a@x.com', password: 'secret123' });
   });
 });

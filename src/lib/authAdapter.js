@@ -296,7 +296,7 @@ export const supabaseAuthAdapter = {
   // Admin dashboard — owner-only aggregate stats (authenticated)
   async getAdminStats() {
     if (!supabase) return { success: false, error: 'Admin stats are not configured yet.' };
-    const { data, error } = await supabase.rpc('get_admin_stats');
+    const { data, error } = await supabase.rpc('fbw_get_admin_stats');
     return error ? { success: false, error: error.message } : { success: true, stats: data };
   },
 };
