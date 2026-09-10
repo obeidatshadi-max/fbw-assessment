@@ -45,10 +45,10 @@ const SCENARIOS_FIRST_LINE_MANAGER = [
       { t: { en: 'I model out the coverage impact before deciding anything.', ar: 'أُحدد أثر القرار على التغطية بالأرقام قبل أي تغيير.' }, d: 'F' },
       { t: { en: 'I sit with them to understand what is really driving the request.', ar: 'أجلس معه لأفهم السبب الحقيقي وراء الطلب.' }, d: 'B' },
       { t: { en: 'I make the call that protects the district, even if unpopular.', ar: 'أتخذ القرار الذي يحمي المنطقة، حتى لو لم يُرضِ الجميع.' }, d: 'W' } ] },
-  { s: { en: 'A field visit shows a rep skipping required call documentation.', ar: 'زيارة ميدانية تكشف أن مندوباً يتجاهل توثيق الزيارات المطلوب.' }, opts: [
-      { t: { en: 'I walk them through the process again, step by step.', ar: 'أُراجع معه الإجراء خطوة بخطوة من جديد.' }, d: 'F' },
-      { t: { en: 'I ask what is making the documentation feel hard to keep up with.', ar: 'أسأله ما الذي يجعل التوثيق صعباً بالنسبة له.' }, d: 'B' },
-      { t: { en: 'I name it clearly as non-negotiable and follow up until it changes.', ar: 'أُوضح بصراحة أن هذا الأمر غير قابل للتفاوض وأُتابعه حتى يتغير.' }, d: 'W' } ] },
+  { s: { en: 'A government tender for a key product is due, and the terms would strain your margin badly.', ar: 'يقترب موعد مناقصة حكومية لمنتج رئيسي، لكن شروطها ستُرهق هامش ربحك بشدة.' }, opts: [
+      { t: { en: 'I remodel the bid financials until the margin math actually works.', ar: 'أُعيد بناء الحسابات المالية للعطاء حتى يصبح الهامش منطقياً فعلاً.' }, d: 'F' },
+      { t: { en: 'I get input from finance and the field before deciding whether to bid.', ar: 'أستشير المالية والفريق الميداني قبل أن أُقرر المشاركة في العطاء.' }, d: 'B' },
+      { t: { en: 'I decide walking away is better than winning at a loss, and hold that line.', ar: 'أُقرر أن الانسحاب أفضل من الفوز بخسارة، وأتمسك بهذا الموقف.' }, d: 'W' } ] },
   { s: { en: 'A new product launch needs your team trained fast before a KOL event.', ar: 'إطلاق منتج جديد يتطلب تدريب فريقك بسرعة قبل فعالية لقادة رأي طبي.' }, opts: [
       { t: { en: 'I build a tight training plan that covers the essentials fast.', ar: 'أضع خطة تدريب مكثفة تُغطي الأساسيات بسرعة.' }, d: 'F' },
       { t: { en: 'I check who is anxious about the event and coach them directly.', ar: 'أتحقق ممن يشعر بالقلق تجاه الفعالية وأُوجّهه مباشرة.' }, d: 'B' },
@@ -57,10 +57,10 @@ const SCENARIOS_FIRST_LINE_MANAGER = [
       { t: { en: 'I audit their call plan and account targeting for gaps.', ar: 'أُراجع خطة زياراته واستهداف حساباته بحثاً عن الفجوات.' }, d: 'F' },
       { t: { en: 'I ask how they are doing beyond the numbers, honestly.', ar: 'أسأله بصدق كيف حاله فعلاً بعيداً عن الأرقام.' }, d: 'B' },
       { t: { en: 'I set a clear 30-day plan with them and hold the line on it.', ar: 'أضع معه خطة واضحة لثلاثين يوماً وألتزم بمتابعتها بحزم.' }, d: 'W' } ] },
-  { s: { en: 'Marketing pushes a campaign your team is not ready to run.', ar: 'قسم التسويق يدفع بحملة والفريق غير جاهز لتنفيذها.' }, opts: [
-      { t: { en: 'I flag the readiness gap with specifics and propose a fix.', ar: 'أُبلغ بفجوة الجاهزية بتفاصيل دقيقة وأقترح حلاً.' }, d: 'F' },
-      { t: { en: 'I check in with reps first on how the pressure is landing on them.', ar: 'أتحقق أولاً من كيفية تأثير هذا الضغط على المندوبين.' }, d: 'B' },
-      { t: { en: 'I push back on the timeline directly, even to my own director.', ar: 'أعترض مباشرة على الجدول الزمني، حتى أمام مديري.' }, d: 'W' } ] },
+  { s: { en: "Your exclusive distributor's contract is up for renewal, and their performance has been mixed.", ar: 'عقد موزّعك الحصري على وشك التجديد، وأداؤه كان متبايناً.' }, opts: [
+      { t: { en: 'I review their coverage and payment-term data hard before renewing.', ar: 'أُراجع بدقة بيانات تغطيتهم وشروط الدفع قبل التجديد.' }, d: 'F' },
+      { t: { en: 'I sit down with them honestly about where the partnership has slipped.', ar: 'أجلس معهم بصراحة لأناقش أين تراجعت الشراكة.' }, d: 'B' },
+      { t: { en: 'I decide whether to renew or switch, and own the disruption either way.', ar: 'أُقرر التجديد أو التغيير، وأتحمل تبعات القرار في الحالتين.' }, d: 'W' } ] },
   { s: { en: 'A rep quietly tells you they are burned out.', ar: 'يُخبرك مندوب بهدوء أنه مُنهك.' }, opts: [
       { t: { en: 'I help them rebuild a realistic weekly plan.', ar: 'أُساعده على بناء خطة أسبوعية واقعية من جديد.' }, d: 'F' },
       { t: { en: 'I make space for them to talk and just listen first.', ar: 'أُفسح له المجال ليتحدث وأستمع أولاً.' }, d: 'B' },
@@ -77,18 +77,18 @@ const SCENARIOS_FIRST_LINE_MANAGER = [
       { t: { en: 'I re-prioritize accounts by potential to protect the highest-value calls.', ar: 'أُعيد ترتيب أولوية الحسابات حسب الإمكانات لحماية الزيارات الأعلى قيمة.' }, d: 'F' },
       { t: { en: "I explain the change to the team honestly, not just as a policy memo.", ar: 'أشرح التغيير للفريق بصدق، لا كمجرد تعميم إداري.' }, d: 'B' },
       { t: { en: 'I decide the new coverage plan myself and own the trade-offs.', ar: 'أتخذ قرار خطة التغطية الجديدة بنفسي وأتحمل مسؤولية المفاضلات.' }, d: 'W' } ] },
-  { s: { en: 'A rep asks you to bend an expense rule "just this once."', ar: 'يطلب منك مندوب التساهل في قاعدة مصاريف "لمرة واحدة فقط".' }, opts: [
-      { t: { en: 'I explain exactly what the policy requires and why.', ar: 'أشرح بدقة ما تتطلبه السياسة ولماذا.' }, d: 'F' },
-      { t: { en: 'I ask what pressure led them to ask, without judging.', ar: 'أسأل عن الضغط الذي دفعه لهذا الطلب، دون إصدار حكم.' }, d: 'B' },
-      { t: { en: 'I say no clearly, even though it is an uncomfortable conversation.', ar: 'أرفض بوضوح، حتى لو كانت محادثة غير مريحة.' }, d: 'W' } ] },
+  { s: { en: 'Head office asks you to shift budget from your country to a struggling neighboring market.', ar: 'يطلب منك المكتب الرئيسي تحويل جزء من ميزانية بلدك إلى سوق مجاور يُعاني.' }, opts: [
+      { t: { en: 'I model the exact impact on my own numbers before agreeing to anything.', ar: 'أُحدد بدقة الأثر على أرقامي الخاصة قبل الموافقة على أي شيء.' }, d: 'F' },
+      { t: { en: 'I talk to my regional counterpart to understand what they are facing.', ar: 'أتحدث مع نظيري الإقليمي لأفهم ما يواجهه فعلاً.' }, d: 'B' },
+      { t: { en: 'I make the call on what serves the region, even if my own numbers take the hit.', ar: 'أتخذ القرار الذي يخدم المنطقة ككل، حتى لو تأثرت أرقامي الخاصة.' }, d: 'W' } ] },
   { s: { en: 'After a strong quarter, you reflect on what actually mattered most.', ar: 'بعد فصل قوي، تتأمل فيما كان له الأثر الأكبر فعلاً.' }, opts: [
       { t: { en: 'I credit the sharper account targeting and call discipline.', ar: 'أعزو الفضل إلى استهداف الحسابات الأدق والانضباط في الزيارات.' }, d: 'F' },
       { t: { en: 'I credit the trust I built with a team that felt safe to speak up.', ar: 'أعزو الفضل إلى الثقة التي بنيتها مع فريق شعر بالأمان للتحدث بصراحة.' }, d: 'B' },
       { t: { en: 'I credit holding the team to a clear, ambitious goal all quarter.', ar: 'أعزو الفضل إلى تمسكي بهدف واضح وطموح طوال الفصل.' }, d: 'W' } ] },
-  { s: { en: 'A new CRM rollout disrupts your team\'s field routine.', ar: 'إطلاق نظام إدارة علاقات العملاء الجديد يُربك الروتين الميداني لفريقك.' }, opts: [
-      { t: { en: 'I build a simple cheat-sheet so the team adapts fast.', ar: 'أُعدّ دليلاً مبسطاً ليتكيف الفريق بسرعة.' }, d: 'F' },
-      { t: { en: 'I ride along with the most frustrated rep first.', ar: 'أُرافق أكثر مندوب متضايق من التغيير أولاً.' }, d: 'B' },
-      { t: { en: "I set a firm adoption deadline and don't let it slide.", ar: 'أضع موعداً نهائياً حازماً للتبني ولا أسمح بتأجيله.' }, d: 'W' } ] },
+  { s: { en: 'A batch of your product is flagged for a possible quality issue in your market.', ar: 'تُرصد دفعة من منتجك بسبب مشكلة جودة محتملة في سوقك.' }, opts: [
+      { t: { en: 'I pull every relevant lot and distribution record within the hour.', ar: 'أستخرج كل سجلات الدفعة والتوزيع ذات الصلة خلال ساعة.' }, d: 'F' },
+      { t: { en: 'I get ahead of it honestly with pharmacies and key doctors before rumors spread.', ar: 'أُبادر بصراحة لإبلاغ الصيدليات والأطباء الرئيسيين قبل انتشار الشائعات.' }, d: 'B' },
+      { t: { en: 'I make the recall call myself, fast, even before head office fully signs off.', ar: 'أتخذ قرار السحب بنفسي وبسرعة، حتى قبل موافقة المكتب الرئيسي الكاملة.' }, d: 'W' } ] },
   { s: { en: 'A distributor delay threatens your coverage target this month.', ar: 'تأخير من الموزّع يُهدد هدف التغطية هذا الشهر.' }, opts: [
       { t: { en: 'I track the exact delivery gap and reroute stock where I can.', ar: 'أُتابع فجوة التسليم بدقة وأُعيد توزيع المخزون حيثما أمكن.' }, d: 'F' },
       { t: { en: 'I keep pharmacies and reps informed so no one is caught off guard.', ar: 'أُبقي الصيدليات والمندوبين على اطلاع حتى لا يُفاجأ أحد.' }, d: 'B' },

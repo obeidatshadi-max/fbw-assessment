@@ -16,12 +16,12 @@ export default function ScenarioScreen({ scenario, index, total, answer, onChoos
             <div className={`opt${stateCls}`} key={idx}>
               <div className="txt">{L(o.t)}</div>
               <div className="chips">
-                <div className={`chip${mostOn ? ' on-most' : ''}`} onClick={() => onChoose('most', idx)}>
+                <button type="button" className={`chip${mostOn ? ' on-most' : ''}`} onClick={() => onChoose('most', idx)}>
                   <span className="ic">✓</span> {t('scenario.mostLike')}
-                </div>
-                <div className={`chip${leastOn ? ' on-least' : ''}`} onClick={() => onChoose('least', idx)}>
+                </button>
+                <button type="button" className={`chip${leastOn ? ' on-least' : ''}`} onClick={() => onChoose('least', idx)}>
                   <span className="ic">✕</span> {t('scenario.leastLike')}
-                </div>
+                </button>
               </div>
             </div>
           );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import HomeLink from './components/HomeLink.jsx';
 import ManagerScreen from './components/ManagerScreen.jsx';
 import SessionLiveScreen from './components/SessionLiveScreen.jsx';
 import { noopAuthAdapter } from './lib/authAdapter.js';
@@ -139,6 +140,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
 
   return (
     <main>
+      <HomeLink />
       <div className="wrap">
         {authState.status === 'signedIn' && (
           <div className="no-print" style={{ display: 'flex', gap: 8, marginBottom: 18 }}>

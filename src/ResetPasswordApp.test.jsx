@@ -21,6 +21,12 @@ describe('ResetPasswordApp', () => {
     await waitFor(() => expect(screen.getByText('Set new password')).toBeInTheDocument());
   });
 
+  it('shows a link back to the main assessment', () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ResetPasswordApp authAdapter={authAdapter} /></LanguageProvider>);
+    expect(screen.getByText('Back to the assessment')).toHaveAttribute('href', '/');
+  });
+
   it('shows the form once a recovery session arrives via onAuthStateChange', async () => {
     const authAdapter = makeAdapter();
     render(<LanguageProvider><ResetPasswordApp authAdapter={authAdapter} /></LanguageProvider>);

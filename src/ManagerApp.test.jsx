@@ -18,6 +18,12 @@ function makeAdapter(overrides = {}) {
 }
 
 describe('ManagerApp', () => {
+  it('shows a link back to the main assessment', () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);
+    expect(screen.getByText('Back to the assessment')).toHaveAttribute('href', '/');
+  });
+
   it('creates a team and shows the join code when the manager has none yet', async () => {
     const authAdapter = makeAdapter();
     render(<LanguageProvider><ManagerApp authAdapter={authAdapter} /></LanguageProvider>);

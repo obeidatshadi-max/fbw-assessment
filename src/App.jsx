@@ -107,6 +107,13 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     window.print();
   }
 
+  function handleHome() {
+    if (phase === 'p1' || phase === 'p2' || phase === 'p3') {
+      if (!window.confirm(t('nav.homeConfirm'))) return;
+    }
+    handleRestart();
+  }
+
   async function handleSignIn(email, password, consent) {
     setPendingConsent(consent);
     setAuthState({ status: 'sending' });
@@ -231,7 +238,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
 
   return (
     <>
-      <Header stepLabel={stepLabel} done={doneP1 + doneP2 + doneP3} total={totalSteps} final={phase === 'report'} />
+      <Header stepLabel={stepLabel} done={doneP1 + doneP2 + doneP3} total={totalSteps} final={phase === 'report'} onHome={handleHome} />
       <main>
         <div className="wrap">
           {phase === 'intro' && <IntroScreen onStart={handleStart} authAdapter={authAdapter} />}

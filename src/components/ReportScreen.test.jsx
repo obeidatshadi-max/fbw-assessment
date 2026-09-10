@@ -32,6 +32,14 @@ describe('ReportScreen', () => {
     expect(screen.getAllByText('Function', { exact: false }).length).toBeGreaterThan(1);
   });
 
+  it('renders a print-only masthead with the brand name and a generated date, since the sticky topbar is hidden when printing', () => {
+    const { container } = render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
+    const masthead = container.querySelector('.print-header');
+    expect(masthead).not.toBeNull();
+    expect(masthead.textContent).toContain('Integral Leadership Dynamics™ · Function · Being · Will');
+    expect(masthead.querySelector('.metaline').textContent.length).toBeGreaterThan(0);
+  });
+
   it('calls onRestart and onPrint from their buttons', () => {
     const onRestart = vi.fn();
     const onPrint = vi.fn();

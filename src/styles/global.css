@@ -43,6 +43,14 @@
   .brand{display:flex; flex-direction:column; gap:1px; min-width:0;}
   .brand .k{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#AAB2C2;}
   .brand .n{font-family:var(--serif); font-size:15px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .brand-home{appearance:none; background:none; border:none; padding:0; margin:0; cursor:pointer; text-align:start; -webkit-tap-highlight-color:transparent;}
+  .brand-home:hover .n, .brand-home:focus-visible .n{text-decoration:underline;}
+  .brand-home:focus-visible{outline:2px solid #fff; outline-offset:3px; border-radius:4px;}
+
+  /* Home link used on standalone routes (manager/rater/reset-password) that have no topbar */
+  .home-bar{max-width:var(--maxw); margin:0 auto; padding:14px 16px 0;}
+  .home-bar a{font-size:13px; font-weight:600; color:var(--muted); text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:1px;}
+  .home-bar a:hover{color:var(--ink); border-color:var(--ink);}
   .step-count{font-size:12px; color:#AAB2C2; white-space:nowrap;}
   .lang-switch{display:flex; gap:4px; flex:0 0 auto;}
   .lang-switch button{
@@ -115,10 +123,12 @@
   .opt.is-least{border-color:#c9ccd3; background:#f4f5f7;}
   .chips{display:flex; gap:8px;}
   .chip{
+    appearance:none; font-family:inherit; -webkit-tap-highlight-color:transparent;
     flex:1; text-align:center; border:1.5px solid var(--line); background:#fff; border-radius:10px;
     padding:11px 8px; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; user-select:none;
     display:flex; align-items:center; justify-content:center; gap:6px; min-height:44px;
   }
+  .chip:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
   .chip .ic{font-size:14px;}
   .chip.on-most{border-color:var(--wl); background:var(--wl); color:#fff;}
   .chip.on-least{border-color:#8a92a0; background:#6f7787; color:#fff;}
@@ -191,12 +201,35 @@
   [dir="rtl"] .profile.pf{border-color:var(--fn);} [dir="rtl"] .profile.pb{border-color:var(--be);} [dir="rtl"] .profile.pw{border-color:var(--wl);}
   [dir="rtl"] .orgbar .fill{margin-left:auto; margin-right:0;}
 
+  /* Print-only report masthead — hidden on screen, shown only in the PDF/print
+     output, since the sticky topbar (which carries the brand on screen) is
+     itself hidden for print. */
+  .print-header{display:none;}
+
   @media print{
+    @page{ size:A4; margin:16mm 14mm; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact; }
     .topbar,.navbar,.no-print{display:none !important;}
     body{background:#fff;}
     main{padding:0;}
+    .wrap{max-width:100%; padding:0;}
     .card{box-shadow:none; border-color:#ccc;}
     .screen{display:none !important;}
     #screen-report{display:block !important;}
     #screen-session-live{display:block !important;}
+
+    .print-header{
+      display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+      border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:20px;
+    }
+    .print-header .brandline{font-family:var(--serif); font-size:16px; color:var(--ink); font-weight:500;}
+    .print-header .metaline{font-size:11px; color:#555; white-space:nowrap;}
+
+    /* Keep report units intact across page boundaries instead of splitting
+       mid-card, and keep a section title glued to the block it introduces. */
+    .sec-title{break-after:avoid; page-break-after:avoid; margin-top:18px;}
+    .profile, .insight, .orgbar, .rankline, .disclaimer, .band{
+      break-inside:avoid; page-break-inside:avoid;
+    }
+    h1,h2,h3,h4{break-after:avoid; page-break-after:avoid;}
   }

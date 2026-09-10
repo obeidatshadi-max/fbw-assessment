@@ -31,28 +31,36 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
         <p className="lead" style={{ marginBottom: 18 }}>{t('team.lead')}</p>
         <div className="card pad">
           <p style={{ margin: '0 0 8px' }}><b>{t('team.signInHeading')}</b> {t('team.signInBody')}</p>
-          <input
-            type="email"
-            value={email}
-            placeholder={t('team.emailPlaceholder')}
-            onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-          />
-          <input
-            type="password"
-            value={password}
-            placeholder={t('team.passwordPlaceholder')}
-            onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-          />
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn sm" disabled={!email || !password || authState.status === 'sending'} onClick={() => onSignIn(email, password)}>
-              {authState.status === 'sending' ? t('team.sending') : t('team.signIn')}
-            </button>
-            <button className="btn sm ghost" disabled={!email || !password || authState.status === 'sending'} onClick={() => onCreateAccount(email, password)}>
-              {authState.status === 'sending' ? t('team.sending') : t('team.createAccount')}
-            </button>
-          </div>
+          <form onSubmit={e => { e.preventDefault(); onSignIn(email, password); }}>
+            <input
+              id="manager-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              placeholder={t('team.emailPlaceholder')}
+              onChange={e => setEmail(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+            />
+            <input
+              id="manager-password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              placeholder={t('team.passwordPlaceholder')}
+              onChange={e => setPassword(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+            />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button type="submit" className="btn sm" disabled={!email || !password || authState.status === 'sending'}>
+                {authState.status === 'sending' ? t('team.sending') : t('team.signIn')}
+              </button>
+              <button type="button" className="btn sm ghost" disabled={!email || !password || authState.status === 'sending'} onClick={() => onCreateAccount(email, password)}>
+                {authState.status === 'sending' ? t('team.sending') : t('team.createAccount')}
+              </button>
+            </div>
+          </form>
           {authState.status === 'error' && <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{authState.error || t('team.sendError')}</p>}
           {resetStatus === 'sent' ? (
             <p style={{ margin: '8px 0 0', fontSize: 13.5 }}>{t('team.resetSent')}</p>

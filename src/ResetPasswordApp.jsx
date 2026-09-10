@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import HomeLink from './components/HomeLink.jsx';
 import ResetPasswordScreen from './components/ResetPasswordScreen.jsx';
 import { noopAuthAdapter } from './lib/authAdapter.js';
 
@@ -58,6 +59,7 @@ export default function ResetPasswordApp({ authAdapter = noopAuthAdapter }) {
 
   return (
     <main>
+      <HomeLink />
       <div className="wrap">
         <ResetPasswordScreen status={status} error={error} onSubmit={handleSubmit} />
       </div>

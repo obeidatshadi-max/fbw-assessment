@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import HomeLink from './components/HomeLink.jsx';
 import RaterScreen from './components/RaterScreen.jsx';
 import { RATER_ITEMS } from './data/raterItems.js';
 import { scoreRaterResponse } from './lib/raterScoring.js';
@@ -39,6 +40,7 @@ export default function RaterApp({ linkId, authAdapter = noopAuthAdapter }) {
 
   return (
     <main>
+      <HomeLink />
       <div className="wrap">
         <RaterScreen status={status} answers={answers} onSelect={handleSelect} onSubmit={handleSubmit} error={error} />
       </div>

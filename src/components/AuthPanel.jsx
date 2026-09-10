@@ -147,36 +147,45 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
             <b>{t('auth.askHeading')}</b> {t('auth.askBody')}
           </p>
           <ConsentCheckboxes consent={consent} onChange={setConsent} t={t} />
-          <input
-            type="email"
-            value={email}
-            placeholder={t('auth.emailPlaceholder')}
-            onChange={e => setEmail(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-          />
-          <input
-            type="password"
-            value={password}
-            placeholder={t('auth.passwordPlaceholder')}
-            onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-          />
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button
-              className="btn sm"
-              disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
-              onClick={() => onSignIn(email, password, consent)}
-            >
-              {authState.status === 'sending' ? t('auth.sending') : t('auth.signIn')}
-            </button>
-            <button
-              className="btn sm ghost"
-              disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
-              onClick={() => onCreateAccount(email, password, consent)}
-            >
-              {authState.status === 'sending' ? t('auth.sending') : t('auth.createAccount')}
-            </button>
-          </div>
+          <form onSubmit={e => { e.preventDefault(); onSignIn(email, password, consent); }}>
+            <input
+              id="auth-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              placeholder={t('auth.emailPlaceholder')}
+              onChange={e => setEmail(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+            />
+            <input
+              id="auth-password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              placeholder={t('auth.passwordPlaceholder')}
+              onChange={e => setPassword(e.target.value)}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+            />
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                type="submit"
+                className="btn sm"
+                disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
+              >
+                {authState.status === 'sending' ? t('auth.sending') : t('auth.signIn')}
+              </button>
+              <button
+                type="button"
+                className="btn sm ghost"
+                disabled={!email || !password || !consent.storeResults || authState.status === 'sending'}
+                onClick={() => onCreateAccount(email, password, consent)}
+              >
+                {authState.status === 'sending' ? t('auth.sending') : t('auth.createAccount')}
+              </button>
+            </div>
+          </form>
           {authState.status === 'error' && (
             <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{authState.error}</p>
           )}

@@ -20,6 +20,12 @@ describe('RaterApp', () => {
     expect(authAdapter.validateRaterLink).toHaveBeenCalledWith({ linkId: 'abc' });
   });
 
+  it('shows a link back to the main assessment', async () => {
+    const authAdapter = makeAdapter();
+    render(<LanguageProvider><RaterApp linkId="abc" authAdapter={authAdapter} /></LanguageProvider>);
+    expect(screen.getByText('Back to the assessment')).toHaveAttribute('href', '/');
+  });
+
   it('shows the invalid message when the link does not validate', async () => {
     const authAdapter = makeAdapter({ validateRaterLink: vi.fn().mockResolvedValue({ valid: false }) });
     render(<LanguageProvider><RaterApp linkId="bad" authAdapter={authAdapter} /></LanguageProvider>);

@@ -53,26 +53,34 @@ export default function ResetPasswordScreen({ status, error, onSubmit }) {
       <div className="eyebrow">{t('resetPassword.eyebrow')}</div>
       <h1 style={{ fontSize: 'clamp(24px,6vw,32px)', marginBottom: 6 }}>{t('resetPassword.heading')}</h1>
       <div className="card pad">
-        <input
-          type="password"
-          value={password}
-          placeholder={t('resetPassword.newPasswordPlaceholder')}
-          onChange={e => setPassword(e.target.value)}
-          style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-        />
-        <input
-          type="password"
-          value={confirm}
-          placeholder={t('resetPassword.confirmPlaceholder')}
-          onChange={e => setConfirm(e.target.value)}
-          style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
-        />
-        {(localError || error) && (
-          <p style={{ color: '#b3261e', fontSize: 13.5, margin: '0 0 10px' }}>{localError || error}</p>
-        )}
-        <button className="btn" disabled={!password || !confirm || status === 'saving'} onClick={handleSubmit}>
-          {status === 'saving' ? t('resetPassword.saving') : t('resetPassword.submit')}
-        </button>
+        <form onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
+          <input
+            id="reset-new-password"
+            name="new-password"
+            type="password"
+            autoComplete="new-password"
+            value={password}
+            placeholder={t('resetPassword.newPasswordPlaceholder')}
+            onChange={e => setPassword(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+          />
+          <input
+            id="reset-confirm-password"
+            name="confirm-password"
+            type="password"
+            autoComplete="new-password"
+            value={confirm}
+            placeholder={t('resetPassword.confirmPlaceholder')}
+            onChange={e => setConfirm(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, marginBottom: 8 }}
+          />
+          {(localError || error) && (
+            <p style={{ color: '#b3261e', fontSize: 13.5, margin: '0 0 10px' }}>{localError || error}</p>
+          )}
+          <button type="submit" className="btn" disabled={!password || !confirm || status === 'saving'}>
+            {status === 'saving' ? t('resetPassword.saving') : t('resetPassword.submit')}
+          </button>
+        </form>
       </div>
     </section>
   );

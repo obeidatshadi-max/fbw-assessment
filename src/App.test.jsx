@@ -68,6 +68,31 @@ describe('App', () => {
     expect(screen.getByText('Where do you lead from?')).toBeInTheDocument();
   });
 
+  it('the Home button confirms before discarding in-progress answers, and only leaves on confirm', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Start the reflection'));
+    expect(screen.getByText('Situation 1 of 15')).toBeInTheDocument();
+
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    fireEvent.click(screen.getByRole('button', { name: 'Home' }));
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(screen.getByText('Situation 1 of 15')).toBeInTheDocument(); // declined — still mid-flow
+
+    confirmSpy.mockReturnValue(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Home' }));
+    expect(screen.getByText('Where do you lead from?')).toBeInTheDocument();
+    confirmSpy.mockRestore();
+  });
+
+  it('the Home button leaves the intro screen without asking for confirmation', () => {
+    render(<App />);
+    const confirmSpy = vi.spyOn(window, 'confirm');
+    fireEvent.click(screen.getByRole('button', { name: 'Home' }));
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(screen.getByText('Where do you lead from?')).toBeInTheDocument();
+    confirmSpy.mockRestore();
+  });
+
   it('keeps the next button disabled until both most and least are chosen', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Start the reflection'));

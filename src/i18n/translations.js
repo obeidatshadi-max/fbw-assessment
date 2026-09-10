@@ -97,7 +97,7 @@ export const UI = {
       lead: 'A few short questions about speaking up, even when it is inconvenient. How often is each true for you?',
       note: 'This is self-reflection, not a compliance assessment or an audit.',
     },
-    nav: { back: 'Back', next: 'Next', continueToWorkplace: 'Continue to workplace', continueToCompliance: 'Continue', seeReport: 'See my report' },
+    nav: { back: 'Back', next: 'Next', continueToWorkplace: 'Continue to workplace', continueToCompliance: 'Continue', seeReport: 'See my report', home: 'Home', homeConfirm: 'Leave this assessment? Your progress on this device will be lost.' },
     header: { stepP1: 'Situation {n} of {total}', stepP2: 'Workplace questions', stepP3: 'Compliance courage questions' },
     report: {
       eyebrow: 'Your reflection report',
@@ -409,7 +409,7 @@ export const UI = {
       lead: 'بضعة أسئلة قصيرة عن التعبير عن رأيك، حتى عندما يكون ذلك غير مريح. ما مدى صحة كل عبارة بالنسبة لك؟',
       note: 'هذا تأمل ذاتي، وليس تقييم امتثال أو تدقيقاً.',
     },
-    nav: { back: 'رجوع', next: 'التالي', continueToWorkplace: 'متابعة إلى أسئلة مكان العمل', continueToCompliance: 'متابعة', seeReport: 'عرض تقريري' },
+    nav: { back: 'رجوع', next: 'التالي', continueToWorkplace: 'متابعة إلى أسئلة مكان العمل', continueToCompliance: 'متابعة', seeReport: 'عرض تقريري', home: 'الرئيسية', homeConfirm: 'مغادرة هذا التقييم؟ سيُفقد تقدمك على هذا الجهاز.' },
     header: { stepP1: 'الموقف {n} من {total}', stepP2: 'أسئلة مكان العمل', stepP3: 'أسئلة شجاعة الالتزام' },
     report: {
       eyebrow: 'تقرير تأملك',

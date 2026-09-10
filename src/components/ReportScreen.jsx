@@ -154,8 +154,9 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
 }
 
 export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount, onCreateRaterLink, onRefreshRaterSummary }) {
-  const { t, tf, L } = useLanguage();
+  const { t, tf, L, lang } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
+  const generatedOn = new Date().toLocaleDateString(lang === 'ar' ? 'ar' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const debriefVars = { dominant: L(dim[dominant].label), developArea: L(dim[developArea].label) };
   const plan = DEV_PLAN[developArea];
@@ -167,6 +168,10 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
 
   return (
     <section className="screen active" id="screen-report">
+      <div className="print-header">
+        <span className="brandline">{t('brand.kicker')} · {t('brand.name')}</span>
+        <span className="metaline">{generatedOn}</span>
+      </div>
       <div className="eyebrow">{t('report.eyebrow')}</div>
       <h1 style={{ fontSize: 'clamp(26px,6.5vw,36px)', marginBottom: 6 }}>{t('report.title')}</h1>
       <p className="lead" style={{ marginBottom: 8 }}>
