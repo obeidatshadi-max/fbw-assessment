@@ -28,7 +28,7 @@ describe('AdminScreen', () => {
     renderScreen({ onSignIn });
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@x.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'secret123' } });
-    fireEvent.click(screen.getByText('Sign in'));
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }));
     expect(onSignIn).toHaveBeenCalledWith('a@x.com', 'secret123');
   });
 
