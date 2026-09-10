@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import RaterApp from './RaterApp.jsx';
 import ManagerApp from './ManagerApp.jsx';
+import AdminApp from './AdminApp.jsx';
 import ResetPasswordApp from './ResetPasswordApp.jsx';
 import LegalScreen from './components/LegalScreen.jsx';
 import { supabaseAuthAdapter } from './lib/authAdapter.js';
@@ -11,6 +12,7 @@ import './styles/global.css';
 
 const raterMatch = window.location.pathname.match(/^\/rate\/([0-9a-f-]{36})$/i);
 const isManagerRoute = window.location.pathname === '/manager';
+const isAdminRoute = window.location.pathname === '/admin';
 const isResetPasswordRoute = window.location.pathname === '/reset-password';
 const isPrivacyRoute = window.location.pathname === '/privacy';
 const isTermsRoute = window.location.pathname === '/terms';
@@ -22,6 +24,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         ? <RaterApp linkId={raterMatch[1]} authAdapter={supabaseAuthAdapter} />
         : isManagerRoute
         ? <ManagerApp authAdapter={supabaseAuthAdapter} />
+        : isAdminRoute
+        ? <AdminApp authAdapter={supabaseAuthAdapter} />
         : isResetPasswordRoute
         ? <ResetPasswordApp authAdapter={supabaseAuthAdapter} />
         : isPrivacyRoute
