@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import AuthPanel from './AuthPanel.jsx';
 import { LanguageProvider } from '../i18n/LanguageContext.jsx';
@@ -65,6 +65,21 @@ describe('AuthPanel', () => {
   it('shows the saved confirmation', () => {
     render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} />);
     expect(screen.getByText('Saved to your account.', { exact: false })).toBeInTheDocument();
+  });
+
+  it('calls onExportData when "Download my data" is clicked', async () => {
+    const onExportData = vi.fn().mockResolvedValue({ success: true });
+    render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} onExportData={onExportData} />);
+    fireEvent.click(screen.getByText('Download my data'));
+    expect(onExportData).toHaveBeenCalled();
+    await waitFor(() => expect(screen.getByText('Download my data')).not.toBeDisabled());
+  });
+
+  it('shows an error when export fails', async () => {
+    const onExportData = vi.fn().mockResolvedValue({ success: false });
+    render(<AuthPanel authState={{ status: 'saved' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={() => {}} onExportData={onExportData} />);
+    fireEvent.click(screen.getByText('Download my data'));
+    expect(await screen.findByText('Could not prepare your data.', { exact: false })).toBeInTheDocument();
   });
 
   it('gates account deletion behind a typed DELETE confirmation', async () => {

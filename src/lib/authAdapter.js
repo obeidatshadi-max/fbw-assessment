@@ -17,6 +17,9 @@ export const noopAuthAdapter = {
   async deleteAccount() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
+  async exportMyData() {
+    return { success: false, error: 'Sign-in is not configured yet.' };
+  },
   async saveAssessment() {
     return { success: false, error: 'Saving is not configured yet.' };
   },
@@ -148,6 +151,38 @@ export const supabaseAuthAdapter = {
     }
     await supabase.auth.signOut();
     return { success: true };
+  },
+
+  // Self-serve portability (the other open half of the Prompt 8 checklist
+  // item — deleteAccount above closed erasure, this closes export). Every
+  // table read here is already scoped to the caller by RLS under the anon
+  // key + their own JWT, the same way saveAssessment/recordConsent read
+  // fbw_consents by profile_id — no service-role function needed, unlike
+  // deleteAccount which has to reach auth.users. Rater *responses* are
+  // deliberately excluded: they carry no identity (see fbw_rater_responses'
+  // INSERT-only RLS, CLAUDE.md's 360 section) so there is nothing of the
+  // caller's to export from that table, only the links they created.
+  async exportMyData({ userId }) {
+    if (!supabase) return { success: false, error: 'Sign-in is not configured yet.' };
+    const [consents, assessments, raterLinks, teams] = await Promise.all([
+      supabase.from('fbw_consents').select('*').eq('profile_id', userId),
+      supabase.from('fbw_assessments').select('*').eq('profile_id', userId),
+      supabase.from('fbw_rater_links').select('id, assessment_id, created_at').eq('leader_profile_id', userId),
+      supabase.from('fbw_teams').select('id, name, join_code, created_at').eq('manager_id', userId),
+    ]);
+    const firstError = [consents, assessments, raterLinks, teams].find(r => r.error)?.error;
+    if (firstError) return { success: false, error: firstError.message };
+    return {
+      success: true,
+      data: {
+        exportedAt: new Date().toISOString(),
+        profileId: userId,
+        consents: consents.data,
+        assessments: assessments.data,
+        raterLinksCreated: raterLinks.data,
+        teamsManaged: teams.data,
+      },
+    };
   },
 
   async saveAssessment({ role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId }) {

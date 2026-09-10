@@ -142,6 +142,21 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     return authAdapter.deleteAccount();
   }
 
+  // Triggers a browser download rather than returning data for AuthPanel to
+  // render — a portability request is "give me a file", not a screen.
+  async function handleExportData() {
+    const result = await authAdapter.exportMyData({ userId: authState.userId });
+    if (!result.success) return result;
+    const blob = new Blob([JSON.stringify(result.data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `fbw-my-data-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    return { success: true };
+  }
+
   async function attemptSave(userId, consent) {
     const payload = { role, p1Answers, orgAnswers, complianceAnswers, reportData, userId, teamId, sessionId };
     const result = await authAdapter.saveAssessment(payload);
@@ -266,6 +281,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onRequestReset={handleRequestReset}
               onConfirmConsent={handleConfirmConsent}
               onDeleteAccount={handleDeleteAccount}
+              onExportData={handleExportData}
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />

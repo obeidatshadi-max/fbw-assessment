@@ -176,7 +176,11 @@ data to a new country or customer:
       `fbw_rater_links`, ...) via `on delete cascade`. Anonymous 360 rater
       responses about a deleted person are *not* removed — they carry no
       identity to find them by, by design (see the 360 section above).
-      Portability (export-your-data) is still not implemented.
+      **Closed 2026-09-11**: portability exists — `AuthPanel.jsx`'s "Download my
+      data" button calls `authAdapter.exportMyData()`, reading the caller's own
+      rows (consents, assessments, rater links created, teams managed) via
+      existing RLS, no service-role function needed. Rater *responses* stay
+      excluded for the same no-identity reason they're excluded from deletion.
 - [ ] If the deploying company has its own DPO/legal/compliance function,
       route this checklist through them rather than relying on this repo's
       notes alone.

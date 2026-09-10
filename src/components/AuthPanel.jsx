@@ -38,13 +38,14 @@ function ConsentCheckboxes({ consent, onChange, t }) {
   );
 }
 
-export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount }) {
+export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount, onExportData }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [resetStatus, setResetStatus] = useState('idle'); // idle | sending | sent | error
   const [consent, setConsent] = useState({ storeResults: false, longitudinalTracking: false, shareWithManager: false });
   const [deleteStep, setDeleteStep] = useState('idle'); // idle | confirming | deleting | error | done
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [exportStatus, setExportStatus] = useState('idle'); // idle | exporting | error
   const { t, tf } = useLanguage();
 
   function handleForgotPassword() {
@@ -56,6 +57,12 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
     setDeleteStep('deleting');
     const result = await onDeleteAccount();
     setDeleteStep(result.success ? 'done' : 'error');
+  }
+
+  async function handleExportData() {
+    setExportStatus('exporting');
+    const result = await onExportData();
+    setExportStatus(result.success ? 'idle' : 'error');
   }
 
   if (authState.status === 'saved') {
@@ -70,11 +77,17 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
       <div className="note no-print" style={{ marginTop: 16 }}>
         {t('auth.savedNote')}
         {deleteStep === 'idle' && (
-          <div style={{ marginTop: 10 }}>
+          <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button type="button" className="btn ghost sm" disabled={exportStatus === 'exporting'} onClick={handleExportData}>
+              {exportStatus === 'exporting' ? t('auth.exporting') : t('auth.exportDataLink')}
+            </button>
             <button type="button" className="btn ghost sm" onClick={() => setDeleteStep('confirming')}>
               {t('auth.deleteAccountLink')}
             </button>
           </div>
+        )}
+        {exportStatus === 'error' && (
+          <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>{t('auth.exportError')}</p>
         )}
         {(deleteStep === 'confirming' || deleteStep === 'deleting' || deleteStep === 'error') && (
           <div style={{ marginTop: 10 }}>
