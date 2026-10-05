@@ -161,7 +161,9 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
       )}
 
       <div style={{ height: 20 }} />
-      <button className="btn" onClick={() => onStart(role, codeStatus === 'valid' ? codeResult : null)}>{t('intro.start')}</button>
+      {/* Held while a join code is being checked: starting then would silently drop a
+          valid code and leave the person's result unattached to their team/session. */}
+      <button className="btn" disabled={codeStatus === 'checking'} onClick={() => onStart(role, codeStatus === 'valid' ? codeResult : null)}>{t('intro.start')}</button>
 
       <div className="footer-signature">
         {t('footer.developedBy')}{' '}

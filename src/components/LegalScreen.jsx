@@ -1,6 +1,6 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { CONTACT_EMAIL } from '../lib/contact.js';
 
-const CONTACT_EMAIL = 'obeidatshadi@gmail.com';
 const LAST_UPDATED = '2026-08-31';
 
 function PrivacyBody({ t, tf }) {

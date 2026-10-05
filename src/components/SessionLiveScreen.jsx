@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { DISCUSSION_CARDS, getDiscussionCardKey } from '../data/discussionCards.js';
+import { copyToClipboard } from '../lib/clipboard.js';
+import { roleLabel } from './ManagerScreen.jsx';
 
 const MIN_RESPONSES = 3;
 
@@ -9,11 +11,11 @@ export default function SessionLiveScreen({ session, summary, imbalance, dim, cr
   const [name, setName] = useState('');
   const [copied, setCopied] = useState(false);
 
-  function copyCode(code) {
-    navigator.clipboard?.writeText(code).then(() => {
+  async function copyCode(code) {
+    if (await copyToClipboard(code)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }
   }
 
   if (!session) {
@@ -105,7 +107,7 @@ export default function SessionLiveScreen({ session, summary, imbalance, dim, cr
             <div className="card pad" style={{ marginBottom: 18 }}>
               {Object.entries(summary.roleBreakdown || {}).map(([role, n]) => (
                 <div key={role} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
-                  <span>{role}</span><span>{n}</span>
+                  <span>{roleLabel(role, L)}</span><span>{n}</span>
                 </div>
               ))}
             </div>

@@ -52,6 +52,8 @@ export default function RaterScreen({ status, answers, onSelect, onSubmit, error
               {labels.map((label, v) => (
                 <button
                   key={label}
+                  type="button"
+                  aria-pressed={answers[i] === v + 1}
                   className={answers[i] === v + 1 ? 'on' : ''}
                   onClick={() => onSelect(i, v + 1)}
                 >

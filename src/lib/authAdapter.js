@@ -11,6 +11,9 @@ export const noopAuthAdapter = {
   async requestPasswordReset() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
+  async signOut() {
+    return { success: true };
+  },
   async updatePassword() {
     return { success: false, error: 'Sign-in is not configured yet.' };
   },
@@ -113,6 +116,13 @@ export const supabaseAuthAdapter = {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
+    return error ? { success: false, error: error.message } : { success: true };
+  },
+  // Ends the session in this browser. Used by the manager/facilitator screens
+  // so a shared workshop laptop does not stay signed in after the session.
+  async signOut() {
+    if (!supabase) return { success: true };
+    const { error } = await supabase.auth.signOut();
     return error ? { success: false, error: error.message } : { success: true };
   },
   async updatePassword({ password }) {

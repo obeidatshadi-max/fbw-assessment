@@ -17,12 +17,16 @@ const AdminApp = lazy(() => import('./AdminApp.jsx'));
 const ResetPasswordApp = lazy(() => import('./ResetPasswordApp.jsx'));
 const LegalScreen = lazy(() => import('./components/LegalScreen.jsx'));
 
-const raterMatch = window.location.pathname.match(/^\/rate\/([0-9a-f-]{36})$/i);
-const isManagerRoute = window.location.pathname === '/manager';
-const isAdminRoute = window.location.pathname === '/admin';
-const isResetPasswordRoute = window.location.pathname === '/reset-password';
-const isPrivacyRoute = window.location.pathname === '/privacy';
-const isTermsRoute = window.location.pathname === '/terms';
+// Trailing slashes are ignored so "/manager/" or "/rate/<id>/" (which chat apps
+// and some browsers add when a link is shared) still reach the right screen
+// instead of silently falling through to the main assessment.
+const path = window.location.pathname.replace(/\/+$/, '') || '/';
+const raterMatch = path.match(/^\/rate\/([0-9a-f-]{36})$/i);
+const isManagerRoute = path === '/manager';
+const isAdminRoute = path === '/admin';
+const isResetPasswordRoute = path === '/reset-password';
+const isPrivacyRoute = path === '/privacy';
+const isTermsRoute = path === '/terms';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

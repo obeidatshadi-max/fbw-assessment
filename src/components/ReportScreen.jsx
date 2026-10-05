@@ -6,6 +6,7 @@ import { DEV_PLAN } from '../data/devPlan.js';
 import { MANAGER_DEBRIEF_QUESTIONS } from '../data/managerDebrief.js';
 import { normalizeSelf, normalizeRaters, buildGapData } from '../lib/raterScoring.js';
 import { archetypeCode } from '../lib/archetype.js';
+import { copyToClipboard } from '../lib/clipboard.js';
 import { ARCHETYPES } from '../data/archetypes.js';
 import {
   PAIRING, PAIRING_ALL, CRISIS, CRISIS_FULL, FEEDBACK_RISK, FEEDBACK_MATURE,
@@ -19,11 +20,11 @@ function InviteFeedback({ raterLink, ind, compliance, dim, onCreateRaterLink, on
   const { t, tf, L } = useLanguage();
   const [copied, setCopied] = useState(false);
 
-  function copyLink(url) {
-    navigator.clipboard?.writeText(url).then(() => {
+  async function copyLink(url) {
+    if (await copyToClipboard(url)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }
   }
 
   const gapData = raterLink?.scores
@@ -277,10 +278,10 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
   );
 }
 
-export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount, onCreateRaterLink, onRefreshRaterSummary }) {
+export default function ReportScreen({ reportData, dim, authState, raterLink, onRestart, onPrint, onSignIn, onCreateAccount, onRequestReset, onConfirmConsent, onDeleteAccount, onExportData, onCreateRaterLink, onRefreshRaterSummary }) {
   const { t, tf, L, lang } = useLanguage();
   const { dominant, backup, developArea, band, rankLines, profiles, orgBars, summaryInsight, orgInsight, total, compliance } = reportData;
-  const generatedOn = new Date().toLocaleDateString(lang === 'ar' ? 'ar' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+  const generatedOn = new Date().toLocaleDateString(lang === 'ar' ? 'ar-IQ-u-nu-latn' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 
   const debriefVars = { dominant: L(dim[dominant].label), developArea: L(dim[developArea].label) };
   const plan = DEV_PLAN[developArea];
@@ -336,7 +337,7 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
         </div>
       </div>
 
-      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} onRequestReset={onRequestReset} onConfirmConsent={onConfirmConsent} onDeleteAccount={onDeleteAccount} />
+      <AuthPanel authState={authState} onSignIn={onSignIn} onCreateAccount={onCreateAccount} onRequestReset={onRequestReset} onConfirmConsent={onConfirmConsent} onDeleteAccount={onDeleteAccount} onExportData={onExportData} />
 
       {authState.status === 'saved' && onCreateRaterLink && (
         <InviteFeedback

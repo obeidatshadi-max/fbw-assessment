@@ -16,6 +16,8 @@ export default function ComplianceScreen({ items, answers, onSelect }) {
               {labels.map((label, v) => (
                 <button
                   key={label}
+                  type="button"
+                  aria-pressed={answers[i] === v + 1}
                   className={answers[i] === v + 1 ? 'on' : ''}
                   onClick={() => onSelect(i, v + 1)}
                 >

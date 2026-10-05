@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import Header from './components/Header.jsx';
 import Navbar from './components/Navbar.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
@@ -13,6 +13,7 @@ import { getScenariosForRole } from './data/scenarioSets.js';
 import { applyChoice } from './lib/answers.js';
 import { buildReportData } from './lib/scoring.js';
 import { noopAuthAdapter } from './lib/authAdapter.js';
+import { localizeAuthError } from './lib/authErrors.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 
 // The report (and its content banks) is only needed at the very end, so it is
@@ -34,8 +35,26 @@ export default function App({ authAdapter = noopAuthAdapter }) {
   const [p1Answers, setP1Answers] = useState(() => scenarios.map(() => ({ most: null, least: null })));
   const [orgAnswers, setOrgAnswers] = useState(() => ORG_ITEMS.map(() => null));
   const [complianceAnswers, setComplianceAnswers] = useState(() => COMPLIANCE_ITEMS.map(() => null));
-  const [reportData, setReportData] = useState(null);
+  const [reportReady, setReportReady] = useState(false);
   const [authState, setAuthState] = useState({ status: 'anon' });
+  // Set only when the person presses Sign in / Create account. The auth
+  // listener below must not save on its own: supabase-js replays the stored
+  // session to every new subscriber (INITIAL_SESSION), so without this a
+  // returning signed-in visitor would have their result saved the moment the
+  // report appeared, contradicting "nothing is saved unless you choose to".
+  const saveRequestedRef = useRef(false);
+
+  // The report is derived from the answers on every render pass that changes
+  // them or the language. It used to be built once at the end and stored, so
+  // its generated sentences (insight, role labels, emphasis levels, compliance
+  // text) stayed in the old language when the reader switched English/Arabic
+  // on the report screen.
+  const reportData = useMemo(
+    () => (reportReady
+      ? buildReportData(p1Answers, orgAnswers, scenarios, ORG_ITEMS, DIM, lang, complianceAnswers)
+      : null),
+    [reportReady, p1Answers, orgAnswers, scenarios, complianceAnswers, lang]
+  );
   const [raterLink, setRaterLink] = useState(null); // { id, count, scores }
   const [pendingConsent, setPendingConsent] = useState(null); // consent captured at sign-in, consumed once by the save effect
   const [pendingSavePayload, setPendingSavePayload] = useState(null); // set when a returning session needs fresh consent before saving
@@ -89,8 +108,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     } else if (phase === 'p2') {
       setPhase('p3');
     } else if (phase === 'p3') {
-      const data = buildReportData(p1Answers, orgAnswers, scenarios, ORG_ITEMS, DIM, lang, complianceAnswers);
-      setReportData(data);
+      setReportReady(true);
       setPhase('report');
     }
   }
@@ -100,7 +118,8 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     setP1Index(0);
     setOrgAnswers(ORG_ITEMS.map(() => null));
     setComplianceAnswers(COMPLIANCE_ITEMS.map(() => null));
-    setReportData(null);
+    setReportReady(false);
+    saveRequestedRef.current = false;
     setAuthState({ status: 'anon' });
     setRaterLink(null);
     setTeamId(null);
@@ -123,17 +142,19 @@ export default function App({ authAdapter = noopAuthAdapter }) {
 
   async function handleSignIn(email, password, consent) {
     setPendingConsent(consent);
+    saveRequestedRef.current = true;
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError')) });
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
   async function handleCreateAccount(email, password, consent) {
     setPendingConsent(consent);
+    saveRequestedRef.current = true;
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signUpWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: result.error || t('auth.sendError') });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError')) });
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
@@ -217,6 +238,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
       if (
         session &&
         reportData &&
+        saveRequestedRef.current &&
         authState.status !== 'saved' &&
         authState.status !== 'signedIn' &&
         authState.status !== 'needsConsent'

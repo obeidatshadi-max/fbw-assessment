@@ -1,7 +1,16 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { copyToClipboard } from '../lib/clipboard.js';
+import { ROLES } from '../data/roles.js';
 
 const MIN_RESPONSES = 3;
+
+// roleBreakdown keys are stored role ids ("sales", "management", ...) or
+// "unspecified"; show the localized role label instead of the raw id.
+export function roleLabel(roleId, L) {
+  const role = ROLES.find(r => r.id === roleId);
+  return role ? L(role.label) : (roleId === 'unspecified' ? '—' : roleId);
+}
 
 export default function ManagerScreen({ authState, team, teams = [], summary, imbalance, dim, createStatus, createError, onSignIn, onCreateAccount, onRequestReset, onCreateTeam, onRefresh, onSwitchTeam }) {
   const { t, tf, L } = useLanguage();
@@ -16,11 +25,11 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
     onRequestReset(email).then(result => setResetStatus(result.success ? 'sent' : 'error'));
   }
 
-  function copyCode(code) {
-    navigator.clipboard?.writeText(code).then(() => {
+  async function copyCode(code) {
+    if (await copyToClipboard(code)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }
   }
 
   if (authState.status !== 'signedIn') {
@@ -160,7 +169,7 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
           <div className="card pad" style={{ marginBottom: 18 }}>
             {Object.entries(summary.roleBreakdown || {}).map(([role, n]) => (
               <div key={role} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
-                <span>{role}</span><span>{n}</span>
+                <span>{roleLabel(role, L)}</span><span>{n}</span>
               </div>
             ))}
           </div>

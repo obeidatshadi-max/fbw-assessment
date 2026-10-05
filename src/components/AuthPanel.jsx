@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { CONTACT_EMAIL } from '../lib/contact.js';
 
 function ConsentCheckboxes({ consent, onChange, t }) {
   return (
@@ -61,8 +62,14 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
 
   async function handleExportData() {
     setExportStatus('exporting');
-    const result = await onExportData();
-    setExportStatus(result.success ? 'idle' : 'error');
+    try {
+      const result = await onExportData();
+      setExportStatus(result.success ? 'idle' : 'error');
+    } catch {
+      // A missing handler or a thrown download error must not leave the
+      // button stuck on "Preparing…" forever.
+      setExportStatus('error');
+    }
   }
 
   if (authState.status === 'saved') {
@@ -107,7 +114,7 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
               <button
                 type="button"
                 className="btn sm"
-                disabled={deleteConfirmText !== 'DELETE' || deleteStep === 'deleting'}
+                disabled={deleteConfirmText.trim().toUpperCase() !== 'DELETE' || deleteStep === 'deleting'}
                 onClick={handleDeleteAccount}
               >
                 {deleteStep === 'deleting' ? t('auth.deleting') : t('auth.deleteButton')}
@@ -123,7 +130,7 @@ export default function AuthPanel({ authState, onSignIn, onCreateAccount, onRequ
             </div>
             {deleteStep === 'error' && (
               <p style={{ margin: '8px 0 0', fontSize: 13.5, color: '#b3261e' }}>
-                {tf('auth.deleteError', { email: 'obeidatshadi@gmail.com' })}
+                {tf('auth.deleteError', { email: CONTACT_EMAIL })}
               </p>
             )}
           </div>

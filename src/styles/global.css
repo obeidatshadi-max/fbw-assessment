@@ -198,6 +198,11 @@
   [dir="rtl"] ol.clean{padding-left:0; padding-right:18px;}
   [dir="rtl"] .legend i{margin-right:0; margin-left:6px;}
   [dir="rtl"] .rankline .pct{margin-left:0; margin-right:auto;}
+  /* Keep "15 of 15 · 100%" on one line so it never wraps into a column. */
+  .rankline .pct{white-space:nowrap;}
+  /* Letter-spacing and uppercase "label" styling disconnect Arabic letters, which
+     must stay joined; Arabic has no letter case. Reset it for the whole RTL UI. */
+  html[dir="rtl"] *{letter-spacing:normal !important; text-transform:none !important;}
   [dir="rtl"] .profile{border-left:none; padding-left:0; border-right:4px solid var(--line); padding-right:16px;}
   [dir="rtl"] .profile.pf{border-color:var(--fn);} [dir="rtl"] .profile.pb{border-color:var(--be);} [dir="rtl"] .profile.pw{border-color:var(--wl);}
   [dir="rtl"] .orgbar .fill{margin-left:auto; margin-right:0;}

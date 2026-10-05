@@ -3,6 +3,7 @@ import HomeLink from './components/HomeLink.jsx';
 import ManagerScreen from './components/ManagerScreen.jsx';
 import SessionLiveScreen from './components/SessionLiveScreen.jsx';
 import { noopAuthAdapter } from './lib/authAdapter.js';
+import { localizeAuthError } from './lib/authErrors.js';
 import { computeImbalance } from './lib/teamScoring.js';
 import { DIM } from './data/dimensions.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
@@ -37,17 +38,29 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     return unsubscribe;
   }, [authAdapter]);
 
+  async function handleSignOut() {
+    await authAdapter.signOut();
+    setAuthState({ status: 'anon' });
+    setTeams([]);
+    setTeam(null);
+    setSummary(null);
+    setSession(null);
+    setSessionSummary(null);
+    setSessionEnded(false);
+    setView('team');
+  }
+
   async function handleSignIn(email, password) {
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: result.error });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError')) });
     // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
   async function handleCreateAccount(email, password) {
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signUpWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: result.error });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError')) });
     // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
@@ -146,6 +159,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
           <div className="no-print" style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
             <button className={`btn sm${view === 'team' ? '' : ' ghost'}`} onClick={() => setView('team')}>{t('manager.tabTeam')}</button>
             <button className={`btn sm${view === 'session' ? '' : ' ghost'}`} onClick={() => setView('session')}>{t('manager.tabSession')}</button>
+            <button className="btn sm ghost" style={{ marginInlineStart: 'auto' }} onClick={handleSignOut}>{t('manager.signOut')}</button>
           </div>
         )}
         {authState.status !== 'signedIn' || view === 'team' ? (

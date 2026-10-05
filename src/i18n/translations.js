@@ -334,6 +334,7 @@ export const UI = {
     manager: {
       tabTeam: 'Team',
       tabSession: 'Live session',
+      signOut: 'Sign out',
     },
     admin: {
       eyebrow: 'Admin',
@@ -703,7 +704,7 @@ export const UI = {
       dashboardTitle: 'نمط الفريق',
       roleBreakdownTitle: 'حسب الدور',
       imbalanceHeading: 'إشارة نمطية',
-      imbalanceNote: '{high} قوي ،({highPct}%)، و{low} منخفض ({lowPct}%) عبر الفريق — إشارة تقريبية، وليست نتيجة إحصائية.',
+      imbalanceNote: '{high} قوي ({highPct}%)، و{low} منخفض ({lowPct}%) عبر الفريق — إشارة تقريبية، وليست نتيجة إحصائية.',
       noFlag: 'لم يتم رصد اختلال واضح عبر الفريق.',
       refresh: 'التحقّق من استجابات جديدة',
       switchTeam: 'تبديل الفريق',
@@ -718,6 +719,7 @@ export const UI = {
     manager: {
       tabTeam: 'الفريق',
       tabSession: 'جلسة مباشرة',
+      signOut: 'تسجيل الخروج',
     },
     admin: {
       eyebrow: 'الإدارة',
