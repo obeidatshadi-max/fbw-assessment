@@ -13,6 +13,11 @@ describe('IntroScreen', () => {
     expect(screen.getByText('Will')).toBeInTheDocument();
   });
 
+  it('tells people up front that it takes about ten minutes', () => {
+    render(<IntroScreen onStart={() => {}} />);
+    expect(screen.getByText(/Takes about 10 minutes\./)).toBeInTheDocument();
+  });
+
   it('calls onStart with the default role when the start button is clicked without changing role', () => {
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} />);

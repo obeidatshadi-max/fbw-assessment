@@ -98,7 +98,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
           <li>{t('intro.note2')}</li>
           <li>{t('intro.note3')}</li>
           <li>{tf('intro.note4', { n: 9 })}</li>
-          <li>{tf('intro.note5', { minutes: 7 })}</li>
+          <li>{tf('intro.note5', { minutes: 10 })}</li>
           <li>{t('intro.note6')}</li>
         </ul>
       </div>
