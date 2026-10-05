@@ -38,6 +38,7 @@ describe('ReportScreen', () => {
     expect(masthead).not.toBeNull();
     expect(masthead.textContent).toContain('Anatomy of Leadership · Function · Being · Will');
     expect(masthead.querySelector('.metaline').textContent.length).toBeGreaterThan(0);
+    expect(screen.getByText('Built on the Integral Leadership Dynamics™ framework')).toBeInTheDocument();
   });
 
   it('calls onRestart and onPrint from their buttons', () => {

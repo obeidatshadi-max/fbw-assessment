@@ -20,6 +20,11 @@ describe('IntroScreen', () => {
     expect(screen.getByText(/leadership archetype as others see you — for example/)).toBeInTheDocument();
   });
 
+  it('shows the Integral Leadership Dynamics framework as a subtitle under the brand', () => {
+    render(<IntroScreen onStart={() => {}} />);
+    expect(screen.getByText('Built on the Integral Leadership Dynamics™ framework')).toBeInTheDocument();
+  });
+
   it('tells people up front that it takes about ten minutes', () => {
     render(<IntroScreen onStart={() => {}} />);
     expect(screen.getByText(/Takes about 10 minutes\./)).toBeInTheDocument();

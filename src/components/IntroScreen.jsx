@@ -39,6 +39,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
       <div className="hero-brand">
         <div className="hero-brand-kicker">{t('brand.kicker')}</div>
         <div className="hero-brand-name">{t('brand.name')}</div>
+        <div className="hero-brand-method">{t('brand.method')}</div>
         <div className="hero-brand-bar" />
       </div>
 

@@ -48,7 +48,7 @@ function getPath(obj, path) {
 export const UI = {
   en: {
     lang: { en: 'EN', ar: 'AR' },
-    brand: { kicker: 'Anatomy of Leadership', name: 'Function · Being · Will' },
+    brand: { kicker: 'Anatomy of Leadership', name: 'Function · Being · Will', method: 'Built on the Integral Leadership Dynamics™ framework' },
     footer: { developedBy: 'Developed by', privacyLink: 'Privacy Policy', termsLink: 'Terms of Service', managerLink: 'Manager? Create a team code' },
     intro: {
       eyebrow: 'Leadership self-reflection',
@@ -432,7 +432,7 @@ export const UI = {
 
   ar: {
     lang: { en: 'EN', ar: 'AR' },
-    brand: { kicker: 'Anatomy of Leadership', name: 'الوظيفة · الكينونة · الإرادة' },
+    brand: { kicker: 'Anatomy of Leadership', name: 'الوظيفة · الكينونة · الإرادة', method: 'مبني على إطار ديناميكيات القيادة المتكاملة™' },
     footer: { developedBy: 'تطوير', privacyLink: 'سياسة الخصوصية', termsLink: 'شروط الخدمة', managerLink: 'مدير؟ أنشئ رمز فريق' },
     intro: {
       eyebrow: 'تأمّل ذاتي في القيادة',
