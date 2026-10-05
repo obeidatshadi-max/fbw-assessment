@@ -188,6 +188,6 @@ data to a new country or customer:
 This checklist is a reminder to verify, not a substitute for verifying.
 
 ## Git workflow
-- After finishing a task and confirming it works, open a pull request and merge it into main yourself.
+- After finishing a task and confirming it works, open a pull request and merge it into master yourself.
 - Do not ask me to merge manually.
 - If a merge conflict or failing check appears, stop and tell me instead of forcing it.
