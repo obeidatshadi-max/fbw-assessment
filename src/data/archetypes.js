@@ -2,7 +2,8 @@
 // domain/language owner for this framework and should review before ship.
 //
 // The eight Function · Being · Will archetypes from the course deck's
-// "Diagnostic Grid" (slide 35 naming, chosen by Shadi). Keyed by a High/Low
+// "Diagnostic Grid" (slide 35 naming, chosen by Shadi; LLH renamed from the
+// slide's "Ambitious Opportunist" to the more positive "Opportunity-Driven"). Keyed by a High/Low
 // code in F-B-W order, e.g. "HLH" = High Function, Low Being, High Will.
 // `sentence` is only set where the deck's "four you will meet most often"
 // slide gives one; the deck's "Sage" (B↑ F~ W↓) has no High/Low code and is
@@ -51,7 +52,7 @@ export const ARCHETYPES = {
     develop: { en: 'Function & Will', ar: 'الوظيفة والإرادة' },
   },
   LLH: {
-    name: { en: 'Ambitious Opportunist', ar: 'الطموح المغتنم للفرص' },
+    name: { en: 'Opportunity-Driven', ar: 'المدفوع بالفرص' },
     strength: { en: 'Energetic, aggressive', ar: 'نشيط، مندفع' },
     shadow: { en: 'Ego-driven, risky decisions', ar: 'تحركه الأنا، وقرارات محفوفة بالمخاطر' },
     develop: { en: 'Being first', ar: 'الكينونة أولاً' },
