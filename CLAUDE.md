@@ -140,7 +140,8 @@ and `0003_fbw_360_hardening.sql` (fixes below).
   leader's links — caught in review before ship.)
 - **Score comparability**: self scores are ipsative (forced-choice, sum to
   15 across F/B/W); rater scores are Likert sums (3-9 per dimension). Both
-  are converted to "% of profile" before comparing — see
+  are put on the same basis before comparing (F/B/W as share of the F+B+W
+  total on both sides; compliance as (score-3)/6 on both sides) — see
   `src/lib/raterScoring.js` and
   `docs/superpowers/specs/2026-08-26-prompt4-360-design.md` for the exact
   math. This is an approximation, documented in the report copy.

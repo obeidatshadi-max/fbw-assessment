@@ -33,16 +33,35 @@ describe('normalizeSelf', () => {
 });
 
 describe('normalizeRaters', () => {
-  it('averages multiple responses then converts each dim to % of the 4-dim total', () => {
+  it('averages responses, then gives F/B/W as % of the F+B+W total (same basis as normalizeSelf)', () => {
     const responses = [
       { F: 9, B: 3, W: 3, C: 3 },
       { F: 9, B: 3, W: 3, C: 3 },
       { F: 9, B: 3, W: 3, C: 3 },
     ];
     const pct = normalizeRaters(responses);
-    // averages 9/3/3/3 sum to 18 -> F = 9/18*100 = 50
-    expect(pct.F).toBeCloseTo(50);
-    expect(pct.B).toBeCloseTo(16.67, 1);
+    // 9/15 = 60%, matching normalizeSelf({F:9,B:3,W:3}) exactly
+    expect(pct.F).toBeCloseTo(60);
+    expect(pct.B).toBeCloseTo(20);
+    expect(pct.F + pct.B + pct.W).toBeCloseTo(100);
+  });
+
+  it('puts compliance on the same absolute (avg-3)/6 scale as the self side', () => {
+    const pct = normalizeRaters([{ F: 6, B: 6, W: 6, C: 7 }, { F: 6, B: 6, W: 6, C: 7 }]);
+    expect(pct.C).toBeCloseTo(66.67, 1);
+    expect(normalizeRaters([{ F: 6, B: 6, W: 6, C: 3 }]).C).toBe(0);
+  });
+
+  it('accepts numeric strings, as Postgres avg() may arrive via JSON', () => {
+    const pct = normalizeRaters([{ F: '9', B: '3', W: '3', C: '9' }]);
+    expect(pct.F).toBeCloseTo(60);
+    expect(pct.C).toBeCloseTo(100);
+  });
+
+  it('shows no gap when raters see the same profile shape and compliance level as the leader', () => {
+    const self = normalizeSelf({ F: 9, B: 3, W: 3 }, 6);
+    const raters = normalizeRaters([{ F: 9, B: 3, W: 3, C: 6 }]);
+    buildGapData(self, raters).forEach(g => expect(g.gap).toBeCloseTo(0));
   });
 
   it('returns null when there are no responses', () => {
