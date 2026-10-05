@@ -12,7 +12,7 @@ export const DIM = {
       strength: [
         { en: "You are reliable — people trust you to deliver.", ar: "أنت موثوق — يثق بك الناس لتحقيق النتائج." },
         { en: "You think clearly and solve problems well.", ar: "تفكر بوضوح وتحل المشكلات بكفاءة." },
-        { en: "You build systems, order, and high standards.", ar: "تبني أنظمة ونظاماً ومعايير عالية." },
+        { en: "You build systems, order, and high standards.", ar: "تبني منظومات وانضباطاً ومعايير عالية." },
         { en: "You turn ideas into real, finished results.", ar: "تحوّل الأفكار إلى نتائج حقيقية ومكتملة." }],
       watch: [
         { en: "You may focus on the task and forget the people.", ar: "قد تركز على المهمة وتنسى الأشخاص." },
@@ -34,9 +34,9 @@ export const DIM = {
         { en: "You build trust and make people feel safe.", ar: "تبني الثقة وتجعل الناس يشعرون بالأمان." },
         { en: "You stay calm and grounded under pressure.", ar: "تبقى هادئاً ومتزناً تحت الضغط." },
         { en: "You know yourself and lead by example.", ar: "تعرف نفسك جيداً وتقود بالقدوة." },
-        { en: "People feel seen and respected around you.", ar: "يشعر من حولك بأنهم مرئيون ومحترمون." }],
+        { en: "People feel seen and respected around you.", ar: "يشعر الناس معك بأنهم مُقدَّرون ومحترمون." }],
       watch: [
-        { en: "You may avoid the hard action to keep the peace.", ar: "قد تتجنب الإجراء الصعب حفاظاً على السلام." },
+        { en: "You may avoid the hard action to keep the peace.", ar: "قد تتجنب الإجراء الصعب حفاظاً على أجواء الود." },
         { en: "You can put harmony above needed results.", ar: "قد تُقدّم الانسجام على النتائج المطلوبة." },
         { en: "You may hesitate on tough decisions.", ar: "قد تتردد في اتخاذ القرارات الصعبة." },
         { en: "You can carry other people's stress as your own.", ar: "قد تحمل توتر الآخرين وكأنه توترك أنت." }],

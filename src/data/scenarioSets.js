@@ -124,7 +124,7 @@ const SCENARIOS_PRODUCT_MANAGER = [
   { s: { en: 'A rep flags that field messaging has drifted off-label.', ar: 'يُنبّه مندوب إلى أن الرسائل الميدانية انحرفت عن الاستخدام المعتمد.' }, opts: [
       { t: { en: 'I pull the approved claims and reissue exact wording immediately.', ar: 'أستخرج الادعاءات المعتمدة وأُعيد إصدار الصياغة الدقيقة فوراً.' }, d: 'F' },
       { t: { en: 'I thank the rep directly for flagging it rather than staying quiet.', ar: 'أشكر المندوب مباشرة على إثارة الأمر بدل الصمت.' }, d: 'B' },
-      { t: { en: 'I escalate to compliance immediately, even if it slows the launch.', ar: 'أُصعّد الأمر فوراً إلى الالتزام، حتى لو أبطأ ذلك الإطلاق.' }, d: 'W' } ] },
+      { t: { en: 'I escalate to compliance immediately, even if it slows the launch.', ar: 'أُصعّد الأمر فوراً إلى قسم الامتثال، حتى لو أبطأ ذلك الإطلاق.' }, d: 'W' } ] },
   { s: { en: 'Two internal stakeholders disagree publicly in a leadership meeting.', ar: 'يختلف طرفان داخليان علناً في اجتماع قيادي.' }, opts: [
       { t: { en: 'I bring the data that settles the factual part of the disagreement.', ar: 'أطرح البيانات التي تحسم الجانب الواقعي من الخلاف.' }, d: 'F' },
       { t: { en: 'I follow up with each of them privately afterward.', ar: 'أُتابع مع كل منهما على انفراد لاحقاً.' }, d: 'B' },
@@ -183,7 +183,7 @@ const SCENARIOS_SALES = [
       { t: { en: 'I decide to compete harder for the account, not step back.', ar: 'أُقرر التنافس بقوة أكبر على هذا الحساب بدلاً من التراجع.' }, d: 'W' } ] },
   { s: { en: "You notice your samples inventory doesn't match your log.", ar: 'تلاحظ أن مخزون العينات لديك لا يطابق سجلك.' }, opts: [
       { t: { en: 'I recount everything carefully and correct the record.', ar: 'أُعيد الجرد بدقة وأُصحح السجل.' }, d: 'F' },
-      { t: { en: "I talk to my supervisor honestly about what happened.", ar: 'أُحدّث مشرفي بصدق عمّا حدث.' }, d: 'B' },
+      { t: { en: "I talk to my supervisor honestly about what happened.", ar: 'أتحدث إلى مشرفي بصدق عمّا حدث.' }, d: 'B' },
       { t: { en: 'I report it accurately, even though it is uncomfortable.', ar: 'أُبلغ عنه بدقة، حتى لو كان ذلك محرجاً.' }, d: 'W' } ] },
   { s: { en: 'A pharmacy asks you to bend a promotional material rule "just this once."', ar: 'تطلب منك صيدلية التساهل في قاعدة المواد الترويجية "لمرة واحدة فقط".' }, opts: [
       { t: { en: 'I explain exactly what the approved guidelines allow.', ar: 'أشرح بدقة ما تسمح به الإرشادات المعتمدة.' }, d: 'F' },
