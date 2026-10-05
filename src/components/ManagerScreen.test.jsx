@@ -74,13 +74,13 @@ describe('ManagerScreen', () => {
     expect(onCreateTeam).toHaveBeenCalledWith('District A');
   });
 
-  it('shows the waiting message when the team has fewer than 3 responses', () => {
+  it('shows the waiting message with the server-reported minimum until enough responses exist', () => {
     renderScreen({
       authState: { status: 'signedIn', userId: 'u1' },
       team: { id: 't1', name: 'District A', joinCode: 'AB12CD' },
-      summary: { count: 1, distribution: null, roleBreakdown: null },
+      summary: { count: 1, minGroupSize: 5, distribution: null, roleBreakdown: null },
     });
-    expect(screen.getByText('1 of 3 responses needed before the team pattern appears.')).toBeInTheDocument();
+    expect(screen.getByText('1 of 5 responses needed before the team pattern appears.')).toBeInTheDocument();
   });
 
   it('shows the dashboard and imbalance flag once revealed', () => {

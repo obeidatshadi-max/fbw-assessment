@@ -4,7 +4,9 @@ import { DISCUSSION_CARDS, getDiscussionCardKey } from '../data/discussionCards.
 import { copyToClipboard } from '../lib/clipboard.js';
 import { roleLabel } from './ManagerScreen.jsx';
 
-const MIN_RESPONSES = 3;
+// Fallback only: the server (fbw_settings.min_group_size, migration 0010) decides
+// the real minimum and returns it as summary.minGroupSize.
+const DEFAULT_MIN_RESPONSES = 5;
 
 export default function SessionLiveScreen({ session, summary, imbalance, dim, createStatus, createError, ended, onCreateSession, onRefresh, onEndSession, onPrintCards, onStartNewSession }) {
   const { t, tf, L } = useLanguage();
@@ -74,7 +76,7 @@ export default function SessionLiveScreen({ session, summary, imbalance, dim, cr
           ) : (
             <>
               {!gapData && (
-                <p style={{ fontSize: 13.5 }}>{tf('session.countWaiting', { count: summary?.count || 0, min: MIN_RESPONSES })}</p>
+                <p style={{ fontSize: 13.5 }}>{tf('session.countWaiting', { count: summary?.count || 0, min: summary?.minGroupSize || DEFAULT_MIN_RESPONSES })}</p>
               )}
               <div style={{ display: 'flex', gap: 8 }}>
                 <button className="btn ghost sm" onClick={onRefresh}>{t('team.refresh')}</button>

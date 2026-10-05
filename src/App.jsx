@@ -145,7 +145,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     saveRequestedRef.current = true;
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError')) });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError'), t('auth.rateLimited')) });
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 
@@ -154,7 +154,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
     saveRequestedRef.current = true;
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signUpWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError')) });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('auth.sendError'), t('auth.rateLimited')) });
     // On success, the onAuthStateChange listener below transitions to 'signedIn' and saves.
   }
 

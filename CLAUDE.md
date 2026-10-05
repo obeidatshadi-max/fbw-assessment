@@ -175,6 +175,25 @@ Report sections drawn from Shadi's course deck (Part 04), all in
 - `ReportScreen` is lazy-loaded in `App.jsx` (prefetched on mount) to keep
   the main chunk under Vite's 500kB warning.
 
+## Abuse guards and the anonymity gate (added 2026-10-05)
+
+- **Signup endpoint** (`netlify/functions/account-signup.js`, open and uses the
+  service-role key): requires a same-origin `Origin` header, and rate-limits per
+  client IP in Netlify Blobs (5 requests/hour, 20/day, store `rl-fbw-signup`).
+  Fails open if Blobs errors, and skips limiting when the IP is unknown. Tests:
+  `src/signupFunction.test.js`. A determined script can still forge headers and
+  rotate IPs, so this is a speed bump, not a wall.
+- **Team and live-session anonymity gate** is no longer a hard-coded 3. It is
+  `fbw_settings.min_group_size` (default **5**, clamped to a floor of 3 by
+  `fbw_min_group_size()`), set by migration `0010_fbw_group_size_setting.sql` and
+  returned to the UI as `minGroupSize`. Change it with one statement, no deploy:
+  `update fbw_settings set value = 4 where key = 'min_group_size';`
+  360 feedback keeps its own per-link `fbw_rater_links.min_raters` gate (0007).
+- **Not done here (dashboard-only):** Supabase "Leaked password protection"
+  (Auth > Passwords) cannot be set from SQL or the MCP tools.
+- Migration history note: `0008_fbw_consents` exists in the database but is not
+  in Supabase's applied-migrations list, so the list is not a reliable record.
+
 ## Data-protection checklist (Prompt 8)
 
 Before deploying anything that stores 360/team/longitudinal/talent-review

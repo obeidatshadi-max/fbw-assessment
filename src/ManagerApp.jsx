@@ -53,14 +53,14 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
   async function handleSignIn(email, password) {
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signInWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError')) });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError'), t('auth.rateLimited')) });
     // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
   async function handleCreateAccount(email, password) {
     setAuthState({ status: 'sending' });
     const result = await authAdapter.signUpWithPassword({ email, password });
-    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError')) });
+    if (!result.success) setAuthState({ status: 'error', error: localizeAuthError(result.error, t('team.sendError'), t('auth.rateLimited')) });
     // On success, the onAuthStateChange listener above transitions to 'signedIn'.
   }
 
@@ -95,7 +95,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     if (!team) return;
     const result = await authAdapter.getTeamSummary({ teamId: team.id });
     if (result.success) {
-      setSummary({ count: result.count, distribution: result.distribution, roleBreakdown: result.roleBreakdown });
+      setSummary({ count: result.count, minGroupSize: result.minGroupSize, distribution: result.distribution, roleBreakdown: result.roleBreakdown });
     }
   }
 
@@ -117,7 +117,7 @@ export default function ManagerApp({ authAdapter = noopAuthAdapter }) {
     if (!session) return;
     const result = await authAdapter.getSessionSummary({ sessionId: session.id });
     if (result.success) {
-      setSessionSummary({ count: result.count, distribution: result.distribution, roleBreakdown: result.roleBreakdown });
+      setSessionSummary({ count: result.count, minGroupSize: result.minGroupSize, distribution: result.distribution, roleBreakdown: result.roleBreakdown });
     }
   }
 

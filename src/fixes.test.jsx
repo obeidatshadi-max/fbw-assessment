@@ -6,9 +6,10 @@ import App from './App.jsx';
 import ManagerApp from './ManagerApp.jsx';
 import AuthPanel from './components/AuthPanel.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
-import { roleLabel } from './components/ManagerScreen.jsx';
+import ManagerScreen, { roleLabel } from './components/ManagerScreen.jsx';
+import SessionLiveScreen from './components/SessionLiveScreen.jsx';
 import { LanguageProvider } from './i18n/LanguageContext.jsx';
-import { t as translate } from './i18n/translations.js';
+import { t as translate, tf as translateF } from './i18n/translations.js';
 import { SCENARIOS } from './data/scenarios.js';
 import { ORG_ITEMS } from './data/orgItems.js';
 import { COMPLIANCE_ITEMS } from './data/complianceItems.js';
@@ -174,6 +175,11 @@ describe('localizeAuthError', () => {
     expect(localizeAuthError('Sign-in is not configured yet.', 'FALLBACK')).toBe('FALLBACK');
     expect(localizeAuthError(undefined, 'FALLBACK')).toBe('FALLBACK');
   });
+  it('swaps the rate-limit message for the translated one when provided', () => {
+    expect(localizeAuthError('Too many attempts. Try again later.', 'FALLBACK', 'LIMITED')).toBe('LIMITED');
+    // without a translation it is left alone rather than shown as a credentials error
+    expect(localizeAuthError('Too many attempts. Try again later.', 'FALLBACK')).toBe('Too many attempts. Try again later.');
+  });
   it('keeps specific messages the user can act on', () => {
     expect(localizeAuthError('Password must be 8-128 characters.', 'FALLBACK')).toBe('Password must be 8-128 characters.');
   });
@@ -222,5 +228,37 @@ describe('manager / facilitator sign-out', () => {
     fireEvent.click(await screen.findByText(en('manager.signOut')));
     await waitFor(() => expect(authAdapter.signOut).toHaveBeenCalled());
     expect(await screen.findByText(en('team.signInHeading'))).toBeInTheDocument();
+  });
+});
+
+describe('anonymity gate shown to managers and facilitators', () => {
+  const dim = DIM;
+  const base = { dim, createStatus: 'idle' };
+
+  it('shows the minimum the server reports for a team (not a hard-coded 3)', () => {
+    render(
+      <LanguageProvider>
+        <ManagerScreen {...base} authState={{ status: 'signedIn' }} team={{ id: 't', name: 'Team A', joinCode: 'ABC123' }} teams={[]} summary={{ count: 2, minGroupSize: 5, distribution: null, roleBreakdown: null }} />
+      </LanguageProvider>
+    );
+    expect(screen.getByText(translateF('en', 'team.countWaiting', { count: 2, min: 5 }))).toBeInTheDocument();
+  });
+
+  it('shows the minimum the server reports for a live session', () => {
+    render(
+      <LanguageProvider>
+        <SessionLiveScreen {...base} session={{ id: 's', name: 'Workshop', joinCode: 'XYZ789' }} summary={{ count: 1, minGroupSize: 6, distribution: null, roleBreakdown: null }} ended={false} />
+      </LanguageProvider>
+    );
+    expect(screen.getByText(translateF('en', 'session.countWaiting', { count: 1, min: 6 }))).toBeInTheDocument();
+  });
+
+  it('falls back to 5 when an older server does not report a minimum', () => {
+    render(
+      <LanguageProvider>
+        <ManagerScreen {...base} authState={{ status: 'signedIn' }} team={{ id: 't', name: 'Team A', joinCode: 'ABC123' }} teams={[]} summary={{ count: 0, distribution: null, roleBreakdown: null }} />
+      </LanguageProvider>
+    );
+    expect(screen.getByText(translateF('en', 'team.countWaiting', { count: 0, min: 5 }))).toBeInTheDocument();
   });
 });

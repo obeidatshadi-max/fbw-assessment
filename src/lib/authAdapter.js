@@ -305,7 +305,7 @@ export const supabaseAuthAdapter = {
   async getTeamSummary({ teamId }) {
     if (!supabase) return { success: false, error: 'Team dashboard is not configured yet.' };
     const { data, error } = await supabase.rpc('get_team_summary', { p_team_id: teamId });
-    return error ? { success: false, error: error.message } : { success: true, count: data.count, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
+    return error ? { success: false, error: error.message } : { success: true, count: data.count, minGroupSize: data.minGroupSize ?? null, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
   },
 
   // Live sessions — facilitator side (authenticated)
@@ -324,7 +324,7 @@ export const supabaseAuthAdapter = {
   async getSessionSummary({ sessionId }) {
     if (!supabase) return { success: false, error: 'Live sessions are not configured yet.' };
     const { data, error } = await supabase.rpc('get_session_summary', { p_session_id: sessionId });
-    return error ? { success: false, error: error.message } : { success: true, count: data.count, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
+    return error ? { success: false, error: error.message } : { success: true, count: data.count, minGroupSize: data.minGroupSize ?? null, distribution: data.distribution, roleBreakdown: data.roleBreakdown };
   },
 
   // Unified join code — rep side (anonymous, called during self-assessment).

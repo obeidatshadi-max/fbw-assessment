@@ -3,7 +3,9 @@ import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { copyToClipboard } from '../lib/clipboard.js';
 import { ROLES } from '../data/roles.js';
 
-const MIN_RESPONSES = 3;
+// Fallback only: the server (fbw_settings.min_group_size, migration 0010) decides
+// the real minimum and returns it as summary.minGroupSize.
+const DEFAULT_MIN_RESPONSES = 5;
 
 // roleBreakdown keys are stored role ids ("sales", "management", ...) or
 // "unspecified"; show the localized role label instead of the raw id.
@@ -141,7 +143,7 @@ export default function ManagerScreen({ authState, team, teams = [], summary, im
         </div>
         <p style={{ fontSize: 13.5, color: 'var(--muted)', margin: '0 0 10px' }}>{t('team.joinCodeShareNote')}</p>
         {!gapData && (
-          <p style={{ fontSize: 13.5 }}>{tf('team.countWaiting', { count: summary?.count || 0, min: MIN_RESPONSES })}</p>
+          <p style={{ fontSize: 13.5 }}>{tf('team.countWaiting', { count: summary?.count || 0, min: summary?.minGroupSize || DEFAULT_MIN_RESPONSES })}</p>
         )}
         <button className="btn ghost sm" onClick={onRefresh}>{t('team.refresh')}</button>
       </div>

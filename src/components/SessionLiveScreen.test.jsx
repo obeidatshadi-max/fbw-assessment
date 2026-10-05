@@ -43,10 +43,10 @@ describe('SessionLiveScreen', () => {
   it('shows the join code and waiting message before the gate is reached', () => {
     renderScreen({
       session: { id: 's1', name: 'Workshop A', joinCode: 'ZZ99ZZ' },
-      summary: { count: 1, distribution: null, roleBreakdown: null },
+      summary: { count: 1, minGroupSize: 5, distribution: null, roleBreakdown: null },
     });
     expect(screen.getByDisplayValue('ZZ99ZZ')).toBeInTheDocument();
-    expect(screen.getByText('1 of 3 responses needed before the group pattern appears.')).toBeInTheDocument();
+    expect(screen.getByText('1 of 5 responses needed before the group pattern appears.')).toBeInTheDocument();
   });
 
   it('shows the live dashboard and a matched discussion card once revealed', () => {
