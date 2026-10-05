@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import ReportScreen from './ReportScreen.jsx';
 import { buildReportData } from '../lib/scoring.js';
@@ -75,6 +75,50 @@ describe('ReportScreen', () => {
     expect(screen.getByText('Simple ways to grow here')).toBeInTheDocument(); // 'develop' profile
   });
 
+  it('renders the whole-leader section keyed by the growth edge, and strength activation for the dominant style', () => {
+    render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
+    expect(screen.getByText('Reading the whole leader')).toBeInTheDocument();
+    expect(screen.getByText('Your style in a crisis')).toBeInTheDocument();
+    expect(screen.getByText('When you receive critical feedback')).toBeInTheDocument();
+    expect(screen.getByText('When you lead change')).toBeInTheDocument();
+    expect(screen.getByText('Put this strength to work')).toBeInTheDocument();
+    expect(screen.queryByText(/\{dominant\}|\{backup\}/)).not.toBeInTheDocument();
+  });
+
+  it('renders the purpose statement as editable, unsaved fields', () => {
+    render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
+    expect(screen.getByText('Your leadership purpose statement')).toBeInTheDocument();
+    const input = screen.getByPlaceholderText('your purpose');
+    fireEvent.change(input, { target: { value: 'people grow' } });
+    expect(input.value).toBe('people grow');
+  });
+
+  it('shows a slide-35 archetype from 360 rater scores once raters have answered', () => {
+    render(
+      <ReportScreen
+        reportData={reportData} dim={dim} authState={{ status: 'saved' }}
+        raterLink={{ status: 'ready', id: 'abc', count: 3, scores: { F: 8, B: 5, W: 7.5, C: 6 } }}
+        onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}}
+        onCreateRaterLink={() => {}} onRefreshRaterSummary={() => {}}
+      />
+    );
+    expect(screen.getByText('Your leadership archetype (as others see you)')).toBeInTheDocument();
+    expect(screen.getByText('Forceful Driver')).toBeInTheDocument();
+    expect(screen.getByText('Burnout, politics, conflict')).toBeInTheDocument();
+  });
+
+  it('shows no archetype before the 360 minimum is reached', () => {
+    render(
+      <ReportScreen
+        reportData={reportData} dim={dim} authState={{ status: 'saved' }}
+        raterLink={{ status: 'ready', id: 'abc', count: 1, scores: null }}
+        onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}}
+        onCreateRaterLink={() => {}} onRefreshRaterSummary={() => {}}
+      />
+    );
+    expect(screen.queryByText('Your leadership archetype (as others see you)')).not.toBeInTheDocument();
+  });
+
   it('renders a fully localized Arabic report using the real content banks', () => {
     const arReport = buildReportData(
       SCENARIOS.map(() => ({ most: 0, least: 1 })),
@@ -89,5 +133,7 @@ describe('ReportScreen', () => {
     expect(screen.getByText('مصفوفة الوظيفة · الكينونة · الإرادة')).toBeInTheDocument();
     expect(screen.getByText('ابدأ من جديد')).toBeInTheDocument();
     expect(screen.getByText('يرجى قراءة هذا.')).toBeInTheDocument();
+    expect(screen.getByText('قراءة القائد بالكامل')).toBeInTheDocument();
+    expect(screen.getByText('بيان هدفك القيادي')).toBeInTheDocument();
   });
 });

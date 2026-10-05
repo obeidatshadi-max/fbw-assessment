@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import Header from './components/Header.jsx';
 import Navbar from './components/Navbar.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
 import ScenarioScreen from './components/ScenarioScreen.jsx';
 import OrgScreen from './components/OrgScreen.jsx';
 import ComplianceScreen from './components/ComplianceScreen.jsx';
-import ReportScreen from './components/ReportScreen.jsx';
 import { ORG_ITEMS } from './data/orgItems.js';
 import { COMPLIANCE_ITEMS } from './data/complianceItems.js';
 import { DIM } from './data/dimensions.js';
@@ -16,8 +15,16 @@ import { buildReportData } from './lib/scoring.js';
 import { noopAuthAdapter } from './lib/authAdapter.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 
+// The report (and its content banks) is only needed at the very end, so it is
+// split off the main bundle to stay under Vite's 500kB chunk warning. The
+// import is kicked off on mount (see the effect in App) so it is already
+// loaded by the time someone finishes the questions.
+const loadReportScreen = () => import('./components/ReportScreen.jsx');
+const ReportScreen = lazy(loadReportScreen);
+
 export default function App({ authAdapter = noopAuthAdapter }) {
   const { lang, t, tf } = useLanguage();
+  useEffect(() => { loadReportScreen(); }, []);
   const [phase, setPhase] = useState('intro');
   const [role, setRole] = useState(DEFAULT_ROLE);
   const [teamId, setTeamId] = useState(null);
@@ -269,6 +276,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
           {phase === 'p2' && <OrgScreen items={ORG_ITEMS} answers={orgAnswers} onSelect={handleOrgSelect} />}
           {phase === 'p3' && <ComplianceScreen items={COMPLIANCE_ITEMS} answers={complianceAnswers} onSelect={handleComplianceSelect} />}
           {phase === 'report' && reportData && (
+            <Suspense fallback={null}>
             <ReportScreen
               reportData={reportData}
               dim={DIM}
@@ -285,6 +293,7 @@ export default function App({ authAdapter = noopAuthAdapter }) {
               onCreateRaterLink={handleCreateRaterLink}
               onRefreshRaterSummary={handleRefreshRaterSummary}
             />
+            </Suspense>
           )}
         </div>
       </main>

@@ -5,6 +5,12 @@ import { interpolate } from '../i18n/translations.js';
 import { DEV_PLAN } from '../data/devPlan.js';
 import { MANAGER_DEBRIEF_QUESTIONS } from '../data/managerDebrief.js';
 import { normalizeSelf, normalizeRaters, buildGapData } from '../lib/raterScoring.js';
+import { archetypeCode } from '../lib/archetype.js';
+import { ARCHETYPES } from '../data/archetypes.js';
+import {
+  PAIRING, PAIRING_ALL, CRISIS, CRISIS_FULL, FEEDBACK_RISK, FEEDBACK_MATURE,
+  CHANGE_RISK, CHANGE_BALANCE, ACTIVATION, DIAGNOSTIC_QUESTIONS,
+} from '../data/modelInsights.js';
 
 const MIN_RATERS = 3;
 const GAP_THRESHOLD = 5;
@@ -95,8 +101,120 @@ function InviteFeedback({ raterLink, ind, compliance, dim, onCreateRaterLink, on
               );
             })}
           </div>
+          <ArchetypeCard scores={raterLink.scores} count={raterLink.count} dim={dim} />
         </>
       )}
+    </>
+  );
+}
+
+function ArchetypeCard({ scores, count, dim }) {
+  const { t, tf, L } = useLanguage();
+  const code = archetypeCode(scores);
+  const archetype = code && ARCHETYPES[code];
+  if (!archetype) return null;
+  return (
+    <>
+      <div className="sec-title">{t('report.archetypeTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>
+          {tf('report.archetypeIntro', { count })}
+        </p>
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 12 }}>
+          {['F', 'B', 'W'].map((k, i) => (
+            <span key={k} style={{ color: dim[k].color, fontWeight: 600 }}>
+              {L(dim[k].label)}: {code[i] === 'H' ? t('report.archetypeHigh') : t('report.archetypeLow')}
+            </span>
+          ))}
+        </div>
+        <h3 style={{ margin: '0 0 4px' }}>{L(archetype.name)}</h3>
+        {archetype.sentence && <p style={{ margin: '0 0 10px', fontStyle: 'italic' }}>{L(archetype.sentence)}</p>}
+        <div className="insight">
+          <h4>{t('report.archetypeStrength')}</h4>
+          <p>{L(archetype.strength)}</p>
+          <h4 style={{ marginTop: 10 }}>{t('report.archetypeShadow')}</h4>
+          <p>{L(archetype.shadow)}</p>
+          <h4 style={{ marginTop: 10 }}>{t('report.archetypeDevelop')}</h4>
+          <p>{L(archetype.develop)}</p>
+        </div>
+        <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: '10px 0 0' }}>{t('report.archetypeNote')}</p>
+      </div>
+    </>
+  );
+}
+
+function WholeLeader({ dim, dominant, backup, developArea }) {
+  const { t, tf, L } = useLanguage();
+  const pairing = PAIRING[developArea];
+  const crisis = CRISIS[developArea];
+  return (
+    <>
+      <div className="sec-title">{t('report.wholeTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 6px', fontSize: 14.5, color: 'var(--text)' }}>{t('report.wholeIntro')}</p>
+
+        <div className="insight">
+          <h4>{t('report.pairingHeading')}</h4>
+          <p>{L(pairing.pair)}</p>
+          <p>{L(pairing.missing)}</p>
+          <p style={{ color: 'var(--muted)' }}>{L(PAIRING_ALL)}</p>
+        </div>
+
+        <div className="insight">
+          <h4>{t('report.crisisHeading')}</h4>
+          <p>{tf('report.crisisSetup', { dominant: L(dim[dominant].label), backup: L(dim[backup].label) })}</p>
+          <p><b>{L(crisis.reflex)}</b></p>
+          <p>{t('report.crisisTeam')}: {L(crisis.team)}</p>
+          <p style={{ marginTop: 10 }}>{t('report.crisisFull')}</p>
+          <p><b>{L(CRISIS_FULL.reflex)}</b></p>
+          <p>{t('report.crisisTeam')}: {L(CRISIS_FULL.team)}</p>
+        </div>
+
+        <div className="insight">
+          <h4>{t('report.feedbackHeading')}</h4>
+          <p>{t('report.feedbackRiskLabel')}: {L(FEEDBACK_RISK[developArea])}</p>
+          <p>{t('report.feedbackMatureLabel')}: {L(FEEDBACK_MATURE)}</p>
+        </div>
+
+        <div className="insight">
+          <h4>{t('report.changeHeading')}</h4>
+          <p>{L(CHANGE_RISK[developArea])}</p>
+          <p style={{ color: 'var(--muted)' }}>{L(CHANGE_BALANCE)}</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const PURPOSE_FIELDS = [
+  { key: 'lead', label: 'report.purposeLead', hint: 'report.purposeLeadHint' },
+  { key: 'intend', label: 'report.purposeIntend', hint: 'report.purposeIntendHint' },
+  { key: 'willing', label: 'report.purposeWilling', hint: 'report.purposeWillingHint' },
+];
+
+// Kept in component state only — never saved or sent anywhere, so the
+// "nothing is stored unless you choose" promise holds. It prints with the report.
+function PurposeStatement() {
+  const { t } = useLanguage();
+  const [values, setValues] = useState({ lead: '', intend: '', willing: '' });
+  return (
+    <>
+      <div className="sec-title">{t('report.purposeTitle')}</div>
+      <div className="card pad">
+        <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>{t('report.purposeIntro')}</p>
+        {PURPOSE_FIELDS.map(f => (
+          <label key={f.key} style={{ display: 'block', marginBottom: 12 }}>
+            <span style={{ display: 'block', fontWeight: 600, marginBottom: 4 }}>{t(f.label)}</span>
+            <input
+              type="text"
+              value={values[f.key]}
+              placeholder={t(f.hint)}
+              onChange={e => setValues(v => ({ ...v, [f.key]: e.target.value }))}
+              style={{ width: '100%', padding: '10px 12px', border: '1.5px solid var(--line)', borderRadius: 10, boxSizing: 'border-box' }}
+            />
+          </label>
+        ))}
+      </div>
     </>
   );
 }
@@ -131,6 +249,12 @@ function ProfileBlock({ dimEntry, data, roleLabel, mode, compliance }) {
           <ul className="clean">{data.strength.map((x, i) => <li key={i}>{L(x)}</li>)}</ul>
           <h4>{t('report.fullWatchHeading')}</h4>
           <ul className="clean">{data.watch.map((x, i) => <li key={i}>{L(x)}</li>)}</ul>
+          {ACTIVATION[dimEntry.key] && (
+            <>
+              <h4>{t('report.activationHeading')}</h4>
+              <ul className="clean">{ACTIVATION[dimEntry.key].map((x, i) => <li key={i}>{L(x)}</li>)}</ul>
+            </>
+          )}
         </>
       )}
       {mode === 'backup' && (
@@ -233,6 +357,8 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
         <ProfileBlock dimEntry={dim[developArea]} data={profiles.develop} roleLabel={t('report.roleDevelop')} mode="develop" compliance={compliance} />
       </div>
 
+      <WholeLeader dim={dim} dominant={dominant} backup={backup} developArea={developArea} />
+
       <div className="sec-title">{t('report.orgTitle')}</div>
       <div className="card pad">
         <p style={{ margin: '0 0 6px', fontSize: 14.5, color: 'var(--text)' }}>{t('report.orgIntro')}</p>
@@ -283,6 +409,7 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
         <p style={{ margin: '0 0 14px', fontSize: 14.5, color: 'var(--text)' }}>
           {tf('report.planIntro', { developArea: L(dim[developArea].label) })}
         </p>
+        <p style={{ margin: '0 0 14px', fontSize: 14, color: 'var(--muted)' }}>{t('report.planRule')}</p>
         {planPhases.map((phase, i) => (
           <div key={phase.key} style={i > 0 ? { marginTop: 16 } : undefined}>
             <h4 style={{ color: dim[developArea].color }}>{phase.label}</h4>
@@ -299,7 +426,15 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
             <li key={i}>{interpolate(L(q), debriefVars)}</li>
           ))}
         </ol>
+        {DIAGNOSTIC_QUESTIONS[developArea] && (
+          <>
+            <h4 style={{ marginTop: 14 }}>{tf('report.diagnosticHeading', { developArea: L(dim[developArea].label) })}</h4>
+            <ul className="clean">{DIAGNOSTIC_QUESTIONS[developArea].map((q, i) => <li key={i}>{L(q)}</li>)}</ul>
+          </>
+        )}
       </div>
+
+      <PurposeStatement />
 
       <div className="disclaimer">
         <b>{t('report.disclaimerHeading')}</b> {t('report.disclaimerBody')}

@@ -149,6 +149,26 @@ and `0003_fbw_360_hardening.sql` (fixes below).
   reflective use; would need per-rater one-time tokens to close — revisit
   if this tool is ever used for Prompt 8 (talent review).
 
+## Course-deck report content (Anatomy: Function · Being · Will)
+
+Report sections drawn from Shadi's course deck (Part 04), all in
+`src/data/modelInsights.js` and `src/data/archetypes.js`:
+
+- **Reading the whole leader**: the result of combining the two main styles, what is missing,
+  crisis vignette, feedback and change pressure tests. Keyed by `developArea`
+  only — the self-score is ipsative, so nothing here claims an absolute
+  High/Low level. Lines marked "derived" in the data file are not on the
+  slides verbatim.
+- **Strength activation** (dominant profile block), **diagnostic questions**
+  (manager debrief, growth edge), **develop-the-lowest-axis** line (plan),
+  **purpose statement** (three inputs, component state only — never saved).
+- **Archetypes (slide 35 names)**: shown **only from 360 rater scores**
+  (`src/lib/archetype.js`), never from self-report, because forced-choice
+  scores can't reach HHH or LLL. High = averaged rater sum ≥ 7 of 9, reusing
+  the app's existing "High" bucket; the deck gives no numeric cut-off.
+- `ReportScreen` is lazy-loaded in `App.jsx` (prefetched on mount) to keep
+  the main chunk under Vite's 500kB warning.
+
 ## Data-protection checklist (Prompt 8)
 
 Before deploying anything that stores 360/team/longitudinal/talent-review
