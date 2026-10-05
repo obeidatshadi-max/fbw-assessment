@@ -39,6 +39,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
       <div className="hero-brand">
         <div className="hero-brand-kicker">{t('brand.kicker')}</div>
         <div className="hero-brand-name">{t('brand.name')}</div>
+        <div className="hero-brand-method">{t('brand.method')}</div>
         <div className="hero-brand-bar" />
       </div>
 
@@ -63,6 +64,15 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
           <li>{t('intro.compareScenarios')}</li>
           <li>{t('intro.compareTeam')}</li>
           <li>{t('intro.compareFollowThrough')}</li>
+        </ul>
+      </div>
+
+      <div className="note" style={{ marginTop: 16 }}>
+        <b>{t('intro.includesHeading')}</b>
+        <ul className="clean" style={{ marginTop: 8 }}>
+          {['includesProfile', 'includesWhole', 'includesStrength', 'includesPlan', 'includesArchetype'].map(key => (
+            <li key={key}>{t(`intro.${key}`)}</li>
+          ))}
         </ul>
       </div>
 
@@ -98,7 +108,7 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
           <li>{t('intro.note2')}</li>
           <li>{t('intro.note3')}</li>
           <li>{tf('intro.note4', { n: 9 })}</li>
-          <li>{tf('intro.note5', { minutes: 7 })}</li>
+          <li>{tf('intro.note5', { minutes: 10 })}</li>
           <li>{t('intro.note6')}</li>
         </ul>
       </div>

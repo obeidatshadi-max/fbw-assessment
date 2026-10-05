@@ -2,8 +2,13 @@
 
 ## What this is
 Single-file, mobile-first leadership self-assessment. Vanilla HTML/CSS/JS,
-no build step, no backend, no data storage. Brand: "Integral Leadership
-Dynamics™ — Function · Being · Will."
+no build step, no backend, no data storage. Brand: "Anatomy of Leadership"
+(umbrella for several leader assessments) — this tool is "Function · Being ·
+Will — where do you lead from?". The brand mark stays in English in the
+Arabic UI too. "Integral Leadership Dynamics™" is the
+methodology, shown as a subtitle ("Built on the Integral Leadership
+Dynamics™ framework", `brand.method`) on the home page and report, and
+in the report disclaimer and privacy intro.
 
 ## Data model (in `fbw-assessment.html`, top of `<script>`)
 
@@ -140,7 +145,8 @@ and `0003_fbw_360_hardening.sql` (fixes below).
   leader's links — caught in review before ship.)
 - **Score comparability**: self scores are ipsative (forced-choice, sum to
   15 across F/B/W); rater scores are Likert sums (3-9 per dimension). Both
-  are converted to "% of profile" before comparing — see
+  are put on the same basis before comparing (F/B/W as share of the F+B+W
+  total on both sides; compliance as (score-3)/6 on both sides) — see
   `src/lib/raterScoring.js` and
   `docs/superpowers/specs/2026-08-26-prompt4-360-design.md` for the exact
   math. This is an approximation, documented in the report copy.
@@ -148,6 +154,26 @@ and `0003_fbw_360_hardening.sql` (fixes below).
   person submitting more than once. Acceptable for this low-stakes,
   reflective use; would need per-rater one-time tokens to close — revisit
   if this tool is ever used for Prompt 8 (talent review).
+
+## Course-deck report content (Anatomy: Function · Being · Will)
+
+Report sections drawn from Shadi's course deck (Part 04), all in
+`src/data/modelInsights.js` and `src/data/archetypes.js`:
+
+- **Reading the whole leader**: the result of combining the two main styles, what is missing,
+  crisis vignette, feedback and change pressure tests. Keyed by `developArea`
+  only — the self-score is ipsative, so nothing here claims an absolute
+  High/Low level. Lines marked "derived" in the data file are not on the
+  slides verbatim.
+- **Strength activation** (dominant profile block), **diagnostic questions**
+  (manager debrief, growth edge), **develop-the-lowest-axis** line (plan),
+  **purpose statement** (three inputs, component state only — never saved).
+- **Archetypes (slide 35 names)**: shown **only from 360 rater scores**
+  (`src/lib/archetype.js`), never from self-report, because forced-choice
+  scores can't reach HHH or LLL. High = averaged rater sum ≥ 7 of 9, reusing
+  the app's existing "High" bucket; the deck gives no numeric cut-off.
+- `ReportScreen` is lazy-loaded in `App.jsx` (prefetched on mount) to keep
+  the main chunk under Vite's 500kB warning.
 
 ## Data-protection checklist (Prompt 8)
 
@@ -186,3 +212,8 @@ data to a new country or customer:
       notes alone.
 
 This checklist is a reminder to verify, not a substitute for verifying.
+
+## Git workflow
+- After finishing a task and confirming it works, open a pull request and merge it into master yourself.
+- Do not ask me to merge manually.
+- If a merge conflict or failing check appears, stop and tell me instead of forcing it.

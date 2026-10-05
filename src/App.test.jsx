@@ -8,7 +8,8 @@ import { COMPLIANCE_ITEMS } from './data/complianceItems.js';
 import { DIM } from './data/dimensions.js';
 import { buildReportData } from './lib/scoring.js';
 
-function completeFullFlow() {
+// The report screen is lazy-loaded (see App.jsx), so wait for it to mount.
+async function completeFullFlow() {
   fireEvent.click(screen.getByText('Start the reflection'));
 
   for (let i = 0; i < SCENARIOS.length; i++) {
@@ -31,6 +32,7 @@ function completeFullFlow() {
     fireEvent.click(oftenButtons[i]);
   }
   fireEvent.click(screen.getByText('See my report'));
+  await screen.findByText('The Function · Being · Will Matrix');
 }
 
 function checkStoreConsent() {
@@ -38,10 +40,10 @@ function checkStoreConsent() {
 }
 
 describe('App', () => {
-  it('walks the full flow and renders a report matching buildReportData directly', () => {
+  it('walks the full flow and renders a report matching buildReportData directly', async () => {
     render(<App />);
     fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'general' } });
-    completeFullFlow();
+    await completeFullFlow();
 
     const expectedAnswers = SCENARIOS.map(() => ({ most: 0, least: 1 }));
     const expectedOrgAnswers = ORG_ITEMS.map(() => 3);
@@ -54,16 +56,16 @@ describe('App', () => {
     expect(screen.getAllByText(DIM[expected.dominant].label.en, { exact: false }).length).toBeGreaterThan(0);
   });
 
-  it('shows the compliance courage line inside the Will profile block', () => {
+  it('shows the compliance courage line inside the Will profile block', async () => {
     render(<App />);
-    completeFullFlow();
+    await completeFullFlow();
     expect(screen.getByText('Compliance courage')).toBeInTheDocument();
     expect(screen.getByText('A strength to protect.')).toBeInTheDocument();
   });
 
-  it('restarts back to the intro screen', () => {
+  it('restarts back to the intro screen', async () => {
     render(<App />);
-    completeFullFlow();
+    await completeFullFlow();
     fireEvent.click(screen.getByText('Start again'));
     expect(screen.getByText('Where do you lead from?')).toBeInTheDocument();
   });
@@ -128,7 +130,7 @@ describe('App with a fake auth adapter', () => {
     };
 
     render(<App authAdapter={fakeAdapter} />);
-    completeFullFlow();
+    await completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
@@ -156,7 +158,7 @@ describe('App with a fake auth adapter', () => {
     };
 
     render(<App authAdapter={fakeAdapter} />);
-    completeFullFlow();
+    await completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
@@ -189,7 +191,7 @@ describe('App with a fake auth adapter', () => {
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
     await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
     await screen.findByText('Joined — your result will count toward this team.');
-    completeFullFlow();
+    await completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
@@ -217,7 +219,7 @@ describe('App with a fake auth adapter', () => {
     fireEvent.change(screen.getByPlaceholderText('e.g. A1B2C3'), { target: { value: 'ab12cd' } });
     await waitFor(() => expect(fakeAdapter.validateCode).toHaveBeenCalled());
     await screen.findByText('Joined — your result will count toward this live session.');
-    completeFullFlow();
+    await completeFullFlow();
 
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
