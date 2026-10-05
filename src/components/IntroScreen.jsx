@@ -66,6 +66,15 @@ export default function IntroScreen({ onStart, authAdapter = noopAuthAdapter }) 
         </ul>
       </div>
 
+      <div className="note" style={{ marginTop: 16 }}>
+        <b>{t('intro.includesHeading')}</b>
+        <ul className="clean" style={{ marginTop: 8 }}>
+          {['includesProfile', 'includesWhole', 'includesStrength', 'includesPlan', 'includesArchetype'].map(key => (
+            <li key={key}>{t(`intro.${key}`)}</li>
+          ))}
+        </ul>
+      </div>
+
       <p style={{ fontSize: 13, color: 'var(--muted)', margin: '12px 0 0' }}>{t('intro.trustLine')}</p>
 
       <div style={{ textAlign: 'center', margin: '26px 0' }}>

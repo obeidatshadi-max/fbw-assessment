@@ -13,6 +13,13 @@ describe('IntroScreen', () => {
     expect(screen.getByText('Will')).toBeInTheDocument();
   });
 
+  it('lists what the report includes, including the 360 archetype', () => {
+    render(<IntroScreen onStart={() => {}} />);
+    expect(screen.getByText('What your report includes')).toBeInTheDocument();
+    expect(screen.getByText(/plays out in a crisis/)).toBeInTheDocument();
+    expect(screen.getByText(/leadership archetype as others see you — for example/)).toBeInTheDocument();
+  });
+
   it('tells people up front that it takes about ten minutes', () => {
     render(<IntroScreen onStart={() => {}} />);
     expect(screen.getByText(/Takes about 10 minutes\./)).toBeInTheDocument();
