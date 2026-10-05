@@ -2,8 +2,11 @@
 
 ## What this is
 Single-file, mobile-first leadership self-assessment. Vanilla HTML/CSS/JS,
-no build step, no backend, no data storage. Brand: "Integral Leadership
-Dynamics™ — Function · Being · Will."
+no build step, no backend, no data storage. Brand: "Anatomy of Leadership"
+(umbrella for several leader assessments) — this tool is "Function · Being ·
+Will — where do you lead from?". The brand mark stays in English in the
+Arabic UI too. "Integral Leadership Dynamics™" is kept only as the
+methodology name (report disclaimer, privacy intro).
 
 ## Data model (in `fbw-assessment.html`, top of `<script>`)
 
