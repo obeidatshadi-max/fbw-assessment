@@ -36,7 +36,7 @@ describe('ReportScreen', () => {
     const { container } = render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
     const masthead = container.querySelector('.print-header');
     expect(masthead).not.toBeNull();
-    expect(masthead.textContent).toContain('Integral Leadership Dynamics™ · Function · Being · Will');
+    expect(masthead.textContent).toContain('Anatomy of Leadership · Function · Being · Will');
     expect(masthead.querySelector('.metaline').textContent.length).toBeGreaterThan(0);
   });
 

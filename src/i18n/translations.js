@@ -48,7 +48,7 @@ function getPath(obj, path) {
 export const UI = {
   en: {
     lang: { en: 'EN', ar: 'AR' },
-    brand: { kicker: 'Integral Leadership Dynamics™', name: 'Function · Being · Will' },
+    brand: { kicker: 'Anatomy of Leadership', name: 'Function · Being · Will' },
     footer: { developedBy: 'Developed by', privacyLink: 'Privacy Policy', termsLink: 'Terms of Service', managerLink: 'Manager? Create a team code' },
     intro: {
       eyebrow: 'Leadership self-reflection',
@@ -206,7 +206,7 @@ export const UI = {
       disclaimerBody: 'This is a structured self-reflection tool built on the Integral Leadership Dynamics™ framework. It is not a validated psychometric test. Because you choose between options, your scores are relative to your own answers only — they show which style you lean to more than the others, and they cannot be compared to other people or read as percentiles. Your results describe how you answered today and can be shaped by your current role, mood, and workplace. Use it to start reflection and conversation, not as a final judgment.',
       startAgain: 'Start again',
       savePrint: 'Save / print',
-      footer: 'Integral Leadership Dynamics™ · Function · Being · Will',
+      footer: 'Anatomy of Leadership · Function · Being · Will',
       inviteHeading: 'Get feedback from others',
       inviteBody: 'See how your self-view compares to how others experience you. Generate a link and share it with a few people who work with you — direct reports, your manager, peers.',
       inviteGenerate: 'Generate feedback link',
@@ -384,7 +384,7 @@ export const UI = {
       backLink: 'Back to the assessment',
       privacyTitle: 'Privacy Policy',
       privacyUpdated: 'Last updated: {date}',
-      privacyIntro: 'This tool ("Function · Being · Will", part of Integral Leadership Dynamics™) is a personal leadership self-reflection tool. This page explains what information it collects, why, and how you can remove it.',
+      privacyIntro: 'This tool ("Function · Being · Will", part of Anatomy of Leadership and built on the Integral Leadership Dynamics™ framework) is a personal leadership self-reflection tool. This page explains what information it collects, why, and how you can remove it.',
       privacyCollectHeading: 'What we collect',
       privacyCollect1: 'Account: the email address and password you choose when you sign in or create an account.',
       privacyCollect2: 'Your self-assessment answers and the report generated from them — only if you choose to save your report and give consent to store it.',
@@ -432,7 +432,7 @@ export const UI = {
 
   ar: {
     lang: { en: 'EN', ar: 'AR' },
-    brand: { kicker: 'ديناميكيات القيادة المتكاملة™', name: 'الوظيفة · الكينونة · الإرادة' },
+    brand: { kicker: 'Anatomy of Leadership', name: 'الوظيفة · الكينونة · الإرادة' },
     footer: { developedBy: 'تطوير', privacyLink: 'سياسة الخصوصية', termsLink: 'شروط الخدمة', managerLink: 'مدير؟ أنشئ رمز فريق' },
     intro: {
       eyebrow: 'تأمّل ذاتي في القيادة',
@@ -590,7 +590,7 @@ export const UI = {
       disclaimerBody: 'هذه أداة تأمل ذاتي منظمة مبنية على إطار ديناميكيات القيادة المتكاملة™. وهي ليست اختباراً نفسياً معتمداً. ولأنك تختار بين خيارات، فإن درجاتك نسبية لإجاباتك أنت فقط — فهي تُظهر أي نمط تميل إليه أكثر من غيره، ولا يمكن مقارنتها بالآخرين أو قراءتها كنسب مئوية. تصف نتائجك كيف أجبت اليوم، وقد تتأثر بدورك الحالي ومزاجك ومكان عملك. استخدمها لبدء التأمل والحوار، لا كحكم نهائي.',
       startAgain: 'ابدأ من جديد',
       savePrint: 'حفظ / طباعة',
-      footer: 'ديناميكيات القيادة المتكاملة™ · الوظيفة · الكينونة · الإرادة',
+      footer: 'Anatomy of Leadership · الوظيفة · الكينونة · الإرادة',
       inviteHeading: 'احصل على آراء الآخرين',
       inviteBody: 'قارن بين رؤيتك لنفسك وكيف يراك من حولك. أنشئ رابطاً وشاركه مع أشخاص يعملون معك — مرؤوسون، مديرك، زملاء.',
       inviteGenerate: 'إنشاء رابط لجمع الآراء',
@@ -768,7 +768,7 @@ export const UI = {
       backLink: 'العودة إلى التقييم',
       privacyTitle: 'سياسة الخصوصية',
       privacyUpdated: 'آخر تحديث: {date}',
-      privacyIntro: 'هذه الأداة ("الوظيفة · الكينونة · الإرادة"، جزء من ديناميكيات القيادة المتكاملة™) هي أداة تأمل ذاتي شخصية في القيادة. توضح هذه الصفحة ما تجمعه من معلومات، ولماذا، وكيف يمكنك حذفها.',
+      privacyIntro: 'هذه الأداة ("الوظيفة · الكينونة · الإرادة"، جزء من Anatomy of Leadership ومبنية على إطار ديناميكيات القيادة المتكاملة™) هي أداة تأمل ذاتي شخصية في القيادة. توضح هذه الصفحة ما تجمعه من معلومات، ولماذا، وكيف يمكنك حذفها.',
       privacyCollectHeading: 'ما الذي نجمعه',
       privacyCollect1: 'الحساب: عنوان بريدك الإلكتروني وكلمة المرور التي تختارها عند تسجيل الدخول أو إنشاء حساب.',
       privacyCollect2: 'إجابات تقييمك الذاتي والتقرير الناتج عنها — فقط إذا اخترت حفظ تقريرك ووافقت على تخزينه.',
