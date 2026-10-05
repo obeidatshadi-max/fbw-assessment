@@ -298,6 +298,7 @@ export default function ReportScreen({ reportData, dim, authState, raterLink, on
       </div>
       <div className="eyebrow">{t('report.eyebrow')}</div>
       <h1 style={{ fontSize: 'clamp(26px,6.5vw,36px)', marginBottom: 6 }}>{t('report.title')}</h1>
+      <p className="hero-brand-method" style={{ margin: '0 0 10px' }}>{t('brand.method')}</p>
       <p className="lead" style={{ marginBottom: 8 }}>
         {tf('report.lead', { dominant: L(dim[dominant].label), backup: L(dim[backup].label), developArea: L(dim[developArea].label) })}
       </p>
