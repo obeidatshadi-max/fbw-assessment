@@ -57,7 +57,7 @@ describe('ReportScreen', () => {
     expect(screen.getByText('Day 1–30')).toBeInTheDocument();
     expect(screen.getByText('Day 31–60')).toBeInTheDocument();
     expect(screen.getByText('Day 61–90')).toBeInTheDocument();
-    expect(screen.getByText('Manager debrief guide')).toBeInTheDocument();
+    expect(screen.getByText('Guide for a talk with your manager')).toBeInTheDocument();
     const dominantLabel = dim[reportData.dominant].label;
     const developLabel = dim[reportData.developArea].label;
     expect(screen.getByText(`Does your ${dominantLabel} profile feel accurate to you? Give one recent example.`)).toBeInTheDocument();
@@ -78,7 +78,7 @@ describe('ReportScreen', () => {
 
   it('renders the whole-leader section keyed by the growth edge, and strength activation for the dominant style', () => {
     render(<ReportScreen reportData={reportData} dim={dim} authState={{ status: 'anon' }} onRestart={() => {}} onPrint={() => {}} onSignIn={() => {}} />);
-    expect(screen.getByText('Reading the whole leader')).toBeInTheDocument();
+    expect(screen.getByText('Seeing the whole leader')).toBeInTheDocument();
     expect(screen.getByText('Your style in a crisis')).toBeInTheDocument();
     expect(screen.getByText('When you receive critical feedback')).toBeInTheDocument();
     expect(screen.getByText('When you lead change')).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('ReportScreen', () => {
         onCreateRaterLink={() => {}} onRefreshRaterSummary={() => {}}
       />
     );
-    expect(screen.getByText('Your leadership archetype (as others see you)')).toBeInTheDocument();
+    expect(screen.getByText('Your leadership type (as others see you)')).toBeInTheDocument();
     expect(screen.getByText('Forceful Driver')).toBeInTheDocument();
     expect(screen.getByText('Burnout, politics, conflict')).toBeInTheDocument();
   });
@@ -117,7 +117,7 @@ describe('ReportScreen', () => {
         onCreateRaterLink={() => {}} onRefreshRaterSummary={() => {}}
       />
     );
-    expect(screen.queryByText('Your leadership archetype (as others see you)')).not.toBeInTheDocument();
+    expect(screen.queryByText('Your leadership type (as others see you)')).not.toBeInTheDocument();
   });
 
   it('renders a fully localized Arabic report using the real content banks', () => {

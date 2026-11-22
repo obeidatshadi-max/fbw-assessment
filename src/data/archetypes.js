@@ -16,8 +16,8 @@ export const ARCHETYPES = {
     name: { en: 'Transformational Leader', ar: 'القائد التحويلي' },
     sentence: { en: '"Understand, decide, act."', ar: '"افهم، قرّر، تصرّف."' },
     strength: { en: 'Inspires, executes, develops others', ar: 'يُلهم، وينفّذ، ويطوّر الآخرين' },
-    shadow: { en: 'Can overextend', ar: 'قد يُجهد نفسه أكثر من طاقته' },
-    develop: { en: 'Sustain & mentor others', ar: 'الاستدامة وتوجيه الآخرين' },
+    shadow: { en: 'Can take on too much', ar: 'قد يُجهد نفسه أكثر من طاقته' },
+    develop: { en: 'Keep it going & mentor others', ar: 'الاستدامة وتوجيه الآخرين' },
   },
   HHL: {
     name: { en: 'Wise Administrator', ar: 'الإداري الحكيم' },
@@ -36,7 +36,7 @@ export const ARCHETYPES = {
     name: { en: 'Technical Expert', ar: 'الخبير التقني' },
     sentence: { en: '"I know how."', ar: '"أعرف كيف."' },
     strength: { en: 'Competent specialist', ar: 'متخصص كفء' },
-    shadow: { en: 'Detached, low leadership impact', ar: 'منفصل، وأثر قيادي محدود' },
+    shadow: { en: 'Distant from people, little impact as a leader', ar: 'منفصل، وأثر قيادي محدود' },
     develop: { en: 'Being & Will', ar: 'الكينونة والإرادة' },
   },
   LHH: {
@@ -59,8 +59,8 @@ export const ARCHETYPES = {
   },
   LLL: {
     name: { en: 'Disengaged Manager', ar: 'المدير غير المنخرط' },
-    strength: { en: 'Minimal risk, status quo', ar: 'مخاطرة دنيا، والحفاظ على الوضع القائم' },
-    shadow: { en: 'Stagnation, low impact', ar: 'الركود، وأثر محدود' },
+    strength: { en: 'Low risk, keeps things as they are', ar: 'مخاطرة دنيا، والحفاظ على الوضع القائم' },
+    shadow: { en: 'Nothing moves forward, little impact', ar: 'الركود، وأثر محدود' },
     develop: { en: 'All dimensions', ar: 'جميع الأبعاد' },
   },
 };

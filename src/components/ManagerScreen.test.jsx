@@ -91,7 +91,7 @@ describe('ManagerScreen', () => {
       imbalance: { high: 'F', low: 'W' },
     });
     expect(screen.getByText('Team pattern')).toBeInTheDocument();
-    expect(screen.getByText('Function is strong (50%), Will is low (18%) across the team — a rule-of-thumb signal, not a statistical finding.')).toBeInTheDocument();
+    expect(screen.getByText('Function is strong (50%) and Will is low (18%) across the team. This is a simple guide, not a statistical result.')).toBeInTheDocument();
   });
 
   it('shows the no-flag message when imbalance is null but the dashboard is revealed', () => {
@@ -101,7 +101,7 @@ describe('ManagerScreen', () => {
       summary: { count: 5, distribution: { F: 34, B: 33, W: 33, C: 60 }, roleBreakdown: { rep: 5 } },
       imbalance: null,
     });
-    expect(screen.getByText('No strong imbalance detected across the team.')).toBeInTheDocument();
+    expect(screen.getByText('No big imbalance found across the team.')).toBeInTheDocument();
   });
 
   it('shows no team switcher when the manager has only one team', () => {

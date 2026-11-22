@@ -13,7 +13,7 @@
 // deliberately non-judgmental (a low score is "an area to build", never a
 // finding or a violation).
 export const COMPLIANCE_ITEMS = [
-  { t: { en: 'I speak up when I notice an HCP interaction that feels off, even if no one else raises it.', ar: 'أُعبّر عن رأيي عندما ألاحظ تفاعلاً مع أحد الأطباء أو الصيادلة أو الكوادر الصحية يبدو غير سليم، حتى لو لم يُثِر أحد آخر الأمر.' }, d: 'W' },
+  { t: { en: 'I speak up when something in a meeting with a doctor or other HCP feels wrong, even if no one else says anything.', ar: 'أُعبّر عن رأيي عندما ألاحظ تفاعلاً مع أحد الأطباء أو الصيادلة أو الكوادر الصحية يبدو غير سليم، حتى لو لم يُثِر أحد آخر الأمر.' }, d: 'W' },
   { t: { en: 'I report an adverse event promptly, even when it is inconvenient or slows things down.', ar: 'أُبلّغ عن حدث دوائي ضار فوراً، حتى لو كان ذلك غير مريح أو يُبطئ الأمور.' }, d: 'W' },
-  { t: { en: 'I escalate it when I see a colleague or distributor cutting corners to hit a number.', ar: 'أُصعّد الأمر عندما أرى زميلاً أو موزّعاً يتحايل لتحقيق رقم مستهدف.' }, d: 'W' },
+  { t: { en: 'I report it to the right person when I see a colleague or distributor breaking rules to hit a target.', ar: 'أُصعّد الأمر عندما أرى زميلاً أو موزّعاً يتحايل لتحقيق رقم مستهدف.' }, d: 'W' },
 ];

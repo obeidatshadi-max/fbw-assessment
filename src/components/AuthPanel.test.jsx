@@ -30,7 +30,7 @@ describe('AuthPanel', () => {
     fireEvent.change(screen.getByPlaceholderText('you@company.com'), { target: { value: 'a@b.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password (min 8 characters)'), { target: { value: 'secret123' } });
     checkStoreConsent();
-    fireEvent.click(screen.getByLabelText('Track my results over time so I can see my own change'));
+    fireEvent.click(screen.getByLabelText('Keep my results over time so I can see how I change'));
     fireEvent.click(screen.getByText('Sign in'));
     expect(onSignIn).toHaveBeenCalledWith('a@b.com', 'secret123', { storeResults: true, longitudinalTracking: true, shareWithManager: false });
   });
@@ -132,7 +132,7 @@ describe('AuthPanel', () => {
     const onConfirmConsent = vi.fn();
     render(<AuthPanel authState={{ status: 'needsConsent', userId: 'u1' }} onSignIn={() => {}} onCreateAccount={() => {}} onRequestReset={() => {}} onConfirmConsent={onConfirmConsent} />);
     fireEvent.click(screen.getByLabelText('Store my results so I can see this report again'));
-    fireEvent.click(screen.getByLabelText('Share a summary with my manager/HR for talent review'));
+    fireEvent.click(screen.getByLabelText('Share a summary with my manager or HR for talent reviews'));
     fireEvent.click(screen.getByText('Continue'));
     expect(onConfirmConsent).toHaveBeenCalledWith({ storeResults: true, longitudinalTracking: false, shareWithManager: true });
   });

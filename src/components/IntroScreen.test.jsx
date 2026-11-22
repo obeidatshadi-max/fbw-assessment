@@ -16,8 +16,8 @@ describe('IntroScreen', () => {
   it('lists what the report includes, including the 360 archetype', () => {
     render(<IntroScreen onStart={() => {}} />);
     expect(screen.getByText('What your report includes')).toBeInTheDocument();
-    expect(screen.getByText(/plays out in a crisis/)).toBeInTheDocument();
-    expect(screen.getByText(/leadership archetype as others see you — for example/)).toBeInTheDocument();
+    expect(screen.getByText(/shows up in a crisis/)).toBeInTheDocument();
+    expect(screen.getByText(/leadership type as others see it. For example/)).toBeInTheDocument();
   });
 
   it('shows the Integral Leadership Dynamics framework as a subtitle under the brand', () => {
@@ -42,10 +42,10 @@ describe('IntroScreen', () => {
     const onStart = vi.fn();
     render(<IntroScreen onStart={onStart} />);
     fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'general' } });
-    expect(screen.queryByText(/early draft for this role/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/early draft/)).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText('Your role'), { target: { value: 'marketing' } });
-    expect(screen.getByText(/early draft for this role/)).toBeInTheDocument();
+    expect(screen.getByText(/early draft/)).toBeInTheDocument();
 
     screen.getByText('Start the reflection').click();
     expect(onStart).toHaveBeenCalledWith('marketing', null);

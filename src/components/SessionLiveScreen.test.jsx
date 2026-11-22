@@ -57,7 +57,7 @@ describe('SessionLiveScreen', () => {
     });
     expect(screen.getByText('Live results')).toBeInTheDocument();
     expect(screen.getByText('Discussion cards')).toBeInTheDocument();
-    expect(screen.getByText('This room delivers. Where have you personally held back from a hard call recently?')).toBeInTheDocument();
+    expect(screen.getByText('This group gets things done. When did you recently avoid a hard decision?')).toBeInTheDocument();
   });
 
   it('shows the balanced discussion cards when there is no imbalance', () => {
@@ -66,7 +66,7 @@ describe('SessionLiveScreen', () => {
       summary: { count: 5, distribution: { F: 34, B: 33, W: 33, C: 60 }, roleBreakdown: { rep: 5 } },
       imbalance: null,
     });
-    expect(screen.getByText('No single pattern dominates this room — where is that a strength, and where might it blur ownership?')).toBeInTheDocument();
+    expect(screen.getByText('No single style leads in this group. Where is that a strength? Where might it make it unclear who is responsible?')).toBeInTheDocument();
   });
 
   it('calls onEndSession when the end-session button is clicked', () => {

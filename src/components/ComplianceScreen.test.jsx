@@ -13,7 +13,7 @@ describe('ComplianceScreen', () => {
     render(<ComplianceScreen items={items} answers={[null, null]} onSelect={() => {}} />);
     expect(screen.getByText('1. I speak up when something feels off.')).toBeInTheDocument();
     expect(screen.getAllByText('Often')).toHaveLength(2);
-    expect(screen.getByText('This is self-reflection, not a compliance assessment or an audit.')).toBeInTheDocument();
+    expect(screen.getByText('This is for your own reflection. It is not a compliance check or an audit.')).toBeInTheDocument();
   });
 
   it('calls onSelect with the item index and value', () => {

@@ -166,7 +166,7 @@ describe('App with a fake auth adapter', () => {
     fireEvent.click(screen.getByText('Sign in'));
     await act(async () => { await authCallback({ user: { id: 'user-123' } }); });
 
-    fireEvent.click(await screen.findByText('Generate feedback link'));
+    fireEvent.click(await screen.findByText('Create feedback link'));
     expect(await screen.findByDisplayValue(/\/rate\/link-1$/)).toBeInTheDocument();
     expect(fakeAdapter.createRaterLink).toHaveBeenCalledWith({ assessmentId: 'assess-1', userId: 'user-123' });
 
