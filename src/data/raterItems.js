@@ -18,5 +18,5 @@ export const RATER_ITEMS = [
   { t: { en: 'Makes brave decisions when it matters.', ar: 'يتخذ قرارات جريئة عند الحاجة.' }, d: 'W' },
   { t: { en: 'Speaks up about questionable behavior, even when it is uncomfortable.', ar: 'يتحدث بصراحة عن السلوك المشكوك فيه حتى عندما يكون ذلك غير مريح.' }, d: 'C' },
   { t: { en: 'Reports problems honestly instead of hiding them.', ar: 'يبلّغ عن المشكلات بصدق بدلاً من إخفائها.' }, d: 'C' },
-  { t: { en: 'Holds the line on doing things the right way, even under pressure to cut corners.', ar: 'يتمسك بفعل الأمور بالطريقة الصحيحة حتى تحت ضغط الاختصار.' }, d: 'C' },
+  { t: { en: 'Keeps doing things the right way, even under pressure to break the rules.', ar: 'يتمسك بفعل الأمور بالطريقة الصحيحة حتى تحت ضغط الاختصار.' }, d: 'C' },
 ];

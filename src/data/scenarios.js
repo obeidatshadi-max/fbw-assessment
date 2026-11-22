@@ -5,17 +5,17 @@ export const SCENARIOS = [
   { s: { en: "A project is falling behind schedule.", ar: "مشروع بدأ يتأخر عن الجدول الزمني." }, opts: [
       { t: { en: "I fix the plan and processes to get back on track.", ar: "أصلح الخطة والإجراءات للعودة إلى المسار الصحيح." }, d: "F" },
       { t: { en: "I check how the team feels and rebuild their energy.", ar: "أتحقق من شعور الفريق وأعيد بناء طاقتهم." }, d: "B" },
-      { t: { en: "I recommit everyone to the goal and push forward.", ar: "أُعيد التزام الجميع بالهدف وأدفع قدماً." }, d: "W" } ] },
+      { t: { en: "I get everyone committed to the goal again and push forward.", ar: "أُعيد التزام الجميع بالهدف وأدفع قدماً." }, d: "W" } ] },
   { s: { en: "You receive hard feedback about yourself.", ar: "تتلقى ملاحظات صعبة عن نفسك." }, opts: [
       { t: { en: "I reflect on what it says about who I am.", ar: "أتأمل فيما تقوله هذه الملاحظات عن هويتي." }, d: "B" },
       { t: { en: "I decide what to change and act on it.", ar: "أقرر ما يجب تغييره وأتصرف بناءً عليه." }, d: "W" },
       { t: { en: "I study which skills I need to improve.", ar: "أدرس المهارات التي أحتاج إلى تحسينها." }, d: "F" } ] },
   { s: { en: "A risky new opportunity appears.", ar: "تظهر فرصة جديدة محفوفة بالمخاطر." }, opts: [
-      { t: { en: "I feel the pull of the purpose and want to go for it.", ar: "أشعر بجاذبية الهدف وأريد خوض التجربة." }, d: "W" },
+      { t: { en: "I feel drawn by the purpose and want to go for it.", ar: "أشعر بجاذبية الهدف وأريد خوض التجربة." }, d: "W" },
       { t: { en: "I check if we truly have the ability to deliver it.", ar: "أتحقق مما إذا كانت لدينا القدرة الحقيقية على تحقيقها." }, d: "F" },
       { t: { en: "I ask if it fits our values and who we want to be.", ar: "أتساءل إن كانت تتوافق مع قيمنا ومن نريد أن نكون." }, d: "B" } ] },
   { s: { en: "There is tension in an important meeting.", ar: "هناك توتر في اجتماع مهم." }, opts: [
-      { t: { en: "I stay calm and hold a steady, safe presence.", ar: "أبقى هادئاً وأحافظ على حضور ثابت وآمن." }, d: "B" },
+      { t: { en: "I stay calm and help people feel safe.", ar: "أبقى هادئاً وأحافظ على حضور ثابت وآمن." }, d: "B" },
       { t: { en: "I bring structure and facts to solve the problem.", ar: "أُدخل التنظيم والحقائق لحل المشكلة." }, d: "F" },
       { t: { en: "I name the hard truth, even if it is uncomfortable.", ar: "أُسمّي الحقيقة الصعبة، حتى لو كانت مزعجة." }, d: "W" } ] },
   { s: { en: "You have some free time at work.", ar: "لديك بعض الوقت الحر في العمل." }, opts: [
@@ -29,7 +29,7 @@ export const SCENARIOS = [
   { s: { en: "Your organization faces a big change.", ar: "تواجه مؤسستك تغييراً كبيراً." }, opts: [
       { t: { en: "I help people feel secure during the change.", ar: "أساعد الناس على الشعور بالأمان خلال التغيير." }, d: "B" },
       { t: { en: "I plan the steps and manage the details.", ar: "أخطط للخطوات وأدير التفاصيل." }, d: "F" },
-      { t: { en: "I hold the vision and keep everyone moving to it.", ar: "أتمسك بالرؤية وأُبقي الجميع يتحرك نحوها." }, d: "W" } ] },
+      { t: { en: "I keep the vision clear and keep everyone moving toward it.", ar: "أتمسك بالرؤية وأُبقي الجميع يتحرك نحوها." }, d: "W" } ] },
   { s: { en: "You feel stressed and tired.", ar: "تشعر بالتوتر والإرهاق." }, opts: [
       { t: { en: "I remind myself why this matters and keep going.", ar: "أُذكّر نفسي بأهمية الأمر وأستمر." }, d: "W" },
       { t: { en: "I pause to reconnect with myself and recharge.", ar: "أتوقف لأعيد الاتصال بنفسي واستعيد طاقتي." }, d: "B" },
@@ -53,7 +53,7 @@ export const SCENARIOS = [
   { s: { en: "A plan fails badly.", ar: "تفشل خطة بشكل ذريع." }, opts: [
       { t: { en: "I take responsibility and choose the next bold step.", ar: "أتحمل المسؤولية وأختار الخطوة الجريئة التالية." }, d: "W" },
       { t: { en: "I review what went wrong and fix the method.", ar: "أُراجع ما حدث خطأ وأُصلح الطريقة." }, d: "F" },
-      { t: { en: "I stay grounded and keep the team's spirit up.", ar: "أبقى متزناً وأحافظ على معنويات الفريق." }, d: "B" } ] },
+      { t: { en: "I stay calm and keep the team's spirit up.", ar: "أبقى متزناً وأحافظ على معنويات الفريق." }, d: "B" } ] },
   { s: { en: "Everything is calm and going well.", ar: "كل شيء هادئ ويسير بشكل جيد." }, opts: [
       { t: { en: "I enjoy the connections and the good atmosphere.", ar: "أستمتع بالعلاقات والأجواء الجيدة." }, d: "B" },
       { t: { en: "I set a bigger goal to aim for next.", ar: "أضع هدفاً أكبر أسعى إليه لاحقاً." }, d: "W" },

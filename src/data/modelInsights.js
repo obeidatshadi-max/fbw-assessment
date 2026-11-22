@@ -17,15 +17,15 @@
 export const PAIRING = {
   W: {
     pair: { en: 'Function + Being → a good manager.', ar: 'الوظيفة + الكينونة ← مدير جيد.' },
-    missing: { en: 'When Will is under-used: stability without direction.', ar: 'حين تقلّ الإرادة: استقرار بلا اتجاه.' },
+    missing: { en: 'When Will is used too little: stability with no direction.', ar: 'حين تقلّ الإرادة: استقرار بلا اتجاه.' },
   },
   B: {
     pair: { en: 'Function + Will → a strong performer.', ar: 'الوظيفة + الإرادة ← مؤدٍّ قوي.' },
-    missing: { en: 'When Being is under-used: results with instability.', ar: 'حين تقلّ الكينونة: نتائج مع عدم استقرار.' },
+    missing: { en: 'When Being is used too little: results, but no stability.', ar: 'حين تقلّ الكينونة: نتائج مع عدم استقرار.' },
   },
   F: {
-    pair: { en: 'Being + Will → an inspirational figure.', ar: 'الكينونة + الإرادة ← شخصية مُلهِمة.' },
-    missing: { en: 'When Function is under-used: good intentions, poor results.', ar: 'حين تقلّ الوظيفة: نوايا حسنة ونتائج ضعيفة.' },
+    pair: { en: 'Being + Will → an inspiring person.', ar: 'الكينونة + الإرادة ← شخصية مُلهِمة.' },
+    missing: { en: 'When Function is used too little: good intentions, poor results.', ar: 'حين تقلّ الوظيفة: نوايا حسنة ونتائج ضعيفة.' },
   },
 };
 
@@ -43,7 +43,7 @@ export const CRISIS = {
   },
   F: {
     reflex: { en: '"We can overcome this together."', ar: '"نستطيع تجاوز هذا معاً."' },
-    team: { en: 'Morale holds, but there is no real plan. Execution stalls.', ar: 'تصمد المعنويات، لكن لا توجد خطة حقيقية. يتعثر التنفيذ.' },
+    team: { en: 'The team stays positive, but there is no real plan. Action stops.', ar: 'تصمد المعنويات، لكن لا توجد خطة حقيقية. يتعثر التنفيذ.' },
   },
   W: {
     reflex: { en: '"Let\'s analyse this carefully and wait for a clear direction."', ar: '"لنحلل الأمر بعناية وننتظر توجيهاً واضحاً."' },
@@ -61,7 +61,7 @@ export const CRISIS_FULL = {
 export const FEEDBACK_RISK = {
   B: { en: '"You don\'t understand the situation." — defending instead of listening.', ar: '"أنت لا تفهم الموقف." — الدفاع بدلاً من الإصغاء.' },
   W: { en: '"You may be right…" — and then nothing changes. Reflection without action.', ar: '"قد تكون محقاً…" — ثم لا يتغير شيء. تأمل بلا فعل.' },
-  F: { en: '"I will fix it." — agreeing warmly, without a concrete plan for what will change.', ar: '"سأصلح ذلك." — موافقة ودودة، دون خطة ملموسة لما سيتغير.' },
+  F: { en: '"I will fix it." — agreeing kindly, but with no clear plan for what will change.', ar: '"سأصلح ذلك." — موافقة ودودة، دون خطة ملموسة لما سيتغير.' },
 };
 
 export const FEEDBACK_MATURE = {
@@ -71,12 +71,12 @@ export const FEEDBACK_MATURE = {
 
 export const CHANGE_RISK = {
   B: { en: 'You may push too hard, create resistance, and read disagreement as disloyalty.', ar: 'قد تدفع بقوة مفرطة، وتخلق مقاومة، وتفسّر الاختلاف على أنه عدم ولاء.' },
-  W: { en: 'You may empathise with everyone and avoid the hard call — the change quietly stalls.', ar: 'قد تتعاطف مع الجميع وتتجنب القرار الصعب — فيتوقف التغيير بهدوء.' },
-  F: { en: 'You may build energy for the change while the plan and milestones lag behind — and over-promise.', ar: 'قد تبني الحماس للتغيير بينما تتأخر الخطة والمراحل — وقد تَعِد بأكثر مما يتحقق.' },
+  W: { en: 'You may try to please everyone and avoid the hard decision. The change slowly stops.', ar: 'قد تتعاطف مع الجميع وتتجنب القرار الصعب — فيتوقف التغيير بهدوء.' },
+  F: { en: 'You may build energy for the change while the plan and its steps fall behind, and you may promise too much.', ar: 'قد تبني الحماس للتغيير بينما تتأخر الخطة والمراحل — وقد تَعِد بأكثر مما يتحقق.' },
 };
 
 export const CHANGE_BALANCE = {
-  en: 'High Will needs Being to bring people along. High Being needs Will to make the call.',
+  en: 'High Will needs Being to bring people along. High Being needs Will to make the decision.',
   ar: 'الإرادة العالية تحتاج الكينونة لتأخذ الناس معها. والكينونة العالية تحتاج الإرادة لاتخاذ القرار.',
 };
 
@@ -84,16 +84,16 @@ export const CHANGE_BALANCE = {
 // Grounded in each dimension's "Remember" line on deck slides 19-21.
 export const ACTIVATION = {
   F: [
-    { en: 'Use your delivery strength to free up time for people — Function is the entry ticket, not the destination.', ar: 'استخدم قوتك في الإنجاز لتوفير وقت للناس — الوظيفة هي تذكرة الدخول، لا الوجهة النهائية.' },
+    { en: 'Use your strength at delivering to free up time for people. Function is where leadership starts, not where it ends.', ar: 'استخدم قوتك في الإنجاز لتوفير وقت للناس — الوظيفة هي تذكرة الدخول، لا الوجهة النهائية.' },
     { en: 'Turn your know-how into a simple method others can use, so your impact grows beyond your own work.', ar: 'حوّل خبرتك إلى طريقة بسيطة يستخدمها الآخرون، ليمتد أثرك أبعد من عملك الشخصي.' },
   ],
   B: [
     { en: 'Use your calm on purpose in the hardest moments — be the steady voice in a tense meeting.', ar: 'استخدم هدوءك عن قصد في أصعب اللحظات — كن الصوت الثابت في الاجتماع المتوتر.' },
-    { en: 'People follow Being first — so point the trust you build toward one clear goal.', ar: 'يتبع الناس الكينونة أولاً — فوجّه الثقة التي تبنيها نحو هدف واحد واضح.' },
+    { en: 'People follow Being first. So use the trust you build to move toward one clear goal.', ar: 'يتبع الناس الكينونة أولاً — فوجّه الثقة التي تبنيها نحو هدف واحد واضح.' },
   ],
   W: [
-    { en: 'Give your drive a named destination: say what you are building and why, so others can join.', ar: 'امنح دافعك وجهة واضحة: قل ما الذي تبنيه ولماذا، ليتمكن الآخرون من الانضمام.' },
-    { en: 'Use your courage for one hard call each month — made with the team, not over them.', ar: 'استخدم شجاعتك في قرار صعب واحد كل شهر — تتخذه مع الفريق، لا فوقه.' },
+    { en: 'Give your drive a clear goal: say what you are building and why, so others can join.', ar: 'امنح دافعك وجهة واضحة: قل ما الذي تبنيه ولماذا، ليتمكن الآخرون من الانضمام.' },
+    { en: 'Use your courage for one hard decision each month. Make it with the team, not over their heads.', ar: 'استخدم شجاعتك في قرار صعب واحد كل شهر — تتخذه مع الفريق، لا فوقه.' },
   ],
 };
 
@@ -103,7 +103,7 @@ export const DIAGNOSTIC_QUESTIONS = {
   F: [
     { en: 'Where are you fully able to do the job today, and where not yet?', ar: 'أين تستطيع أداء العمل بالكامل اليوم، وأين ليس بعد؟' },
     { en: 'Which complex problem did you solve recently, and how?', ar: 'ما المشكلة المعقدة التي حللتها مؤخراً، وكيف؟' },
-    { en: 'Where does your execution slip from consistent to occasional?', ar: 'أين يتحول تنفيذك من ثابت إلى متقطع؟' },
+    { en: 'Where do you deliver only sometimes, instead of every time?', ar: 'أين يتحول تنفيذك من ثابت إلى متقطع؟' },
   ],
   B: [
     { en: 'How do you behave under pressure — what would your team say?', ar: 'كيف تتصرف تحت الضغط — ماذا سيقول فريقك؟' },

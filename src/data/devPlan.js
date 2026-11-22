@@ -14,7 +14,7 @@ export const DEV_PLAN = {
     ],
     day60: [
       { en: 'Set one measurable weekly target and track it for two weeks.', ar: 'ضع هدفاً أسبوعياً قابلاً للقياس وتتبعه لأسبوعين.' },
-      { en: 'Finish one task fully before starting the next, even if tempted to jump ahead.', ar: 'أنهِ مهمة كاملة قبل بدء التالية، حتى لو راودتك رغبة التنقل بينها.' },
+      { en: 'Finish one task fully before starting the next, even if you want to jump ahead.', ar: 'أنهِ مهمة كاملة قبل بدء التالية، حتى لو راودتك رغبة التنقل بينها.' },
     ],
     day90: [
       { en: 'Review your checklist. Update it based on what actually worked.', ar: 'راجع قائمة التحقق. حدّثها بناءً على ما نجح فعلاً.' },
@@ -31,7 +31,7 @@ export const DEV_PLAN = {
       { en: 'Ask someone close: "What is one thing I do that makes you feel unseen?"', ar: 'اسأل شخصاً مقرباً: "ما الشيء الذي أفعله ويجعلك تشعر بأنك غير مرئي؟"' },
     ],
     day90: [
-      { en: 'Before a hard meeting, check your own state — are you grounded or reactive?', ar: 'قبل اجتماع صعب، تحقق من حالتك — هل أنت متزن أم رد فعلك متسرع؟' },
+      { en: 'Before a hard meeting, check yourself: are you calm, or ready to react?', ar: 'قبل اجتماع صعب، تحقق من حالتك — هل أنت متزن أم رد فعلك متسرع؟' },
       { en: 'Make it a habit: one real, unhurried check-in with your team each week.', ar: 'اجعلها عادة: لقاء صادق وغير متسرع مع فريقك كل أسبوع.' },
     ],
   },
@@ -41,12 +41,12 @@ export const DEV_PLAN = {
       { en: 'Say one hard "yes" or "no" this week that you have been putting off.', ar: 'قل "نعم" أو "لا" صعبة هذا الأسبوع كنت تؤجلها.' },
     ],
     day60: [
-      { en: 'Take one visible, courageous stand on something you believe in at work.', ar: 'اتخذ موقفاً شجاعاً وواضحاً تجاه أمر تؤمن به في العمل.' },
+      { en: 'At work, stand up openly for one thing you believe in.', ar: 'اتخذ موقفاً شجاعاً وواضحاً تجاه أمر تؤمن به في العمل.' },
       { en: 'Push through one setback this month without giving up on the goal.', ar: 'تجاوز نكسة واحدة هذا الشهر دون التخلي عن الهدف.' },
     ],
     day90: [
       { en: 'Look back: where did you show real courage this quarter? Name it.', ar: 'انظر إلى الخلف: أين أظهرت شجاعة حقيقية هذا الفصل؟ سمِّها.' },
-      { en: 'Set your next 90-day goal out loud, to someone who will hold you to it.', ar: 'أعلن هدفك القادم لتسعين يوماً بصوت مسموع، لشخص سيحاسبك عليه.' },
+      { en: 'Tell someone your next 90-day goal — someone who will check that you do it.', ar: 'أعلن هدفك القادم لتسعين يوماً بصوت مسموع، لشخص سيحاسبك عليه.' },
     ],
   },
 };
